@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Consulta SQL - Atapuerca Net</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+  <header>
+    <h1>Consulta SQL</h1>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="retos.html">Retos</a>
+      <a href="sql.html">Consulta SQL</a>
+      <a href="descargas.html">Descargas</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+  <main>
+    <h2>🛰️ Conexión con la base de datos</h2>
+    <form onsubmit="runQuery(); return false;">
+      <textarea id="sqlInput" rows="5">SELECT TOP 5 * FROM Robots;</textarea><br />
+      <button type="submit">Ejecutar consulta</button>
+    </form>
+    <pre id="output">Resultados aparecerán aquí...</pre>
+  </main>
+  <footer>
+    <p>&copy; 2025 Atapuerca Net</p>
+  </footer>
+  <script src="js/main.js"></script>
+</body>
+</html>
