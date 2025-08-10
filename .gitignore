@@ -5,6 +5,10 @@
 # Environment variables
 .env
 
+# Node.js backend files (no se usan en GitHub Pages)
+node_modules/
+package-lock.json
+
 # Logs
 logs
 *.log
