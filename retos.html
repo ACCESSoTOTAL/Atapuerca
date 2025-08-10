@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Retos SQL - Atapuerca Net</title>
+                 <button onclick="irAlReto(' + reto.id + ')" style="background: var(--accent-cyan); color: var(--bg-dark); border: none; padding: 0.7em 1.2em; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9em;">🚀 Ir al Terminal</button>
+                <button onclick="cargarEjemplo(' + reto.id + ')" style="background: var(--bg-medium); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 0.7em 1.2em; border-radius: 5px; cursor: pointer; font-size: 0.9em;">📝 Ver ejemplo</button>
+                <button onclick="mostrarPistaSimple(' + reto.id + ')" style="background: var(--bg-medium); color: var(--accent-orange); border: 1px solid var(--accent-orange); padding: 0.7em 1.2em; border-radius: 5px; cursor: pointer; font-size: 0.9em;">💡 Pista</button>title>Retos SQL - Atapuerca Net</title>
   <link rel="stylesheet" href="css/estilos.css" />
 </head>
 <body>
@@ -160,12 +162,23 @@
     }
     
     function irAlReto(numeroReto) {
-      // Guardar el reto seleccionado
+      // Ir al terminal SIN cargar la consulta - que sea un verdadero desafío
+      const reto = retos && retos.find(r => r.id === numeroReto);
+      if (reto) {
+        localStorage.setItem('retoActual', JSON.stringify(reto));
+        // NO guardamos la consulta sugerida - el usuario debe resolverlo
+        localStorage.removeItem('consultaPendiente'); 
+        window.location.href = 'sql.html?reto=true';
+      }
+    }
+    
+    function cargarEjemplo(numeroReto) {
+      // Esta función SÍ carga el ejemplo, pero como botón separado
       const reto = retos && retos.find(r => r.id === numeroReto);
       if (reto) {
         localStorage.setItem('retoActual', JSON.stringify(reto));
         localStorage.setItem('consultaPendiente', reto.consulta_sugerida);
-        window.location.href = 'sql.html?reto=true';
+        window.location.href = 'sql.html?reto=true&ejemplo=true';
       }
     }
   </script>

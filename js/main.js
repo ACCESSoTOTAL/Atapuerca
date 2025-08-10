@@ -187,7 +187,7 @@ function mostrarRetoActual() {
           border-radius: 3px; 
           font-size: 0.9em;
           font-weight: bold;
-        ">📝 Cargar consulta sugerida</button>
+        ">📝 Ver ejemplo de solución</button>
         
         <button onclick="ocultarRetoActual()" style="
           background: var(--bg-medium); 
@@ -292,7 +292,7 @@ function cargarConsultaSugerida() {
       z-index: 1000;
       animation: slideIn 0.3s ease;
     `;
-    notif.innerHTML = '📝 Consulta sugerida cargada';
+    notif.innerHTML = '📝 Ejemplo de solución cargado - ¡Estúdialo!';
     document.body.appendChild(notif);
     
     setTimeout(() => {
@@ -313,6 +313,7 @@ function ocultarRetoActual() {
 document.addEventListener('DOMContentLoaded', function() {
   const urlParams = new URLSearchParams(window.location.search);
   const consultaPendiente = localStorage.getItem('consultaPendiente');
+  const esEjemplo = urlParams.get('ejemplo') === 'true';
   
   // Mostrar información del reto actual si existe
   const retoInfo = mostrarRetoActual();
@@ -321,7 +322,8 @@ document.addEventListener('DOMContentLoaded', function() {
     main.insertBefore(retoInfo, main.children[1]); // Insertar después del h2
   }
   
-  if (urlParams.get('reto') === 'true' && consultaPendiente) {
+  // Solo cargar consulta si viene con ejemplo=true
+  if (urlParams.get('reto') === 'true' && consultaPendiente && esEjemplo) {
     document.getElementById('sqlInput').value = consultaPendiente;
     localStorage.removeItem('consultaPendiente');
     
@@ -336,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
       text-align: center; 
       font-weight: bold;
     `;
-    info.innerHTML = '🎯 Consulta del reto cargada. ¡Modifícala si es necesario y ejecuta!';
+    info.innerHTML = '📝 Consulta de ejemplo cargada. ¡Estúdiala y modifícala si quieres!';
     
     const main = document.querySelector('main');
     const insertPosition = retoInfo ? 3 : 2; // Ajustar posición según si hay reto info
@@ -344,5 +346,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Remover el mensaje después de 5 segundos
     setTimeout(() => info.remove(), 5000);
+  } else if (urlParams.get('reto') === 'true') {
+    // Limpiar campo si viene de un reto sin ejemplo
+    document.getElementById('sqlInput').value = '';
+    document.getElementById('sqlInput').placeholder = '-- ¡Tu turno! Escribe aquí tu consulta SQL para resolver el reto...\n-- Pista: Lee la descripción del reto y usa las tablas disponibles';
+    
+    // Mostrar mensaje de desafío
+    const info = document.createElement('div');
+    info.style.cssText = `
+      background: var(--accent-orange); 
+      color: var(--bg-dark); 
+      padding: 1em; 
+      border-radius: 5px; 
+      margin-bottom: 1em; 
+      text-align: center; 
+      font-weight: bold;
+    `;
+    info.innerHTML = '🎯 ¡Desafío activo! Escribe tu propia consulta SQL para resolver el reto. Si necesitas ayuda, usa el botón "📝 Ver ejemplo".';
+    
+    const main = document.querySelector('main');
+    const insertPosition = retoInfo ? 3 : 2;
+    main.insertBefore(info, main.children[insertPosition]);
+    
+    setTimeout(() => info.remove(), 7000);
   }
 });
