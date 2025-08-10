@@ -6,9 +6,9 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "Reconocimiento inicial",
-    descripcion: "Listar los nombres de todas las bases",
-    consulta_sugerida: "SELECT Nombre FROM Bases;",
-    pista: "Usa SELECT para obtener solo la columna Nombre de la tabla Bases",
+    descripcion: "Mostrar toda la información de las bases disponibles",
+    consulta_sugerida: "SELECT * FROM Bases;",
+    pista: "Usa SELECT * para obtener todas las columnas de la tabla Bases",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/AOWiBICrndc"
   },
@@ -902,7 +902,7 @@ function verificarConsultaFlexible(consulta, reto) {
   
   switch (reto.id) {
     case 1:
-      return consultaLower.includes('select') && consultaLower.includes('nombre') && consultaLower.includes('bases');
+      return consultaLower.includes('select') && consultaLower.includes('*') && consultaLower.includes('bases');
     case 2:
       return consultaLower.includes('select') && consultaLower.includes('nombre') && consultaLower.includes('tipo') && consultaLower.includes('order by');
     case 3:
