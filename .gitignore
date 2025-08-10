@@ -1,3 +1,10 @@
+# macOS
+.DS_Store
+._*
+
+# Environment variables
+.env
+
 # Logs
 logs
 *.log

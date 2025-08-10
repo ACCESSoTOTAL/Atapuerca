@@ -12,11 +12,16 @@ async function runQuery() {
 
     const data = await res.json();
     if (res.ok) {
-      output.textContent = JSON.stringify(data.rows, null, 2);
+      if (data.rows && data.rows.length > 0) {
+        output.textContent = JSON.stringify(data.rows, null, 2);
+      } else {
+        output.textContent = 'La consulta se ejecutó correctamente pero no devolvió resultados.';
+      }
     } else {
-      output.textContent = 'Error: ' + data.error;
+      output.textContent = 'Error: ' + (data.error || 'Error desconocido');
     }
   } catch (err) {
-    output.textContent = 'Error de conexión con el servidor.';
+    output.textContent = 'Error de conexión: ' + err.message;
+    console.error('Error:', err);
   }
 }
