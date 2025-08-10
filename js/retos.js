@@ -18,7 +18,7 @@ const retos = [
     nivel: "Básico",
     titulo: "Información básica ordenada",
     descripcion: "Mostrar el nombre y tipo de cada base, ordenadas por nombre",
-    consulta_sugerida: "SELECT Nombre, Tipo FROM Bases ORDER BY Nombre;",
+    consulta_sugerida: "SELECT Nombre, TipoBase FROM Bases ORDER BY Nombre;",
     pista: "Usa ORDER BY para ordenar los resultados alfabéticamente",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/gBpUMv1H8zk"
@@ -29,7 +29,7 @@ const retos = [
     nivel: "Básico", 
     titulo: "Filtro de supervivencia",
     descripcion: "Mostrar las bases de tipo 'Humana'",
-    consulta_sugerida: "SELECT * FROM Bases WHERE Tipo = 'Humana';",
+    consulta_sugerida: "SELECT * FROM Bases WHERE TipoBase = 'Humana';",
     pista: "Usa WHERE para filtrar por el tipo específico",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
@@ -40,8 +40,8 @@ const retos = [
     nivel: "Básico",
     titulo: "Censo de resistentes",
     descripcion: "Mostrar toda la información de los supervivientes",
-    consulta_sugerida: "SELECT * FROM Supervivientes;",
-    pista: "Usa SELECT * para conocer toda la estructura de la tabla Supervivientes",
+    consulta_sugerida: "SELECT * FROM Survivors;",
+    pista: "Usa SELECT * para conocer toda la estructura de la tabla Survivors",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -51,8 +51,8 @@ const retos = [
     nivel: "Básico",
     titulo: "Inventario de recursos",
     descripcion: "Mostrar toda la información de los recursos disponibles",
-    consulta_sugerida: "SELECT * FROM Recursos;",
-    pista: "Usa SELECT * para conocer toda la estructura de la tabla Recursos",
+    consulta_sugerida: "SELECT * FROM Resources;",
+    pista: "Usa SELECT * para conocer toda la estructura de la tabla Resources",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -62,7 +62,7 @@ const retos = [
     nivel: "Básico",
     titulo: "Supervivientes específicos",
     descripcion: "Mostrar solo el nombre y edad de los supervivientes",
-    consulta_sugerida: "SELECT Nombre, Edad FROM Supervivientes;",
+    consulta_sugerida: "SELECT Nombre, Edad FROM Survivors;",
     pista: "Selecciona solo las columnas específicas que necesitas",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
@@ -73,7 +73,7 @@ const retos = [
     nivel: "Básico",
     titulo: "Veteranos de guerra",
     descripcion: "Mostrar los supervivientes mayores de 30 años",
-    consulta_sugerida: "SELECT * FROM Supervivientes WHERE Edad > 30;",
+    consulta_sugerida: "SELECT * FROM Survivors WHERE Edad > 30;",
     pista: "Usa el operador > para comparar la edad",
     puntos: 8,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
@@ -84,8 +84,8 @@ const retos = [
     nivel: "Básico",
     titulo: "Bases bien abastecidas",
     descripcion: "Mostrar las bases con más de 40 raciones de comida",
-    consulta_sugerida: "SELECT * FROM Recursos WHERE ComidaRaciones > 40;",
-    pista: "Filtra la tabla Recursos por la columna ComidaRaciones",
+    consulta_sugerida: "SELECT * FROM Resources WHERE ComidaRaciones > 40;",
+    pista: "Filtra la tabla Resources por la columna ComidaRaciones",
     puntos: 8,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -94,9 +94,9 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "Equipo médico",
-    descripcion: "Mostrar los supervivientes cuya profesión es 'Médico'",
-    consulta_sugerida: "SELECT * FROM Supervivientes WHERE Profesion = 'Médico';",
-    pista: "Usa WHERE para filtrar por profesión específica",
+    descripcion: "Mostrar los supervivientes por rol específico",
+    consulta_sugerida: "SELECT * FROM Survivors WHERE Rol = 'Médico';",
+    pista: "Usa WHERE para filtrar por rol específico (explora qué roles existen)",
     puntos: 8,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
