@@ -44,7 +44,130 @@
   <script src="js/retos.js"></script>
   <script>
     // Cargar retos al abrir la página
-    document.addEventListener('DOMContentLoaded', cargarRetos);
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM cargado, intentando cargar retos...');
+      
+      // Verificar que las funciones existen
+      if (typeof cargarRetos === 'function') {
+        console.log('Función cargarRetos encontrada, ejecutando...');
+        try {
+          cargarRetos();
+        } catch (error) {
+          console.error('Error al cargar retos:', error);
+          // Cargar retos manualmente si hay error
+          cargarRetosManual();
+        }
+      } else {
+        console.log('Función cargarRetos no encontrada, cargando manualmente...');
+        cargarRetosManual();
+      }
+    });
+    
+    // Función de respaldo para cargar retos manualmente
+    function cargarRetosManual() {
+      const container = document.getElementById('retos-container');
+      if (!container) return;
+      
+      let html = '';
+      html += '<div style="background: linear-gradient(135deg, var(--bg-medium), var(--bg-light)); border: 2px solid var(--primary-green); padding: 1.5em; border-radius: 8px; margin-bottom: 2em; text-align: center;">';
+      html += '<h3 style="margin: 0 0 1em 0; color: var(--primary-green);">📊 Sistema de 60 Retos SQL</h3>';
+      html += '<p style="color: var(--text-secondary);">Sistema completo de entrenamiento SQL con datos reales de Atapuerca</p>';
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1em; margin-top: 1em;">';
+      html += '<div><div style="font-size: 2em; color: var(--accent-cyan);">60</div><div style="font-size: 0.9em; color: var(--text-secondary);">Retos totales</div></div>';
+      html += '<div><div style="font-size: 2em; color: var(--accent-orange);">1,260</div><div style="font-size: 0.9em; color: var(--text-secondary);">Puntos máximos</div></div>';
+      html += '<div><div style="font-size: 2em; color: var(--primary-green);">5</div><div style="font-size: 0.9em; color: var(--text-secondary);">Fases</div></div>';
+      html += '</div></div>';
+      
+      // Fase 1
+      html += '<div style="margin-bottom: 2em;">';
+      html += '<h3 style="color: var(--primary-green); margin-bottom: 1em;">📚 Fase 1: Fundamentos Básicos (1-10)</h3>';
+      html += '<p style="color: var(--text-secondary); margin-bottom: 1.5em;">SELECT, WHERE, ORDER BY con datos reales</p>';
+      html += '<div style="display: grid; gap: 1em;">';
+      html += generarTarjetasRetos(1, 10);
+      html += '</div></div>';
+      
+      // Fase 1.5
+      html += '<div style="margin-bottom: 2em;">';
+      html += '<h3 style="color: var(--accent-cyan); margin-bottom: 1em;">🔗 Fase 1.5: Tutorial Completo de JOINs (11-20)</h3>';
+      html += '<p style="color: var(--text-secondary); margin-bottom: 1.5em;">Domina todos los tipos de JOIN basados en el infográfico TSQL</p>';
+      html += '<div style="display: grid; gap: 1em;">';
+      html += generarTarjetasRetos(11, 20);
+      html += '</div></div>';
+      
+      // Fase 2
+      html += '<div style="margin-bottom: 2em;">';
+      html += '<h3 style="color: var(--accent-orange); margin-bottom: 1em;">📊 Fase 2: Nivel Intermedio (21-30)</h3>';
+      html += '<p style="color: var(--text-secondary); margin-bottom: 1.5em;">JOINs aplicados y análisis de datos reales</p>';
+      html += '<div style="display: grid; gap: 1em;">';
+      html += generarTarjetasRetos(21, 30);
+      html += '</div></div>';
+      
+      // Fase 3
+      html += '<div style="margin-bottom: 2em;">';
+      html += '<h3 style="color: #ff6b6b; margin-bottom: 1em;">📈 Fase 3: Nivel Avanzado (31-40)</h3>';
+      html += '<p style="color: var(--text-secondary); margin-bottom: 1.5em;">Agregaciones complejas: GROUP BY, HAVING, funciones window</p>';
+      html += '<div style="display: grid; gap: 1em;">';
+      html += generarTarjetasRetos(31, 40);
+      html += '</div></div>';
+      
+      // Fase 4
+      html += '<div style="margin-bottom: 2em;">';
+      html += '<h3 style="color: #ff4444; margin-bottom: 1em;">🎯 Fase 4: Nivel Experto (41-50)</h3>';
+      html += '<p style="color: var(--text-secondary); margin-bottom: 1.5em;">Subconsultas estratégicas y análisis predictivo</p>';
+      html += '<div style="display: grid; gap: 1em;">';
+      html += generarTarjetasRetos(41, 50);
+      html += '</div></div>';
+      
+      // Fase 5
+      html += '<div style="margin-bottom: 2em;">';
+      html += '<h3 style="color: #8b5cf6; margin-bottom: 1em;">🏆 Fase 5: Nivel Maestro (51-60)</h3>';
+      html += '<p style="color: var(--text-secondary); margin-bottom: 1.5em;">CTEs complejas y modelado integral del futuro</p>';
+      html += '<div style="display: grid; gap: 1em;">';
+      html += generarTarjetasRetos(51, 60);
+      html += '</div></div>';
+      
+      container.innerHTML = html;
+    }
+    
+    function generarTarjetasRetos(inicio, fin) {
+      let html = '';
+      for (let i = inicio; i <= fin; i++) {
+        const reto = retos && retos.find(r => r.id === i);
+        if (reto) {
+          html += '<div style="background: var(--bg-light); border: 2px solid var(--accent-orange); border-radius: 8px; padding: 1.5em; transition: all 0.3s ease;" onmouseover="this.style.transform=\'scale(1.02)\'" onmouseout="this.style.transform=\'scale(1)\'">';
+          html += '<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1em;">';
+          html += '<h4 style="margin: 0; color: var(--text-primary); flex: 1;">⭐ ' + reto.titulo + '</h4>';
+          html += '<span style="background: var(--accent-orange); color: var(--bg-dark); padding: 0.3em 0.8em; border-radius: 15px; font-size: 0.8em; font-weight: bold; margin-left: 1em;">' + reto.puntos + 'pts</span>';
+          html += '</div>';
+          html += '<p style="margin: 0 0 1em 0; color: var(--text-secondary); line-height: 1.4;">' + reto.descripcion + '</p>';
+          html += '<div style="display: flex; gap: 0.5em; flex-wrap: wrap;">';
+          html += '<button onclick="irAlReto(' + reto.id + ')" style="background: var(--accent-cyan); color: var(--bg-dark); border: none; padding: 0.7em 1.2em; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9em;">🚀 Ir al Terminal</button>';
+          html += '<button onclick="mostrarPistaSimple(' + reto.id + ')" style="background: var(--bg-medium); color: var(--accent-orange); border: 1px solid var(--accent-orange); padding: 0.7em 1.2em; border-radius: 5px; cursor: pointer; font-size: 0.9em;">💡 Pista</button>';
+          html += '</div>';
+          html += '<div id="pista-' + reto.id + '" style="display: none; margin-top: 1em; padding: 1em; background: var(--bg-medium); border-radius: 5px; border-left: 3px solid var(--accent-orange);">';
+          html += '<strong style="color: var(--accent-orange);">💡 Pista:</strong> ' + reto.pista;
+          html += '</div></div>';
+        }
+      }
+      return html;
+    }
+    
+    function mostrarPistaSimple(retoId) {
+      const pistaDiv = document.getElementById('pista-' + retoId);
+      if (pistaDiv) {
+        pistaDiv.style.display = pistaDiv.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+    
+    function irAlReto(numeroReto) {
+      // Guardar el reto seleccionado
+      const reto = retos && retos.find(r => r.id === numeroReto);
+      if (reto) {
+        localStorage.setItem('retoActual', JSON.stringify(reto));
+        localStorage.setItem('consultaPendiente', reto.consulta_sugerida);
+        window.location.href = 'sql.html?reto=true';
+      }
+    }
   </script>
 </body>
 </html>
