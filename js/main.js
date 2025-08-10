@@ -213,34 +213,40 @@ function mostrarRetoActual() {
 function getFaseInfo(fase) {
   const fasesInfo = {
     1: {
-      titulo: "Fase 1 — Nivel básico (1–10)",
-      descripcion: "Consultas SELECT simples sobre una tabla",
+      titulo: "Fase 1 — Nivel Básico (1–10)",
+      descripcion: "Fundamentos SQL: SELECT, WHERE, ORDER BY",
       color: "var(--primary-green)",
-      icono: "📊"
+      icono: "�"
     },
-    2: {
-      titulo: "Fase 2 — Introducción a JOIN (11–20)",
-      descripcion: "Combinar dos tablas básico",
+    1.5: {
+      titulo: "Fase 1.5 — Tutorial JOIN (11–20)", 
+      descripcion: "Dominio completo de JOINs: INNER, LEFT, RIGHT, FULL OUTER, CROSS",
       color: "var(--accent-cyan)",
       icono: "🔗"
     },
-    3: {
-      titulo: "Fase 3 — Agregaciones (21–30)",
-      descripcion: "GROUP BY, COUNT, SUM, AVG",
+    2: {
+      titulo: "Fase 2 — Nivel Intermedio (21–30)",
+      descripcion: "JOINs aplicados y análisis de datos reales",
       color: "var(--accent-orange)",
-      icono: "📈"
+      icono: "�"
+    },
+    3: {
+      titulo: "Fase 3 — Nivel Avanzado (31–40)",
+      descripcion: "Agregaciones complejas: GROUP BY, HAVING, funciones window",
+      color: "#ff6b6b",
+      icono: "�"
     },
     4: {
-      titulo: "Fase 4 — Consultas avanzadas (31–40)",
-      descripcion: "Subconsultas, condiciones complejas",
+      titulo: "Fase 4 — Nivel Experto (41–50)",
+      descripcion: "Subconsultas estratégicas y análisis predictivo",
       color: "#ff4444",
-      icono: "🔍"
+      icono: "🎯"
     },
     5: {
-      titulo: "Fase 5 — Consultas estratégicas (41–50)",
-      descripcion: "CTE, subconsultas anidadas, análisis complejo",
-      color: "#ff44ff",
-      icono: "🛡️"
+      titulo: "Fase 5 — Nivel Maestro (51–60)",
+      descripcion: "CTEs complejas y modelado integral del futuro",
+      color: "#8b5cf6",
+      icono: "🏆"
     }
   };
   return fasesInfo[fase] || fasesInfo[1];

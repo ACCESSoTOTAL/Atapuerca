@@ -33,9 +33,27 @@
     
     <p><strong>Estado del sistema:</strong> <span style="color: var(--accent-cyan);">OPERATIVO</span></p>
     <p><strong>Nivel de seguridad:</strong> <span style="color: var(--accent-orange);">ALTO</span></p>
+    
+    <!-- Dashboard de progreso -->
+    <div id="dashboard-progreso" style="margin-top: 2em;">
+      <!-- Se cargará dinámicamente -->
+    </div>
   </main>
   <footer>
     <p>&copy; 2025 Atapuerca Net - Proyecto de resistencia digital</p>
   </footer>
+  
+  <script src="js/dataLoader.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/retos.js"></script>
+  <script>
+    // Cargar dashboard al abrir la página
+    document.addEventListener('DOMContentLoaded', function() {
+      const container = document.getElementById('dashboard-progreso');
+      if (container && typeof mostrarDashboard === 'function') {
+        mostrarDashboard('dashboard-progreso');
+      }
+    });
+  </script>
 </body>
 </html>
