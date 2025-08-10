@@ -42,7 +42,7 @@ app.get('/tables', (req, res) => {
   const tablasPrincipales = ['Robots', 'Humanos', 'Misiones', 'Armas', 'Bases', 'Resources', 'Survivors'];
   res.json({ 
     tables: tablasPrincipales,
-    message: 'Estas son las tablas principales disponibles. Puedes usar cualquier tabla de la base de datos Atapuerca.'
+    message: 'Tablas disponibles. Operaciones permitidas: SELECT, INSERT, UPDATE, DELETE. Prohibidas: DROP, ALTER, CREATE, etc.'
   });
 });
 
@@ -64,13 +64,25 @@ app.post('/query', async (req, res) => {
   // Lista de tablas permitidas (whitelist) - ACTUALIZADA CON NOMBRES REALES
   const tablasPermitidas = ['Robots', 'Humanos', 'Misiones', 'Armas', 'Bases', 'Resources', 'Survivors', 'supplies', 'weapons', 'attacks'];
   
-  // Verificar que solo sea SELECT
-  if (!/^select\s/i.test(query.trim())) {
-    return res.status(400).json({ error: 'Solo se permiten consultas SELECT. Otras operaciones están restringidas por seguridad.' });
+  // Permitir todas las operaciones SQL (SELECT, INSERT, UPDATE, DELETE, etc.)
+  // Solo bloquear operaciones peligrosas del sistema
+  
+  // Verificar que no use operaciones peligrosas del sistema
+  const queryLower = query.toLowerCase();
+  const operacionesPeligrosas = [
+    'drop table', 'drop database', 'truncate', 'alter table', 'create table',
+    'create database', 'drop view', 'drop procedure', 'drop function',
+    'grant', 'revoke', 'backup', 'restore', 'shutdown'
+  ];
+  
+  const usaOperacionPeligrosa = operacionesPeligrosas.some(op => queryLower.includes(op));
+  if (usaOperacionPeligrosa) {
+    return res.status(403).json({ 
+      error: 'Acceso denegado: Operación no permitida por seguridad. Solo se permiten: SELECT, INSERT, UPDATE, DELETE.' 
+    });
   }
   
-  // Verificar que no use tablas del sistema
-  const queryLower = query.toLowerCase();
+  // Verificar que no use tablas del sistema (usa la misma variable queryLower)
   const tablasSistema = [
     'information_schema', 'sys.', 'master.', 'msdb.', 'model.', 'tempdb.',
     'sysadmin', 'sysusers', 'sysobjects', 'syscolumns'
