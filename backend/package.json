@@ -1,6 +1,7 @@
 {
-  "name": "atapuerca-sql-web",
+  "name": "atapuerca-backend",
   "version": "1.0.0",
+  "description": "Backend API para Atapuerca Net - Consultas SQL",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -13,6 +14,7 @@
     "mssql": "^9.1.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }
