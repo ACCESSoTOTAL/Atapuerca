@@ -39,9 +39,9 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "Censo de resistentes",
-    descripcion: "Listar todos los supervivientes (Nombre, Edad, Profesion)",
-    consulta_sugerida: "SELECT Nombre, Edad, Profesion FROM Supervivientes;",
-    pista: "Selecciona solo las columnas que necesitas de la tabla Supervivientes",
+    descripcion: "Mostrar toda la información de los supervivientes",
+    consulta_sugerida: "SELECT * FROM Supervivientes;",
+    pista: "Usa SELECT * para conocer toda la estructura de la tabla Supervivientes",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -49,10 +49,10 @@ const retos = [
     id: 5,
     fase: 1,
     nivel: "Básico",
-    titulo: "Veteranos de guerra",
-    descripcion: "Mostrar los supervivientes mayores de 40 años",
-    consulta_sugerida: "SELECT * FROM Supervivientes WHERE Edad > 40;",
-    pista: "Usa el operador > para comparar la edad",
+    titulo: "Inventario de recursos",
+    descripcion: "Mostrar toda la información de los recursos disponibles",
+    consulta_sugerida: "SELECT * FROM Recursos;",
+    pista: "Usa SELECT * para conocer toda la estructura de la tabla Recursos",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -60,21 +60,21 @@ const retos = [
     id: 6,
     fase: 1,
     nivel: "Básico",
-    titulo: "Bases bien abastecidas",
-    descripcion: "Mostrar las bases con más de 50 raciones de comida",
-    consulta_sugerida: "SELECT * FROM Recursos WHERE ComidaRaciones > 50;",
-    pista: "Filtra la tabla Recursos por la columna ComidaRaciones",
-    puntos: 8,
+    titulo: "Supervivientes específicos",
+    descripcion: "Mostrar solo el nombre y edad de los supervivientes",
+    consulta_sugerida: "SELECT Nombre, Edad FROM Supervivientes;",
+    pista: "Selecciona solo las columnas específicas que necesitas",
+    puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 7,
     fase: 1,
     nivel: "Básico",
-    titulo: "Crisis hídrica",
-    descripcion: "Mostrar las bases con menos de 20 litros de agua, ordenadas de menor a mayor",
-    consulta_sugerida: "SELECT * FROM Recursos WHERE AguaLitros < 20 ORDER BY AguaLitros;",
-    pista: "Combina WHERE para filtrar y ORDER BY para ordenar",
+    titulo: "Veteranos de guerra",
+    descripcion: "Mostrar los supervivientes mayores de 30 años",
+    consulta_sugerida: "SELECT * FROM Supervivientes WHERE Edad > 30;",
+    pista: "Usa el operador > para comparar la edad",
     puntos: 8,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -82,10 +82,10 @@ const retos = [
     id: 8,
     fase: 1,
     nivel: "Básico",
-    titulo: "Territorio austral",
-    descripcion: "Mostrar las bases ubicadas en el hemisferio sur (latitud negativa)",
-    consulta_sugerida: "SELECT * FROM Bases WHERE Latitud < 0;",
-    pista: "El hemisferio sur tiene latitudes negativas",
+    titulo: "Bases bien abastecidas",
+    descripcion: "Mostrar las bases con más de 40 raciones de comida",
+    consulta_sugerida: "SELECT * FROM Recursos WHERE ComidaRaciones > 40;",
+    pista: "Filtra la tabla Recursos por la columna ComidaRaciones",
     puntos: 8,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -94,20 +94,20 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "Equipo médico",
-    descripcion: "Mostrar los supervivientes cuya profesión es 'Médico', ordenados por edad descendente",
-    consulta_sugerida: "SELECT * FROM Supervivientes WHERE Profesion = 'Médico' ORDER BY Edad DESC;",
-    pista: "Usa DESC para orden descendente (mayor a menor)",
-    puntos: 10,
+    descripcion: "Mostrar los supervivientes cuya profesión es 'Médico'",
+    consulta_sugerida: "SELECT * FROM Supervivientes WHERE Profesion = 'Médico';",
+    pista: "Usa WHERE para filtrar por profesión específica",
+    puntos: 8,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 10,
     fase: 1,
     nivel: "Básico",
-    titulo: "Inventario completo",
-    descripcion: "Listar todos los recursos (BaseID, ComidaRaciones, AguaLitros, Armas)",
-    consulta_sugerida: "SELECT BaseID, ComidaRaciones, AguaLitros, Armas FROM Recursos;",
-    pista: "Especifica exactamente las columnas que necesitas",
+    titulo: "Supervivientes ordenados",
+    descripcion: "Mostrar todos los supervivientes ordenados por edad de mayor a menor",
+    consulta_sugerida: "SELECT * FROM Supervivientes ORDER BY Edad DESC;",
+    pista: "Usa ORDER BY con DESC para orden descendente (mayor a menor)",
     puntos: 10,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -907,6 +907,20 @@ function verificarConsultaFlexible(consulta, reto) {
       return consultaLower.includes('select') && consultaLower.includes('nombre') && consultaLower.includes('tipo') && consultaLower.includes('order by');
     case 3:
       return consultaLower.includes('where') && consultaLower.includes('tipo') && consultaLower.includes('humana');
+    case 4:
+      return consultaLower.includes('select') && consultaLower.includes('*') && consultaLower.includes('supervivientes');
+    case 5:
+      return consultaLower.includes('select') && consultaLower.includes('*') && consultaLower.includes('recursos');
+    case 6:
+      return consultaLower.includes('select') && consultaLower.includes('nombre') && consultaLower.includes('edad') && consultaLower.includes('supervivientes');
+    case 7:
+      return consultaLower.includes('where') && consultaLower.includes('edad') && consultaLower.includes('>');
+    case 8:
+      return consultaLower.includes('where') && consultaLower.includes('comidaraciones') && consultaLower.includes('>');
+    case 9:
+      return consultaLower.includes('where') && consultaLower.includes('profesion') && consultaLower.includes('médico');
+    case 10:
+      return consultaLower.includes('order by') && consultaLower.includes('edad') && consultaLower.includes('desc');
     // Agregar más verificaciones según necesites
     default:
       return false;
