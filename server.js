@@ -37,12 +37,12 @@ app.get('/', (req, res) => {
   res.json({ message: 'Atapuerca Backend funcionando', status: 'OK' });
 });
 
-// Endpoint para obtener las tablas permitidas
+// Endpoint para obtener las tablas principales
 app.get('/tables', (req, res) => {
-  const tablasPermitidas = ['Robots', 'Humanos', 'Misiones', 'Armas', 'Bases'];
+  const tablasPrincipales = ['Robots', 'Humanos', 'Misiones', 'Armas', 'Bases', 'Resources', 'Survivors'];
   res.json({ 
-    tables: tablasPermitidas,
-    message: 'Estas son las tablas disponibles para consulta.'
+    tables: tablasPrincipales,
+    message: 'Estas son las tablas principales disponibles. Puedes usar cualquier tabla de la base de datos Atapuerca.'
   });
 });
 
@@ -61,12 +61,12 @@ app.post('/query', async (req, res) => {
     });
   }
   
-  // Lista de tablas permitidas (whitelist)
-  const tablasPermitidas = ['Robots', 'Humanos', 'Misiones', 'Armas', 'Bases'];
+  // Lista de tablas permitidas (whitelist) - ACTUALIZADA CON NOMBRES REALES
+  const tablasPermitidas = ['Robots', 'Humanos', 'Misiones', 'Armas', 'Bases', 'Resources', 'Survivors', 'supplies', 'weapons', 'attacks'];
   
   // Verificar que solo sea SELECT
   if (!/^select\s/i.test(query.trim())) {
-    return res.status(400).json({ error: 'Solo se permiten consultas SELECT.' });
+    return res.status(400).json({ error: 'Solo se permiten consultas SELECT. Otras operaciones están restringidas por seguridad.' });
   }
   
   // Verificar que no use tablas del sistema
@@ -83,16 +83,8 @@ app.post('/query', async (req, res) => {
     });
   }
   
-  // Verificar que solo use tablas permitidas
-  const usaTablaNoPermitida = !tablasPermitidas.some(tabla => 
-    queryLower.includes(tabla.toLowerCase())
-  );
-  
-  if (usaTablaNoPermitida && !queryLower.includes('dual')) {
-    return res.status(403).json({ 
-      error: `Acceso denegado: Solo se permiten las tablas: ${tablasPermitidas.join(', ')}` 
-    });
-  }
+  // Permitir todas las consultas SELECT que no sean de tablas del sistema
+  // Ya no validamos tabla por tabla para dar más flexibilidad a los retos
   
   try {
     console.log('Intentando conectar a la base de datos...');
