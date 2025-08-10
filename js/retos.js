@@ -10,7 +10,7 @@ const retos = [
     consulta_sugerida: "SELECT Nombre FROM Bases;",
     pista: "Usa SELECT para obtener solo la columna Nombre de la tabla Bases",
     puntos: 5,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+    videoUrl: "https://www.youtube.com/shorts/AOWiBICrndc"
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const retos = [
     consulta_sugerida: "SELECT Nombre, Tipo FROM Bases ORDER BY Nombre;",
     pista: "Usa ORDER BY para ordenar los resultados alfabéticamente",
     puntos: 5,
-    videoUrl: "https://www.youtube.com/shorts/AOWiBICrndc"
+    videoUrl: "https://www.youtube.com/shorts/gBpUMv1H8zk"
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ const retos = [
     consulta_sugerida: "SELECT * FROM Bases WHERE Tipo = 'Humana';",
     pista: "Usa WHERE para filtrar por el tipo específico",
     puntos: 5,
-    videoUrl: "https://www.youtube.com/shorts/gBpUMv1H8zk"
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 4,
