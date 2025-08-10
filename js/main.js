@@ -115,10 +115,205 @@ function createDataTable(rows) {
   return html;
 }
 
+// Mostrar información del reto actual
+function mostrarRetoActual() {
+  const retoActual = JSON.parse(localStorage.getItem('retoActual') || 'null');
+  
+  if (retoActual) {
+    const retoInfo = document.createElement('div');
+    retoInfo.id = 'reto-info';
+    retoInfo.style.cssText = `
+      background: linear-gradient(135deg, var(--bg-medium), var(--bg-light)); 
+      border: 2px solid var(--accent-orange); 
+      padding: 1.5em; 
+      border-radius: 8px; 
+      margin-bottom: 2em; 
+      box-shadow: 0 0 20px rgba(255, 136, 0, 0.3);
+    `;
+    
+    const faseInfo = getFaseInfo(retoActual.fase);
+    
+    retoInfo.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1em;">
+        <h3 style="margin: 0; color: var(--accent-orange); display: flex; align-items: center; gap: 0.5em;">
+          🎯 Reto Actual: ${retoActual.titulo}
+        </h3>
+        <span style="
+          background: var(--accent-orange); 
+          color: var(--bg-dark); 
+          padding: 0.3em 0.8em; 
+          border-radius: 15px; 
+          font-size: 0.8em; 
+          font-weight: bold;
+        ">${retoActual.nivel} - ${retoActual.puntos}pts</span>
+      </div>
+      
+      <div style="margin-bottom: 1em;">
+        <strong style="color: ${faseInfo.color};">${faseInfo.icono} ${faseInfo.titulo}</strong>
+      </div>
+      
+      <p style="margin: 0 0 1em 0; color: var(--text-secondary); line-height: 1.5; font-size: 1.1em;">
+        <strong style="color: var(--accent-cyan);">Misión:</strong> ${retoActual.descripcion}
+      </p>
+      
+      <!-- Video de YouTube embebido -->
+      <div style="margin: 1em 0; border-radius: 8px; overflow: hidden; border: 2px solid var(--accent-orange);">
+        <iframe 
+          width="100%" 
+          height="200" 
+          src="${convertirURLYoutube(retoActual.videoUrl)}" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen
+          style="display: block;">
+        </iframe>
+      </div>
+      
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5em; margin-top: 1em;">
+        <button onclick="mostrarPistaReto()" style="
+          background: var(--bg-medium); 
+          color: var(--accent-orange); 
+          border: 1px solid var(--accent-orange); 
+          padding: 0.5em 1em; 
+          border-radius: 3px; 
+          font-size: 0.9em;
+        ">💡 Mostrar pista</button>
+        
+        <button onclick="cargarConsultaSugerida()" style="
+          background: var(--accent-cyan); 
+          color: var(--bg-dark); 
+          border: none; 
+          padding: 0.5em 1em; 
+          border-radius: 3px; 
+          font-size: 0.9em;
+          font-weight: bold;
+        ">📝 Cargar consulta sugerida</button>
+        
+        <button onclick="ocultarRetoActual()" style="
+          background: var(--bg-medium); 
+          color: var(--text-secondary); 
+          border: 1px solid var(--text-secondary); 
+          padding: 0.5em 1em; 
+          border-radius: 3px; 
+          font-size: 0.9em;
+        ">👁️ Ocultar</button>
+      </div>
+      
+      <div id="pista-reto" style="display: none; margin-top: 1em; padding: 1em; background: var(--bg-medium); border-radius: 5px; border-left: 3px solid var(--accent-orange);">
+        <strong style="color: var(--accent-orange);">💡 Pista:</strong> ${retoActual.pista}
+      </div>
+    `;
+    
+    return retoInfo;
+  }
+  
+  return null;
+}
+
+function getFaseInfo(fase) {
+  const fasesInfo = {
+    1: {
+      titulo: "Fase 1 — Nivel básico (1–10)",
+      descripcion: "Consultas SELECT simples sobre una tabla",
+      color: "var(--primary-green)",
+      icono: "📊"
+    },
+    2: {
+      titulo: "Fase 2 — Introducción a JOIN (11–20)",
+      descripcion: "Combinar dos tablas básico",
+      color: "var(--accent-cyan)",
+      icono: "🔗"
+    },
+    3: {
+      titulo: "Fase 3 — Agregaciones (21–30)",
+      descripcion: "GROUP BY, COUNT, SUM, AVG",
+      color: "var(--accent-orange)",
+      icono: "📈"
+    },
+    4: {
+      titulo: "Fase 4 — Consultas avanzadas (31–40)",
+      descripcion: "Subconsultas, condiciones complejas",
+      color: "#ff4444",
+      icono: "🔍"
+    },
+    5: {
+      titulo: "Fase 5 — Consultas estratégicas (41–50)",
+      descripcion: "CTE, subconsultas anidadas, análisis complejo",
+      color: "#ff44ff",
+      icono: "🛡️"
+    }
+  };
+  return fasesInfo[fase] || fasesInfo[1];
+}
+
+function convertirURLYoutube(url) {
+  // Convertir URL de YouTube a formato embed
+  if (url.includes('youtube.com/shorts/')) {
+    const videoId = url.split('/shorts/')[1].split('?')[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  } else if (url.includes('youtube.com/watch?v=')) {
+    const videoId = url.split('v=')[1].split('&')[0];
+    return `https://www.youtube.com/embed/${videoId}`;
+  }
+  return url;
+}
+
+function mostrarPistaReto() {
+  const pistaDiv = document.getElementById('pista-reto');
+  if (pistaDiv.style.display === 'none') {
+    pistaDiv.style.display = 'block';
+  } else {
+    pistaDiv.style.display = 'none';
+  }
+}
+
+function cargarConsultaSugerida() {
+  const retoActual = JSON.parse(localStorage.getItem('retoActual') || 'null');
+  if (retoActual) {
+    document.getElementById('sqlInput').value = retoActual.consulta_sugerida;
+    
+    // Mostrar notificación
+    const notif = document.createElement('div');
+    notif.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accent-cyan);
+      color: var(--bg-dark);
+      padding: 1em 1.5em;
+      border-radius: 5px;
+      font-weight: bold;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    `;
+    notif.innerHTML = '📝 Consulta sugerida cargada';
+    document.body.appendChild(notif);
+    
+    setTimeout(() => {
+      notif.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => notif.remove(), 300);
+    }, 2000);
+  }
+}
+
+function ocultarRetoActual() {
+  const retoInfo = document.getElementById('reto-info');
+  if (retoInfo) {
+    retoInfo.style.display = 'none';
+  }
+}
+
 // Cargar consulta pendiente si viene de un reto
 document.addEventListener('DOMContentLoaded', function() {
   const urlParams = new URLSearchParams(window.location.search);
   const consultaPendiente = localStorage.getItem('consultaPendiente');
+  
+  // Mostrar información del reto actual si existe
+  const retoInfo = mostrarRetoActual();
+  if (retoInfo) {
+    const main = document.querySelector('main');
+    main.insertBefore(retoInfo, main.children[1]); // Insertar después del h2
+  }
   
   if (urlParams.get('reto') === 'true' && consultaPendiente) {
     document.getElementById('sqlInput').value = consultaPendiente;
@@ -138,7 +333,8 @@ document.addEventListener('DOMContentLoaded', function() {
     info.innerHTML = '🎯 Consulta del reto cargada. ¡Modifícala si es necesario y ejecuta!';
     
     const main = document.querySelector('main');
-    main.insertBefore(info, main.children[2]);
+    const insertPosition = retoInfo ? 3 : 2; // Ajustar posición según si hay reto info
+    main.insertBefore(info, main.children[insertPosition]);
     
     // Remover el mensaje después de 5 segundos
     setTimeout(() => info.remove(), 5000);

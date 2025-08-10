@@ -37,6 +37,15 @@ app.get('/', (req, res) => {
   res.json({ message: 'Atapuerca Backend funcionando', status: 'OK' });
 });
 
+// Endpoint para obtener las tablas permitidas
+app.get('/tables', (req, res) => {
+  const tablasPermitidas = ['Robots', 'Humanos', 'Misiones', 'Armas', 'Bases'];
+  res.json({ 
+    tables: tablasPermitidas,
+    message: 'Estas son las tablas disponibles para consulta.'
+  });
+});
+
 app.post('/query', async (req, res) => {
   const { query } = req.body;
   
@@ -44,15 +53,44 @@ app.post('/query', async (req, res) => {
     return res.status(400).json({ error: 'Se requiere una consulta SQL.' });
   }
   
-  if (!/^select\s/i.test(query.trim())) {
-    return res.status(400).json({ error: 'Solo se permiten consultas SELECT.' });
-  }
-  
   // Verificar que tengamos las credenciales necesarias
   if (missingEnvVars.length > 0) {
     return res.status(500).json({ 
       error: 'Configuración del servidor incompleta',
       details: `Variables faltantes: ${missingEnvVars.join(', ')}`
+    });
+  }
+  
+  // Lista de tablas permitidas (whitelist)
+  const tablasPermitidas = ['Robots', 'Humanos', 'Misiones', 'Armas', 'Bases'];
+  
+  // Verificar que solo sea SELECT
+  if (!/^select\s/i.test(query.trim())) {
+    return res.status(400).json({ error: 'Solo se permiten consultas SELECT.' });
+  }
+  
+  // Verificar que no use tablas del sistema
+  const queryLower = query.toLowerCase();
+  const tablasSistema = [
+    'information_schema', 'sys.', 'master.', 'msdb.', 'model.', 'tempdb.',
+    'sysadmin', 'sysusers', 'sysobjects', 'syscolumns'
+  ];
+  
+  const usaTablasSistema = tablasSistema.some(tabla => queryLower.includes(tabla));
+  if (usaTablasSistema) {
+    return res.status(403).json({ 
+      error: 'Acceso denegado: No se permite consultar tablas del sistema.' 
+    });
+  }
+  
+  // Verificar que solo use tablas permitidas
+  const usaTablaNoPermitida = !tablasPermitidas.some(tabla => 
+    queryLower.includes(tabla.toLowerCase())
+  );
+  
+  if (usaTablaNoPermitida && !queryLower.includes('dual')) {
+    return res.status(403).json({ 
+      error: `Acceso denegado: Solo se permiten las tablas: ${tablasPermitidas.join(', ')}` 
     });
   }
   
@@ -66,6 +104,32 @@ app.post('/query', async (req, res) => {
     res.json({ rows: result.recordset });
   } catch (err) {
     console.error('Error en consulta SQL:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Endpoint especial para consultas de administrador (requiere clave)
+app.post('/admin-query', async (req, res) => {
+  const { query, adminKey } = req.body;
+  
+  // Clave de administrador (en producción debería estar en variables de entorno)
+  const ADMIN_KEY = process.env.ADMIN_KEY || 'atapuerca-admin-2025';
+  
+  if (adminKey !== ADMIN_KEY) {
+    return res.status(403).json({ error: 'Clave de administrador incorrecta.' });
+  }
+  
+  if (!query) {
+    return res.status(400).json({ error: 'Se requiere una consulta SQL.' });
+  }
+  
+  try {
+    const pool = await sql.connect(config);
+    const result = await pool.request().query(query);
+    await pool.close();
+    res.json({ rows: result.recordset });
+  } catch (err) {
+    console.error('Error en consulta admin:', err);
     res.status(500).json({ error: err.message });
   }
 });
