@@ -70,10 +70,14 @@ class AtapuercaDashboard {
 
         // Insertar en el contenedor específico de index.html
         const contenedorDestino = document.getElementById('dashboard-progreso') || document.querySelector('main');
+        console.log('Contenedor destino:', contenedorDestino ? contenedorDestino.id || 'main' : 'no encontrado');
+        
         if (contenedorDestino) {
             if (contenedorDestino.id === 'dashboard-progreso') {
+                console.log('Insertando dashboard en contenedor específico al final');
                 contenedorDestino.appendChild(this.contenedor);
             } else {
+                console.log('Insertando dashboard al principio del main');
                 contenedorDestino.insertBefore(this.contenedor, contenedorDestino.firstChild);
             }
         }
@@ -393,14 +397,19 @@ class AtapuercaDashboard {
 // Inicializar dashboard cuando la página esté lista - SOLO EN INDEX.HTML
 document.addEventListener('DOMContentLoaded', async function() {
     // Solo mostrar dashboard en la página de inicio
-    const esIndex = window.location.pathname.endsWith('index.html') || 
-                   window.location.pathname === '/' ||
-                   window.location.pathname.endsWith('/');
+    const pathname = window.location.pathname;
+    const esIndex = pathname.endsWith('index.html') || 
+                   pathname === '/' ||
+                   pathname.endsWith('/') ||
+                   pathname.includes('/Atapuerca/') && !pathname.includes('retos.html') && !pathname.includes('sql.html') && !pathname.includes('descargas.html') && !pathname.includes('contacto.html');
+    
+    console.log('Dashboard check - Pathname:', pathname, 'Es index:', esIndex);
     
     if (esIndex) {
         setTimeout(async () => {
             const dashboard = new AtapuercaDashboard();
             await dashboard.inicializar();
+            console.log('Dashboard inicializado en página de inicio');
         }, 1000); // Dar tiempo para que se carguen los datos
     }
 });
