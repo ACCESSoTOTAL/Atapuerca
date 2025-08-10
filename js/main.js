@@ -371,3 +371,38 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => info.remove(), 7000);
   }
 });
+
+// Cargar ejemplo si viene desde retos.html
+document.addEventListener('DOMContentLoaded', function() {
+  const queryToLoad = localStorage.getItem('queryToLoad');
+  if (queryToLoad) {
+    const sqlInput = document.getElementById('sqlInput');
+    if (sqlInput) {
+      sqlInput.value = queryToLoad;
+      // Scroll hacia el textarea
+      sqlInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Enfocar el textarea
+      setTimeout(() => sqlInput.focus(), 500);
+    }
+    // Limpiar el localStorage
+    localStorage.removeItem('queryToLoad');
+    
+    // Mostrar mensaje de ayuda
+    const info = document.createElement('div');
+    info.style.cssText = `
+      background: linear-gradient(135deg, var(--accent-orange), #ff9500); 
+      color: var(--bg-dark); 
+      padding: 1em; 
+      border-radius: 5px; 
+      margin-bottom: 1em; 
+      text-align: center; 
+      font-weight: bold;
+    `;
+    info.innerHTML = '📝 Ejemplo cargado. Puedes usar esta consulta como referencia y modificarla para resolver el reto.';
+    
+    const main = document.querySelector('main');
+    main.insertBefore(info, main.children[2]);
+    
+    setTimeout(() => info.remove(), 8000);
+  }
+});

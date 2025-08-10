@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                 <button onclick="irAlReto(' + reto.id + ')" style="background: var(--accent-cyan); color: var(--bg-dark); border: none; padding: 0.7em 1.2em; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9em;">🚀 Ir al Terminal</button>
-                <button onclick="cargarEjemplo(' + reto.id + ')" style="background: var(--bg-medium); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 0.7em 1.2em; border-radius: 5px; cursor: pointer; font-size: 0.9em;">📝 Ver ejemplo</button>
-                <button onclick="mostrarPistaSimple(' + reto.id + ')" style="background: var(--bg-medium); color: var(--accent-orange); border: 1px solid var(--accent-orange); padding: 0.7em 1.2em; border-radius: 5px; cursor: pointer; font-size: 0.9em;">💡 Pista</button>title>Retos SQL - Atapuerca Net</title>
+  <title>Retos SQL - Atapuerca Net</title>
   <link rel="stylesheet" href="css/estilos.css" />
 </head>
 <body>
@@ -144,6 +142,7 @@
           html += '<p style="margin: 0 0 1em 0; color: var(--text-secondary); line-height: 1.4;">' + reto.descripcion + '</p>';
           html += '<div style="display: flex; gap: 0.5em; flex-wrap: wrap;">';
           html += '<button onclick="irAlReto(' + reto.id + ')" style="background: var(--accent-cyan); color: var(--bg-dark); border: none; padding: 0.7em 1.2em; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 0.9em;">🚀 Ir al Terminal</button>';
+          html += '<button onclick="cargarEjemplo(' + reto.id + ')" style="background: var(--bg-medium); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 0.7em 1.2em; border-radius: 5px; cursor: pointer; font-size: 0.9em;">📝 Ver ejemplo</button>';
           html += '<button onclick="mostrarPistaSimple(' + reto.id + ')" style="background: var(--bg-medium); color: var(--accent-orange); border: 1px solid var(--accent-orange); padding: 0.7em 1.2em; border-radius: 5px; cursor: pointer; font-size: 0.9em;">💡 Pista</button>';
           html += '</div>';
           html += '<div id="pista-' + reto.id + '" style="display: none; margin-top: 1em; padding: 1em; background: var(--bg-medium); border-radius: 5px; border-left: 3px solid var(--accent-orange);">';
@@ -154,7 +153,26 @@
       return html;
     }
     
-    function mostrarPistaSimple(retoId) {
+          function obtenerReto(id) {
+        // Buscar en todos los niveles
+        for (let nivel in retos) {
+          const reto = retos[nivel].find(r => r.id === id);
+          if (reto) return reto;
+        }
+        return null;
+      }
+
+      function cargarEjemplo(idReto) {
+        const reto = obtenerReto(idReto);
+        if (reto && reto.ejemploQuery) {
+          localStorage.setItem('queryToLoad', reto.ejemploQuery);
+          window.location.href = 'sql.html';
+        } else {
+          alert('No hay ejemplo disponible para este reto.');
+        }
+      }
+
+      function mostrarPistaSimple(idReto) {
       const pistaDiv = document.getElementById('pista-' + retoId);
       if (pistaDiv) {
         pistaDiv.style.display = pistaDiv.style.display === 'none' ? 'block' : 'none';
