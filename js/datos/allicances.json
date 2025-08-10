@@ -1,0 +1,37 @@
+[
+  {
+    "AllianceID": 1,
+    "BaseID1": 1,
+    "BaseID2": 2,
+    "FechaInicio": "2025-06-25T00:00:00",
+    "NivelConfianza": 8
+  },
+  {
+    "AllianceID": 2,
+    "BaseID1": 2,
+    "BaseID2": 5,
+    "FechaInicio": "2025-07-01T00:00:00",
+    "NivelConfianza": 7
+  },
+  {
+    "AllianceID": 3,
+    "BaseID1": 1,
+    "BaseID2": 5,
+    "FechaInicio": "2025-07-03T00:00:00",
+    "NivelConfianza": 6
+  },
+  {
+    "AllianceID": 4,
+    "BaseID1": 2,
+    "BaseID2": 1,
+    "FechaInicio": "2025-07-04T00:00:00",
+    "NivelConfianza": 8
+  },
+  {
+    "AllianceID": 5,
+    "BaseID1": 5,
+    "BaseID2": 1,
+    "FechaInicio": "2025-07-05T00:00:00",
+    "NivelConfianza": 9
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "AttackID": 1,
+    "BaseID": 1,
+    "Fecha": "2025-07-02T00:00:00",
+    "TipoRobot": "Ares-12",
+    "Daños": "Perímetro externo destruido",
+    "Muertos": 2
+  },
+  {
+    "AttackID": 2,
+    "BaseID": 5,
+    "Fecha": "2025-07-05T00:00:00",
+    "TipoRobot": "Hydra-X",
+    "Daños": "Cúpula dañada, comunicaciones fallidas",
+    "Muertos": 3
+  },
+  {
+    "AttackID": 3,
+    "BaseID": 2,
+    "Fecha": "2025-07-04T00:00:00",
+    "TipoRobot": "Nyx-7",
+    "Daños": "Fallo de sensores perimetrales",
+    "Muertos": 1
+  },
+  {
+    "AttackID": 4,
+    "BaseID": 1,
+    "Fecha": "2025-07-06T00:00:00",
+    "TipoRobot": "Valkiria-V",
+    "Daños": "Interferencia en red eléctrica",
+    "Muertos": 0
+  },
+  {
+    "AttackID": 5,
+    "BaseID": 5,
+    "Fecha": "2025-07-07T00:00:00",
+    "TipoRobot": "Sigma-9",
+    "Daños": "Brecha en entrada de suministros",
+    "Muertos": 1
+  }
+]

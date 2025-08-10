@@ -1,0 +1,37 @@
+[
+  {
+    "SurvivorID": 1,
+    "Nombre": "Elena Torres",
+    "Edad": 34,
+    "Rol": "Médica",
+    "BaseID": 1
+  },
+  {
+    "SurvivorID": 2,
+    "Nombre": "Marcus Black",
+    "Edad": 41,
+    "Rol": "Soldado",
+    "BaseID": 1
+  },
+  {
+    "SurvivorID": 3,
+    "Nombre": "Li Wei",
+    "Edad": 27,
+    "Rol": "Técnico",
+    "BaseID": 2
+  },
+  {
+    "SurvivorID": 4,
+    "Nombre": "Sara Kim",
+    "Edad": 16,
+    "Rol": "Scout",
+    "BaseID": 5
+  },
+  {
+    "SurvivorID": 5,
+    "Nombre": "Hugo Díaz",
+    "Edad": 39,
+    "Rol": "Comandante",
+    "BaseID": 1
+  }
+]

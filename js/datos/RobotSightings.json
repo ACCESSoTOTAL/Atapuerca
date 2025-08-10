@@ -1,0 +1,42 @@
+[
+  {
+    "SightingID": 1,
+    "Fecha": "2025-07-01T00:00:00",
+    "Coordenadas": "47.120,11.570",
+    "TipoRobot": "Ares-12",
+    "NivelAmenaza": 9,
+    "BaseID": 1
+  },
+  {
+    "SightingID": 2,
+    "Fecha": "2025-07-03T00:00:00",
+    "Coordenadas": "36.220,-115.010",
+    "TipoRobot": "Nyx-7",
+    "NivelAmenaza": 6,
+    "BaseID": 2
+  },
+  {
+    "SightingID": 3,
+    "Fecha": "2025-07-04T00:00:00",
+    "Coordenadas": "-3.460,-62.210",
+    "TipoRobot": "Hydra-X",
+    "NivelAmenaza": 10,
+    "BaseID": 5
+  },
+  {
+    "SightingID": 4,
+    "Fecha": "2025-07-05T00:00:00",
+    "Coordenadas": "40.715,-74.000",
+    "TipoRobot": "Valkiria-V",
+    "NivelAmenaza": 7,
+    "BaseID": 4
+  },
+  {
+    "SightingID": 5,
+    "Fecha": "2025-07-06T00:00:00",
+    "Coordenadas": "45.000,10.400",
+    "TipoRobot": "Sigma-9",
+    "NivelAmenaza": 5,
+    "BaseID": 3
+  }
+]

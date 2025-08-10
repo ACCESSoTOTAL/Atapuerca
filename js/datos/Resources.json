@@ -1,0 +1,26 @@
+[
+  {
+    "RecursosID": 1,
+    "BaseID": 1,
+    "AguaLitros": 1200,
+    "ComidaRaciones": 900,
+    "Armas": 60,
+    "Medicinas": 300
+  },
+  {
+    "RecursosID": 2,
+    "BaseID": 2,
+    "AguaLitros": 700,
+    "ComidaRaciones": 450,
+    "Armas": 30,
+    "Medicinas": 150
+  },
+  {
+    "RecursosID": 3,
+    "BaseID": 5,
+    "AguaLitros": 1000,
+    "ComidaRaciones": 600,
+    "Armas": 40,
+    "Medicinas": 200
+  }
+]

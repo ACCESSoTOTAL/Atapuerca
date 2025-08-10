@@ -1,0 +1,52 @@
+[
+  {
+    "BaseID": 1,
+    "Nombre": "Fortaleza Norte",
+    "Ubicacion": "Montañas Heladas",
+    "TipoBase": "Humana",
+    "Capacidad": 80,
+    "Latitud": 47.123,
+    "Longitud": 11.567,
+    "EsComandoCentral": "1"
+  },
+  {
+    "BaseID": 2,
+    "Nombre": "Refugio Delta",
+    "Ubicacion": "Desierto Rojo",
+    "TipoBase": "Humana",
+    "Capacidad": 50,
+    "Latitud": 36.219,
+    "Longitud": -115.015,
+    "EsComandoCentral": "0"
+  },
+  {
+    "BaseID": 3,
+    "Nombre": "Nido Central",
+    "Ubicacion": "Instalación Subterránea Z3",
+    "TipoBase": "IA",
+    "Capacidad": null,
+    "Latitud": 45.003,
+    "Longitud": 10.401,
+    "EsComandoCentral": "0"
+  },
+  {
+    "BaseID": 4,
+    "Nombre": "Torre Omega",
+    "Ubicacion": "Sector Urbano X",
+    "TipoBase": "IA",
+    "Capacidad": null,
+    "Latitud": 40.716,
+    "Longitud": -74.003,
+    "EsComandoCentral": "0"
+  },
+  {
+    "BaseID": 5,
+    "Nombre": "Cúpula Esperanza",
+    "Ubicacion": "Selva Tropical",
+    "TipoBase": "Humana",
+    "Capacidad": 70,
+    "Latitud": -3.465,
+    "Longitud": -62.215,
+    "EsComandoCentral": "0"
+  }
+]

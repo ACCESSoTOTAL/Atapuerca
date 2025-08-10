@@ -1,0 +1,37 @@
+[
+  {
+    "SupplyID": 1,
+    "BaseID": 1,
+    "Tipo": "Agua",
+    "Cantidad": 200,
+    "FechaEntrega": "2025-07-01T00:00:00"
+  },
+  {
+    "SupplyID": 2,
+    "BaseID": 1,
+    "Tipo": "Comida",
+    "Cantidad": 300,
+    "FechaEntrega": "2025-07-01T00:00:00"
+  },
+  {
+    "SupplyID": 3,
+    "BaseID": 2,
+    "Tipo": "Medicinas",
+    "Cantidad": 100,
+    "FechaEntrega": "2025-07-02T00:00:00"
+  },
+  {
+    "SupplyID": 4,
+    "BaseID": 5,
+    "Tipo": "Munición",
+    "Cantidad": 150,
+    "FechaEntrega": "2025-07-03T00:00:00"
+  },
+  {
+    "SupplyID": 5,
+    "BaseID": 5,
+    "Tipo": "Comida",
+    "Cantidad": 200,
+    "FechaEntrega": "2025-07-04T00:00:00"
+  }
+]

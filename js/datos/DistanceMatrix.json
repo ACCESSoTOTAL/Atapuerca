@@ -1,0 +1,32 @@
+[
+  {
+    "ID": 1,
+    "IDOrigen": 1,
+    "IDDestino": 2,
+    "Kilometros": 320
+  },
+  {
+    "ID": 2,
+    "IDOrigen": 1,
+    "IDDestino": 3,
+    "Kilometros": 850
+  },
+  {
+    "ID": 3,
+    "IDOrigen": 1,
+    "IDDestino": 4,
+    "Kilometros": 1250
+  },
+  {
+    "ID": 4,
+    "IDOrigen": 1,
+    "IDDestino": 5,
+    "Kilometros": 900
+  },
+  {
+    "ID": 5,
+    "IDOrigen": 2,
+    "IDDestino": 3,
+    "Kilometros": 710
+  }
+]

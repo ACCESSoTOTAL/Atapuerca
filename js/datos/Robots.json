@@ -1,0 +1,37 @@
+[
+  {
+    "RobotID": 1,
+    "Modelo": "Ares-12",
+    "Generacion": 3,
+    "Funciones": "Combate terrestre pesado",
+    "NivelAmenaza": 9
+  },
+  {
+    "RobotID": 2,
+    "Modelo": "Nyx-7",
+    "Generacion": 2,
+    "Funciones": "Reconocimiento aéreo y rastreo térmico",
+    "NivelAmenaza": 6
+  },
+  {
+    "RobotID": 3,
+    "Modelo": "Hydra-X",
+    "Generacion": 4,
+    "Funciones": "Intervención urbana y anulación electrónica",
+    "NivelAmenaza": 10
+  },
+  {
+    "RobotID": 4,
+    "Modelo": "Sigma-9",
+    "Generacion": 1,
+    "Funciones": "Exploración autónoma",
+    "NivelAmenaza": 5
+  },
+  {
+    "RobotID": 5,
+    "Modelo": "Valkiria-V",
+    "Generacion": 2,
+    "Funciones": "Neutralización de sistemas energéticos",
+    "NivelAmenaza": 7
+  }
+]

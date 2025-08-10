@@ -1,0 +1,52 @@
+[
+  {
+    "MissionID": 1,
+    "Nombre": "Operación Luz Verde",
+    "OrigenID": 1,
+    "DestinoID": 2,
+    "FechaInicio": "2025-07-06T00:00:00",
+    "FechaFin": null,
+    "Objetivo": "Entregar suministros médicos y reconocimiento",
+    "Estado": "En curso"
+  },
+  {
+    "MissionID": 2,
+    "Nombre": "Ruta del Fénix",
+    "OrigenID": 2,
+    "DestinoID": 5,
+    "FechaInicio": "2025-07-04T00:00:00",
+    "FechaFin": "2025-07-06T00:00:00",
+    "Objetivo": "Evacuación de niños y civiles",
+    "Estado": "Completada"
+  },
+  {
+    "MissionID": 3,
+    "Nombre": "Escudo del Sur",
+    "OrigenID": 5,
+    "DestinoID": 1,
+    "FechaInicio": "2025-07-02T00:00:00",
+    "FechaFin": "2025-07-03T00:00:00",
+    "Objetivo": "Transporte de armas pesadas",
+    "Estado": "Completada"
+  },
+  {
+    "MissionID": 4,
+    "Nombre": "Vigía Estelar",
+    "OrigenID": 1,
+    "DestinoID": 4,
+    "FechaInicio": "2025-07-05T00:00:00",
+    "FechaFin": null,
+    "Objetivo": "Espionaje a base enemiga",
+    "Estado": "En curso"
+  },
+  {
+    "MissionID": 5,
+    "Nombre": "Eco de la Llama",
+    "OrigenID": 2,
+    "DestinoID": 3,
+    "FechaInicio": "2025-07-01T00:00:00",
+    "FechaFin": "2025-07-02T00:00:00",
+    "Objetivo": "Interferencia en sistemas de IA",
+    "Estado": "Fallida"
+  }
+]
