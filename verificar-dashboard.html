@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificación Dashboard</title>
+</head>
+<body>
+    <h1>Verificación de Estado del Dashboard</h1>
+    <div id="resultados"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const resultados = document.getElementById('resultados');
+            
+            // Verificar páginas
+            const verificaciones = [
+                { 
+                    nombre: 'Página Index', 
+                    url: 'https://accessototal.github.io/Atapuerca/',
+                    debeTenerDashboard: true 
+                },
+                { 
+                    nombre: 'Página Retos', 
+                    url: 'https://accessototal.github.io/Atapuerca/retos.html',
+                    debeTenerDashboard: false 
+                }
+            ];
+            
+            resultados.innerHTML = `
+                <h2>Estado de las Páginas:</h2>
+                <ol>
+                    <li><strong>Index:</strong> Debería mostrar dashboard al FINAL del contenido</li>
+                    <li><strong>Retos:</strong> NO debería mostrar dashboard</li>
+                </ol>
+                
+                <h2>Instrucciones de Verificación:</h2>
+                <ol>
+                    <li>Abre la <a href="https://accessototal.github.io/Atapuerca/" target="_blank">página de inicio</a></li>
+                    <li>Verifica que aparezca "📊 ESTADO ACTUAL DE ATAPUERCA" al final</li>
+                    <li>Abre la <a href="https://accessototal.github.io/Atapuerca/retos.html" target="_blank">página de retos</a></li>
+                    <li>Verifica que NO aparezca el dashboard de estadísticas</li>
+                    <li>En ambas páginas, abre Developer Tools (F12) y revisa la consola</li>
+                </ol>
+                
+                <h2>URLs de Verificación:</h2>
+                <ul>
+                    ${verificaciones.map(v => `
+                        <li>
+                            <a href="${v.url}" target="_blank">${v.nombre}</a> 
+                            (Dashboard: ${v.debeTenerDashboard ? 'SÍ' : 'NO'})
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        });
+    </script>
+</body>
+</html>
