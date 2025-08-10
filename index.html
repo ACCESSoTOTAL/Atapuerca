@@ -47,13 +47,8 @@
   <script src="js/dashboard.js"></script>
   <script src="js/retos.js"></script>
   <script>
-    // Cargar dashboard al abrir la página
-    document.addEventListener('DOMContentLoaded', function() {
-      const container = document.getElementById('dashboard-progreso');
-      if (container && typeof mostrarDashboard === 'function') {
-        mostrarDashboard('dashboard-progreso');
-      }
-    });
+    // El dashboard se carga automáticamente en esta página por dashboard.js
+    console.log('Página de inicio cargada - Dashboard se inicializará automáticamente');
   </script>
 </body>
 </html>

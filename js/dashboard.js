@@ -68,10 +68,14 @@ class AtapuercaDashboard {
             </div>
         `;
 
-        // Insertar antes del contenido principal de retos
-        const main = document.querySelector('main');
-        if (main) {
-            main.insertBefore(this.contenedor, main.firstChild);
+        // Insertar en el contenedor específico de index.html
+        const contenedorDestino = document.getElementById('dashboard-progreso') || document.querySelector('main');
+        if (contenedorDestino) {
+            if (contenedorDestino.id === 'dashboard-progreso') {
+                contenedorDestino.appendChild(this.contenedor);
+            } else {
+                contenedorDestino.insertBefore(this.contenedor, contenedorDestino.firstChild);
+            }
         }
 
         // Event listener para refresh
@@ -386,10 +390,17 @@ class AtapuercaDashboard {
     }
 }
 
-// Inicializar dashboard cuando la página esté lista
+// Inicializar dashboard cuando la página esté lista - SOLO EN INDEX.HTML
 document.addEventListener('DOMContentLoaded', async function() {
-    setTimeout(async () => {
-        const dashboard = new AtapuercaDashboard();
-        await dashboard.inicializar();
-    }, 1000); // Dar tiempo para que se carguen los datos
+    // Solo mostrar dashboard en la página de inicio
+    const esIndex = window.location.pathname.endsWith('index.html') || 
+                   window.location.pathname === '/' ||
+                   window.location.pathname.endsWith('/');
+    
+    if (esIndex) {
+        setTimeout(async () => {
+            const dashboard = new AtapuercaDashboard();
+            await dashboard.inicializar();
+        }, 1000); // Dar tiempo para que se carguen los datos
+    }
 });
