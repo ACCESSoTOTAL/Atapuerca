@@ -2,12 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Consulta SQL - Atapuerca Net</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminal SQL - Atapuerca Net</title>
   <link rel="stylesheet" href="css/estilos.css" />
 </head>
 <body>
   <header>
-    <h1>Consulta SQL</h1>
+    <h1 class="glow">🛰️ TERMINAL SQL</h1>
     <nav>
       <a href="index.html">Inicio</a>
       <a href="retos.html">Retos</a>
@@ -17,12 +18,22 @@
     </nav>
   </header>
   <main>
-    <h2>🛰️ Conexión con la base de datos</h2>
+    <h2>� Conexión con la base de datos</h2>
+    <p><strong>Estado:</strong> <span style="color: var(--accent-cyan);">CONECTADO</span> | <strong>Servidor:</strong> atapuerca.database.windows.net</p>
+    
     <form onsubmit="runQuery(); return false;">
-      <textarea id="sqlInput" rows="5">SELECT TOP 5 * FROM Robots;</textarea><br />
-      <button type="submit">Ejecutar consulta</button>
+      <label for="sqlInput"><strong>Introduce tu consulta SQL:</strong></label>
+      <textarea id="sqlInput" rows="8" placeholder="-- Ejemplo: SELECT TOP 5 * FROM Robots;">SELECT TOP 5 * FROM Robots;</textarea>
+      <button type="submit">🚀 EJECUTAR CONSULTA</button>
     </form>
-    <pre id="output">Resultados aparecerán aquí...</pre>
+    
+    <h3>📊 Resultados:</h3>
+    <pre id="output">Esperando comando...</pre>
+    
+    <div style="margin-top: 2em; padding: 1em; background: var(--bg-light); border-radius: 5px; border-left: 4px solid var(--accent-orange);">
+      <h4 style="margin: 0 0 1em 0; color: var(--accent-orange);">⚠️ Protocolo de seguridad:</h4>
+      <p style="margin: 0; font-size: 0.9em;">Solo se permiten consultas SELECT. Otras operaciones están restringidas por seguridad.</p>
+    </div>
   </main>
   <footer>
     <p>&copy; 2025 Atapuerca Net</p>
