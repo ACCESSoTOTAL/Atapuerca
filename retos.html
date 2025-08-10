@@ -19,26 +19,30 @@
   </header>
   <main>
     <h2>🎯 Entrenamientos de la resistencia</h2>
-    <p>Mejora tus habilidades SQL con estos desafíos progresivos. Cada nivel te preparará para las misiones más complejas.</p>
+    <p>Completa estos desafíos SQL para entrenar tus habilidades y ganar puntos. Cada reto te acerca más a convertirte en un maestro hacker de datos.</p>
     
-    <h3>🏆 Niveles de entrenamiento:</h3>
-    <ul>
-      <li><strong>Nivel 1 - Reconocimiento básico:</strong> <a href="sql.html">Consultas SELECT simples</a></li>
-      <li><strong>Nivel 2 - Infiltración intermedia:</strong> <a href="sql.html">WHERE, ORDER BY, GROUP BY</a></li>
-      <li><strong>Nivel 3 - Operaciones combinadas:</strong> <a href="sql.html">JOINs entre tablas</a></li>
-      <li><strong>Nivel 4 - Análisis avanzado:</strong> <a href="sql.html">Subconsultas y funciones</a></li>
-      <li><strong>Nivel 5 - Maestría total:</strong> <a href="sql.html">Consultas complejas</a></li>
-    </ul>
-    
-    <div style="margin-top: 2em; padding: 1.5em; background: var(--bg-light); border-radius: 5px; border-left: 4px solid var(--accent-cyan);">
-      <h4 style="margin: 0 0 1em 0; color: var(--accent-cyan);">💡 Consejo del comando:</h4>
-      <p style="margin: 0;">Utiliza el <a href="sql.html">Terminal SQL</a> para practicar cada reto. Los datos están esperando ser descubiertos.</p>
+    <div id="retos-container">
+      <!-- Los retos se cargarán aquí dinámicamente -->
     </div>
     
-    <p style="margin-top: 2em;"><strong>Próximamente:</strong> Sistema de puntuación automático y retos interactivos.</p>
+    <div style="margin-top: 3em; padding: 1.5em; background: var(--bg-light); border-radius: 5px; border-left: 4px solid var(--accent-cyan);">
+      <h4 style="margin: 0 0 1em 0; color: var(--accent-cyan);">� Instrucciones:</h4>
+      <ol style="margin: 0; padding-left: 1.5em; color: var(--text-secondary);">
+        <li>Lee la descripción del reto</li>
+        <li>Si necesitas ayuda, haz clic en "💡 Pista"</li>
+        <li>Haz clic en "🚀 Ir al Terminal" para escribir tu consulta</li>
+        <li>El sistema detectará automáticamente si has completado el reto</li>
+        <li>¡Gana puntos y desbloquea nuevos desafíos!</li>
+      </ol>
+    </div>
   </main>
   <footer>
     <p>&copy; 2025 Atapuerca Net</p>
   </footer>
+  <script src="js/retos.js"></script>
+  <script>
+    // Cargar retos al abrir la página
+    document.addEventListener('DOMContentLoaded', cargarRetos);
+  </script>
 </body>
 </html>
