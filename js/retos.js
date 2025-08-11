@@ -1539,6 +1539,9 @@ function cargarRetos() {
     const container = document.getElementById('retos-container');
     if (!container) return;
 
+    // LIMPIAR contenedor antes de añadir nuevo contenido
+    container.innerHTML = '';
+
     let html = '';
     
     // Mostrar estadísticas generales
