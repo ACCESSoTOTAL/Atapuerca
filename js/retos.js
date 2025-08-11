@@ -898,8 +898,8 @@ function resetearProgreso() {
         localStorage.removeItem('progresoAtapuerca');
         localStorage.removeItem('modoDesarrollador');
         
-        alert('✅ Progreso completamente reseteado.\nLa página se recargará.');
-        window.location.reload();
+        alert('✅ Progreso completamente reseteado.\nLa interfaz se actualizará.');
+        cargarRetos(); // Actualizar interfaz inmediatamente
     }
 }
 
@@ -925,8 +925,8 @@ function desbloquearTodosLosRetos() {
               '🚀 Ahora puedes acceder a cualquier reto\n\n' +
               'La página se actualizará para mostrar todos los retos disponibles.');
         
-        // Recargar la página para mostrar todos los retos desbloqueados
-        window.location.reload();
+        // Actualizar la interfaz inmediatamente
+        cargarRetos();
     }
 }
 
@@ -938,8 +938,8 @@ function modoDesarrollador() {
         // Si ya está activo, preguntar si quiere desactivarlo
         if (confirm('🛠️ MODO DESARROLLADOR ACTIVO\n\n¿Desactivar el modo desarrollador?\n\nEsto volverá a mostrar solo los retos que realmente has completado.')) {
             localStorage.removeItem('modoDesarrollador');
-            alert('✅ Modo desarrollador desactivado.\nLa página se recargará para mostrar tu progreso real.');
-            window.location.reload();
+            alert('✅ Modo desarrollador desactivado.\nLa interfaz se actualizará para mostrar tu progreso real.');
+            cargarRetos(); // Actualizar interfaz inmediatamente
         }
     } else {
         // Si no está activo, activarlo
@@ -950,9 +950,9 @@ function modoDesarrollador() {
                   '✅ Todos los retos desbloqueados para testing\n' +
                   '📊 Tu progreso real se mantiene intacto\n' +
                   '🔄 Usa este botón nuevamente para desactivarlo\n\n' +
-                  'La página se actualizará.');
+                  'La interfaz se actualizará.');
             
-            window.location.reload();
+            cargarRetos(); // Actualizar interfaz inmediatamente
         }
     }
 }
@@ -960,6 +960,7 @@ function modoDesarrollador() {
 // Inicializar el sistema al cargar
 document.addEventListener('DOMContentLoaded', function() {
     cargarProgreso();
+    cargarRetos(); // ¡Esta llamada faltaba!
     console.log('Sistema de retos Atapuerca cargado - Progreso actual:', obtenerEstadisticas());
 });
 
@@ -1588,7 +1589,7 @@ function cargarRetos() {
             
             retosFase.forEach(reto => {
                 const completado = retosCompletados.includes(reto.id);
-                const bloqueado = reto.id > retoActual + 1;
+                const bloqueado = !estaDesbloqueado(reto.id);
                 
                 html += crearTarjetaReto(reto, completado, bloqueado);
             });
@@ -1609,7 +1610,7 @@ function cargarRetos() {
 
             retosFase.forEach(reto => {
                 const completado = retosCompletados.includes(reto.id);
-                const bloqueado = reto.id > retoActual + 1;
+                const bloqueado = !estaDesbloqueado(reto.id);
                 
                 html += crearTarjetaReto(reto, completado, bloqueado);
             });
