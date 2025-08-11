@@ -868,14 +868,15 @@ function verificarReto(consultaEjecutada, resultados) {
                                resultados.length >= 1; // Ajustado para ser más flexible
             break;
         case 9:
-            cumpleRequisitos = queryNormalizada.includes('count') &&
-                               queryNormalizada.includes('survivors') &&
-                               resultados.length === 1;
+            cumpleRequisitos = (queryNormalizada.includes('min') && queryNormalizada.includes('edad')) ||
+                               (queryNormalizada.includes('edad') && queryNormalizada.includes('order by') && queryNormalizada.includes('limit 1')) ||
+                               (queryNormalizada.includes('survivors') && queryNormalizada.includes('edad')) &&
+                               resultados.length >= 1;
             break;
         case 10:
-            cumpleRequisitos = queryNormalizada.includes('sum') &&
-                               queryNormalizada.includes('resources') &&
-                               resultados.length === 1;
+            cumpleRequisitos = queryNormalizada.includes('latitud > 0') &&
+                               queryNormalizada.includes('from bases') &&
+                               resultados.length >= 3; // Ajustado para ser flexible
             break;
 
         // FASE 1.5 - TUTORIAL JOIN (11-20)
