@@ -1743,3 +1743,37 @@ function mostrarPista(retoId) {
         pistaDiv.style.display = pistaDiv.style.display === 'none' ? 'block' : 'none';
     }
 }
+
+// ========================================
+// FUNCIÓN DE RESET COMPLETO DEL SISTEMA
+// ========================================
+function resetearSistemaCompleto() {
+    // Resetear variables globales
+    retosCompletados.length = 0;
+    retoActual = 1;
+    puntosTotal = 0;
+    
+    // Limpiar localStorage
+    localStorage.removeItem('retosCompletados');
+    localStorage.removeItem('retoActual');  
+    localStorage.removeItem('puntuacionAtapuerca');
+    localStorage.removeItem('progresoAtapuerca');
+    localStorage.removeItem('consultaPendiente');
+    localStorage.removeItem('queryToLoad');
+    localStorage.removeItem('retoActualObj');
+    
+    // Limpiar cualquier dato adicional
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && (key.includes('atapuerca') || key.includes('reto') || key.includes('sql'))) {
+            keysToRemove.push(key);
+        }
+    }
+    keysToRemove.forEach(key => localStorage.removeItem(key));
+    
+    // Guardar el estado reseteado
+    guardarProgreso();
+    
+    return true;
+}

@@ -46,11 +46,53 @@
       <h4 style="margin: 0 0 1em 0; color: var(--accent-orange);">⚠️ Protocolo de seguridad:</h4>
       <p style="margin: 0; font-size: 0.9em;">Solo se permiten consultas SELECT. Otras operaciones están restringidas por seguridad.</p>
     </div>
+    
+    <!-- Botón de Reset discreto para desarrolladores -->
+    <div style="margin-top: 1em; text-align: right;">
+      <button 
+        onclick="resetearProgresoRapido()" 
+        style="
+          background: var(--bg-medium); 
+          color: var(--text-secondary); 
+          border: 1px solid var(--bg-light); 
+          padding: 0.5em 1em; 
+          border-radius: 3px; 
+          font-size: 0.8em; 
+          cursor: pointer;
+          opacity: 0.7;
+        "
+        title="Reset rápido del progreso para testing"
+      >
+        🔧 Dev Reset
+      </button>
+    </div>
   </main>
   <footer>
     <p>&copy; 2025 Atapuerca Net</p>
   </footer>
   <script src="js/retos.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    // Función de reset rápido para desarrolladores
+    function resetearProgresoRapido() {
+      if (confirm('🔧 Reset rápido de desarrollo\n\n¿Limpiar todo el progreso?')) {
+        try {
+          // Usar la función del sistema si existe
+          if (typeof resetearSistemaCompleto === 'function') {
+            resetearSistemaCompleto();
+          } else {
+            // Fallback manual
+            localStorage.clear();
+          }
+          
+          alert('✅ Reset completado');
+          window.location.reload();
+        } catch (error) {
+          console.error('Error en reset:', error);
+          alert('❌ Error en reset');
+        }
+      }
+    }
+  </script>
 </body>
 </html>
