@@ -8,9 +8,9 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "🏠 Exploración inicial - Las bases de Atapuerca",
-    descripcion: "Descubre todas las bases de supervivencia disponibles (deberías ver 5 bases)",
+    descripcion: "Descubre todas las bases de supervivencia disponibles (deberías ver 8 bases)",
     consulta_sugerida: "SELECT * FROM Bases;",
-    pista: "Usa SELECT * para obtener todas las columnas. Deberías ver: Fortaleza Norte, Refugio Delta, Nido Central, Torre Omega y Cúpula Esperanza",
+    pista: "Usa SELECT * para obtener todas las columnas. Deberías ver: Fortaleza Norte, Refugio Delta, Nido Central, Torre Omega, Cúpula Esperanza, Puesto Avanzado Alpha, Estación Fantasma y Centro Nexus",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/AOWiBICrndc"
   },
@@ -19,9 +19,9 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "📋 Bases ordenadas alfabéticamente",
-    descripcion: "Mostrar solo el nombre y tipo de cada base, ordenadas alfabéticamente",
+    descripcion: "Mostrar solo el nombre y tipo de cada base, ordenadas alfabéticamente (8 bases totales)",
     consulta_sugerida: "SELECT Nombre, TipoBase FROM Bases ORDER BY Nombre;",
-    pista: "Usa ORDER BY para ordenar. El resultado debería empezar con 'Cúpula Esperanza' y terminar con 'Torre Omega'",
+    pista: "Usa ORDER BY para ordenar. El resultado debería empezar con 'Centro Nexus' y terminar con 'Torre Omega'. Hay 8 bases en total",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/gBpUMv1H8zk"
   },
@@ -30,9 +30,9 @@ const retos = [
     fase: 1,
     nivel: "Básico", 
     titulo: "👥 Bases humanas vs bases IA",
-    descripcion: "Filtrar y mostrar solo las bases de tipo 'Humana' (deberías encontrar 3 bases)",
+    descripcion: "Filtrar y mostrar solo las bases de tipo 'Humana' (deberías encontrar 5 bases)",
     consulta_sugerida: "SELECT * FROM Bases WHERE TipoBase = 'Humana';",
-    pista: "Usa WHERE para filtrar. Ojo con el uso de comillas simples o dobles. Las bases humanas son: Fortaleza Norte, Refugio Delta y Cúpula Esperanza",
+    pista: "Usa WHERE para filtrar. Las 5 bases humanas son: Fortaleza Norte, Refugio Delta, Cúpula Esperanza, Puesto Avanzado Alpha y Estación Fantasma",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -41,7 +41,7 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "🧑‍🤝‍🧑 El equipo de supervivientes",
-    descripcion: "Conoce a todos los supervivientes (deberías ver 5 personas: Elena, Marcus, Li Wei, Sara y Hugo)",
+    descripcion: "Conoce a todos los supervivientes (deberías ver 8 personas: Elena, Marcus, Li Wei, Sara, Hugo, Maya, Diego y Zara)",
     consulta_sugerida: "SELECT * FROM Survivors;",
     pista: "Usa SELECT * para ver a todo el equipo con sus roles: Médica, Soldado, Técnico, Scout y Comandante",
     puntos: 5,
@@ -52,9 +52,9 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "📦 Inventario de recursos",
-    descripcion: "Explorar todos los recursos disponibles en las bases (3 bases tienen recursos registrados)",
+    descripcion: "Explorar todos los recursos disponibles en las bases (5 registros de recursos)",
     consulta_sugerida: "SELECT * FROM Resources;",
-    pista: "Los recursos incluyen: AguaLitros, ComidaRaciones, Armas y Medicinas. Solo 3 bases tienen recursos registrados. No se pide unir con Survivors o Bases. SOLO LOS RECURSOS DISPONIBLES",
+    pista: "Los recursos incluyen: AguaLitros, ComidaRaciones, Armas y Medicinas. Hay 5 registros de recursos registrados. No se pide unir con Survivors o Bases. SOLO LOS RECURSOS DISPONIBLES",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -74,7 +74,7 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "👨‍⚕️ Supervivientes veteranos",
-    descripcion: "Encontrar supervivientes mayores de 30 años (deberías encontrar a Elena, Marcus y Hugo)",
+    descripcion: "Encontrar supervivientes mayores de 30 años (deberías encontrar a Elena, Marcus, Hugo y Zara)",
     consulta_sugerida: "SELECT * FROM Survivors WHERE Edad > 30;",
     pista: "Usa el operador > para comparar edades. Los veteranos son los más experimentados",
     puntos: 8,
@@ -96,7 +96,7 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "👶 La scout más joven",
-    descripcion: "Encontrar el superviviente más joven del equipo",
+    descripcion: "Encontrar el superviviente más joven del equipo (Sara Kim, 16 años)",
     consulta_sugerida: "SELECT * FROM Survivors WHERE Edad = (SELECT MIN(Edad) FROM Survivors);",
     pista: "Usa MIN para encontrar la edad mínima. La más joven es Sara Kim con 16 años",
     puntos: 10,
@@ -107,9 +107,9 @@ const retos = [
     fase: 1,
     nivel: "Básico",
     titulo: "🌍 Bases en el hemisferio norte",
-    descripcion: "Mostrar bases ubicadas en el hemisferio norte (Latitud > 0)",
+    descripcion: "Mostrar bases ubicadas en el hemisferio norte (Latitud > 0). Deberías encontrar 6 bases",
     consulta_sugerida: "SELECT Nombre, Ubicacion, Latitud FROM Bases WHERE Latitud > 0;",
-    pista: "Filtra por latitud positiva. Deberías encontrar 4 bases en el hemisferio norte",
+    pista: "Filtra por latitud positiva. Deberías encontrar 6 bases en el hemisferio norte",
     puntos: 8,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -129,9 +129,9 @@ const retos = [
     fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "🔗 INNER JOIN - Solo coincidencias",
-    descripcion: "INNER JOIN devuelve solo los registros que tienen coincidencias en ambas tablas. Supervivientes CON base asignada.",
+    descripcion: "INNER JOIN devuelve solo los registros que tienen coincidencias en ambas tablas. Supervivientes CON base asignada (6 supervivientes).",
     consulta_sugerida: "SELECT s.Nombre AS Superviviente, b.Nombre AS Base FROM Survivors s INNER JOIN Bases b ON s.BaseID = b.BaseID;",
-    pista: "INNER JOIN es el más común. Muestra solo supervivientes que tienen una base válida asignada (todos en nuestro caso).",
+    pista: "INNER JOIN es el más común. Muestra solo supervivientes que tienen una base válida asignada. Maya y Diego no aparecen porque no tienen base.",
     puntos: 10,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -142,7 +142,7 @@ const retos = [
     titulo: "◀️ LEFT OUTER JOIN - Todos de la izquierda",
     descripcion: "LEFT JOIN devuelve TODOS los registros de la tabla izquierda, incluso si no tienen coincidencias en la derecha.",
     consulta_sugerida: "SELECT b.Nombre AS Base, s.Nombre AS Superviviente FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID;",
-    pista: "LEFT JOIN muestra todas las bases, incluso las que no tienen supervivientes (como Torre Omega y Nido Central).",
+    pista: "LEFT JOIN muestra todas las bases, incluso las vacías (Centro Nexus, Estación Fantasma, Nido Central y Torre Omega aparecen con NULL).",
     puntos: 12,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -153,7 +153,7 @@ const retos = [
     titulo: "▶️ RIGHT OUTER JOIN - Todos de la derecha",
     descripcion: "RIGHT JOIN devuelve TODOS los registros de la tabla derecha, incluso si no tienen coincidencias en la izquierda.",
     consulta_sugerida: "SELECT b.Nombre AS Base, s.Nombre AS Superviviente FROM Bases b RIGHT JOIN Survivors s ON b.BaseID = s.BaseID;",
-    pista: "RIGHT JOIN muestra todos los supervivientes. En nuestro caso, todos tienen base, así que es igual que INNER JOIN.",
+    pista: "RIGHT JOIN muestra todos los supervivientes. Maya Chen y Diego Morales aparecen con NULL porque no tienen base asignada.",
     puntos: 12,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -173,9 +173,9 @@ const retos = [
     fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "❌ LEFT JOIN con exclusión - Solo sin coincidencias",
-    descripcion: "LEFT JOIN con WHERE NULL encuentra registros de la tabla izquierda SIN coincidencias en la derecha.",
+    descripcion: "LEFT JOIN con WHERE NULL encuentra registros de la tabla izquierda SIN coincidencias en la derecha (4 bases vacías).",
     consulta_sugerida: "SELECT b.Nombre AS Base FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID WHERE s.BaseID IS NULL;",
-    pista: "Esta consulta encuentra bases que NO tienen supervivientes asignados (bases vacías).",
+    pista: "Esta consulta encuentra bases que NO tienen supervivientes asignados: Nido Central, Torre Omega, Estación Fantasma y Centro Nexus.",
     puntos: 15,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -184,9 +184,9 @@ const retos = [
     fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "❌ RIGHT JOIN con exclusión - Huérfanos",
-    descripcion: "RIGHT JOIN con WHERE NULL encuentra registros de la tabla derecha SIN coincidencias en la izquierda.",
+    descripcion: "RIGHT JOIN con WHERE NULL encuentra registros de la tabla derecha SIN coincidencias en la izquierda (2 supervivientes huérfanos).",
     consulta_sugerida: "SELECT s.Nombre AS Superviviente FROM Bases b RIGHT JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.BaseID IS NULL;",
-    pista: "Esta consulta encontraría supervivientes sin base asignada (huérfanos). En nuestros datos no hay ninguno.",
+    pista: "Esta consulta encuentra supervivientes sin base asignada (huérfanos): Maya Chen y Diego Morales.",
     puntos: 15,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -197,7 +197,7 @@ const retos = [
     titulo: "🔗 CROSS JOIN - Producto cartesiano",
     descripcion: "CROSS JOIN combina cada registro de una tabla con CADA registro de la otra tabla.",
     consulta_sugerida: "SELECT b.Nombre AS Base, s.Nombre AS Superviviente FROM Bases b CROSS JOIN Survivors s;",
-    pista: "CROSS JOIN crea todas las combinaciones posibles. 5 bases × 5 supervivientes = 25 combinaciones!",
+    pista: "CROSS JOIN crea todas las combinaciones posibles. 8 bases × 8 supervivientes = 64 combinaciones!",
     puntos: 12,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -217,9 +217,9 @@ const retos = [
     fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "🎯 Auto-JOIN - La tabla consigo misma",
-    descripcion: "Usar alias para comparar registros de la misma tabla. Encuentra supervivientes de la misma edad.",
+    descripcion: "Usar alias para comparar registros de la misma tabla. Encuentra supervivientes de la misma edad (Marcus+Zara: 41 años, Li+Diego: 27 años).",
     consulta_sugerida: "SELECT s1.Nombre AS Superviviente1, s2.Nombre AS Superviviente2, s1.Edad FROM Survivors s1 INNER JOIN Survivors s2 ON s1.Edad = s2.Edad AND s1.SurvivorID < s2.SurvivorID;",
-    pista: "Auto-JOIN compara la tabla consigo misma. Encuentra pares de supervivientes con la misma edad.",
+    pista: "Auto-JOIN compara la tabla consigo misma. Deberías encontrar 2 pares: Marcus+Zara (41) y Li+Diego (27)",
     puntos: 20,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -228,9 +228,9 @@ const retos = [
     fase: 2,
     nivel: "Intermedio",
     titulo: "👥 Equipo por base - Análisis real",
-    descripcion: "Mostrar cada superviviente con el nombre de su base usando los datos reales",
+    descripcion: "Mostrar cada superviviente con el nombre de su base usando los datos reales (6 supervivientes con base asignada)",
     consulta_sugerida: "SELECT s.Nombre AS Superviviente, s.Rol, b.Nombre AS Base, b.TipoBase FROM Survivors s JOIN Bases b ON s.BaseID = b.BaseID ORDER BY b.Nombre;",
-    pista: "Verás que Fortaleza Norte tiene 3 supervivientes (Elena, Marcus, Hugo), Refugio Delta tiene 1 (Li Wei), y Cúpula Esperanza tiene 1 (Sara)",
+    pista: "Verás que Fortaleza Norte tiene 3 supervivientes (Elena, Marcus, Hugo), y hay 1 superviviente en Cúpula Esperanza, Puesto Avanzado Alpha y Refugio Delta cada una",
     puntos: 10,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -318,7 +318,7 @@ const retos = [
     titulo: "👑 Liderazgo y experiencia",
     descripcion: "Mostrar comandantes y médicos con sus bases y edades",
     consulta_sugerida: "SELECT s.Nombre AS Superviviente, s.Rol, s.Edad, b.Nombre AS Base FROM Survivors s JOIN Bases b ON s.BaseID = b.BaseID WHERE s.Rol IN ('Comandante', 'Médica') ORDER BY s.Edad DESC;",
-    pista: "Filtra por roles de liderazgo. Hugo es Comandante (39) y Elena es Médica (34)",
+    pista: "Filtra por roles de liderazgo. Zara es Comandante (41), Hugo es Comandante (39) y Elena es Médica (34)",
     puntos: 12,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -662,6 +662,94 @@ const retos = [
     pista: "La consulta más compleja del sistema: integra demografía, recursos, liderazgo para proyectar escenarios futuros a 5 años con estrategias específicas",
     puntos: 100,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+  },
+  {
+    id: 61,
+    fase: 2,
+    nivel: "Intermedio",
+    titulo: "🤖 Catálogo de amenazas robóticas",
+    descripcion: "Clasificar y analizar todos los tipos de robots por nivel de peligro",
+    consulta_sugerida: "SELECT r.Modelo, r.Generacion, r.Funciones, r.NivelAmenaza, CASE WHEN r.NivelAmenaza >= 9 THEN '🔴 CRÍTICO' WHEN r.NivelAmenaza >= 7 THEN '🟠 ALTO' WHEN r.NivelAmenaza >= 5 THEN '🟡 MEDIO' ELSE '🟢 BAJO' END AS ClasificacionRiesgo FROM Robots r ORDER BY r.NivelAmenaza DESC, r.Generacion DESC;",
+    pista: "Usa la tabla Robots. Analiza el nivel de amenaza para clasificar el riesgo. Los robots más modernos suelen ser más peligrosos",
+    puntos: 15,
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+  },
+  {
+    id: 62,
+    fase: 2,
+    nivel: "Intermedio", 
+    titulo: "💥 Historial de ataques por base",
+    descripcion: "Identificar qué bases han sufrido más ataques y bajas",
+    consulta_sugerida: "SELECT b.Nombre AS Base, COUNT(a.AttackID) AS TotalAtaques, SUM(a.Muertos) AS TotalMuertos, MAX(a.Fecha) AS UltimoAtaque, STRING_AGG(a.TipoRobot, ', ') AS RobotsAgresores FROM Bases b LEFT JOIN Attacks a ON b.BaseID = a.BaseID GROUP BY b.BaseID, b.Nombre ORDER BY TotalAtaques DESC, TotalMuertos DESC;",
+    pista: "Usa JOIN entre Bases y Attacks. STRING_AGG concatena los tipos de robots. Ordena por mayor cantidad de ataques",
+    puntos: 20,
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+  },
+  {
+    id: 63,
+    fase: 3,
+    nivel: "Avanzado",
+    titulo: "🎯 Eficiencia de misiones por alianza",
+    descripcion: "Comparar el éxito de misiones entre bases aliadas vs independientes",
+    consulta_sugerida: "SELECT CASE WHEN EXISTS (SELECT 1 FROM Alliances al WHERE (al.BaseID1 = m.OrigenID AND al.BaseID2 = m.DestinoID) OR (al.BaseID1 = m.DestinoID AND al.BaseID2 = m.OrigenID)) THEN 'Misión entre Aliados' ELSE 'Misión Independiente' END AS TipoCooperacion, COUNT(*) AS TotalMisiones, SUM(CASE WHEN Estado = 'Completada' THEN 1 ELSE 0 END) AS MisionesExitosas, ROUND(SUM(CASE WHEN Estado = 'Completada' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 2) AS PorcentajeExito FROM Missions m GROUP BY CASE WHEN EXISTS (SELECT 1 FROM Alliances al WHERE (al.BaseID1 = m.OrigenID AND al.BaseID2 = m.DestinoID) OR (al.BaseID1 = m.DestinoID AND al.BaseID2 = m.OrigenID)) THEN 'Misión entre Aliados' ELSE 'Misión Independiente' END;",
+    pista: "Usa EXISTS para verificar alianzas entre origen y destino. Calcula porcentaje de éxito comparando estados 'Completada'",
+    puntos: 30,
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+  },
+  {
+    id: 64,
+    fase: 3,
+    nivel: "Avanzado",
+    titulo: "👁️ Correlación avistamientos-ataques", 
+    descripcion: "Detectar patrones temporales entre avistamientos de robots y ataques posteriores",
+    consulta_sugerida: "WITH AvistamientosAmenaza AS (SELECT rs.BaseID, rs.Fecha AS FechaAvistamiento, rs.TipoRobot, rs.NivelAmenaza, b.Nombre AS Base FROM RobotSightings rs JOIN Bases b ON rs.BaseID = b.BaseID WHERE rs.NivelAmenaza >= 7) SELECT av.Base, av.FechaAvistamiento, av.TipoRobot AS RobotAvistado, av.NivelAmenaza, a.Fecha AS FechaAtaque, a.TipoRobot AS RobotAtacante, a.Muertos, DATEDIFF(day, av.FechaAvistamiento, a.Fecha) AS DiasDeWarning, CASE WHEN DATEDIFF(day, av.FechaAvistamiento, a.Fecha) BETWEEN 0 AND 3 THEN '🔴 Ataque Inmediato' WHEN DATEDIFF(day, av.FechaAvistamiento, a.Fecha) BETWEEN 4 AND 7 THEN '🟡 Ataque Próximo' ELSE '🟢 Sin Correlación Directa' END AS PatronTemporal FROM AvistamientosAmenaza av JOIN Attacks a ON av.BaseID = a.BaseID WHERE a.Fecha >= av.FechaAvistamiento AND DATEDIFF(day, av.FechaAvistamiento, a.Fecha) <= 10 ORDER BY DiasDeWarning, av.NivelAmenaza DESC;",
+    pista: "CTE para filtrar avistamientos peligrosos, luego JOIN con ataques. DATEDIFF calcula días entre eventos",
+    puntos: 35,
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+  },
+  {
+    id: 65,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "📦 Red de suministros inteligente",
+    descripcion: "Análisis logístico de necesidades vs suministros entregados por base",
+    consulta_sugerida: "WITH NecesidadRecursos AS (SELECT b.BaseID, b.Nombre AS Base, COUNT(s.SurvivorID) AS Personal, COALESCE(r.ComidaRaciones, 0) AS ComidaActual, COALESCE(r.Medicinas, 0) AS MedicinasActuales, COUNT(s.SurvivorID) * 100 AS ComidaNecesaria, COUNT(s.SurvivorID) * 20 AS MedicinasNecesarias FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID LEFT JOIN Resources r ON b.BaseID = r.BaseID GROUP BY b.BaseID, b.Nombre, r.ComidaRaciones, r.Medicinas), SuministrosRecientes AS (SELECT su.BaseID, su.Tipo, SUM(su.Cantidad) AS CantidadEntregada, MAX(su.FechaEntrega) AS UltimaEntrega FROM Supplies su WHERE su.FechaEntrega >= '2025-07-01' GROUP BY su.BaseID, su.Tipo) SELECT nr.Base, nr.Personal, nr.ComidaActual, nr.ComidaNecesaria, (nr.ComidaActual - nr.ComidaNecesaria) AS DeficitComida, nr.MedicinasActuales, nr.MedicinasNecesarias, (nr.MedicinasActuales - nr.MedicinasNecesarias) AS DeficitMedicinas, COALESCE(src.CantidadEntregada, 0) AS SuministrosRecibidos, src.UltimaEntrega, CASE WHEN (nr.ComidaActual - nr.ComidaNecesaria) < -50 OR (nr.MedicinasActuales - nr.MedicinasNecesarias) < -10 THEN '🔴 CRISIS - Necesita suministros urgentes' WHEN (nr.ComidaActual - nr.ComidaNecesaria) < 0 OR (nr.MedicinasActuales - nr.MedicinasNecesarias) < 0 THEN '🟡 RIESGO - Suministros insuficientes' ELSE '🟢 ESTABLE - Suministros adecuados' END AS EstadoLogistico FROM NecesidadRecursos nr LEFT JOIN SuministrosRecientes src ON nr.BaseID = src.BaseID ORDER BY DeficitComida, DeficitMedicinas;",
+    pista: "Dos CTEs: una calcula necesidades basadas en personal, otra suma suministros recientes. Compara deficit vs entregas",
+    puntos: 40,
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+  },
+  {
+    id: 66,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "🗺️ Análisis de rutas estratégicas",
+    descripcion: "Optimizar rutas usando la matriz de distancias y evaluar su uso en misiones",
+    consulta_sugerida: "SELECT bo.Nombre AS Origen, bd.Nombre AS Destino, dm.Kilometros, CASE WHEN dm.Kilometros <= 50 THEN '🟢 Corta' WHEN dm.Kilometros <= 100 THEN '🟡 Media' ELSE '🔴 Larga' END AS TipoRuta, COUNT(m.MissionID) AS MisionesRealizadas, CASE WHEN COUNT(m.MissionID) > 0 THEN 'Ruta Activa' ELSE 'Ruta Potencial' END AS EstadoUso, CASE WHEN COUNT(m.MissionID) > 0 THEN ROUND(SUM(CASE WHEN m.Estado = 'Completada' THEN 1 ELSE 0 END) * 100.0 / COUNT(m.MissionID), 2) ELSE 0 END AS PorcentajeExitoRuta FROM DistanceMatrix dm JOIN Bases bo ON dm.IDOrigen = bo.BaseID JOIN Bases bd ON dm.IDDestino = bd.BaseID LEFT JOIN Missions m ON dm.IDOrigen = m.OrigenID AND dm.IDDestino = m.DestinoID GROUP BY bo.BaseID, bo.Nombre, bd.BaseID, bd.Nombre, dm.Kilometros ORDER BY MisionesRealizadas DESC, dm.Kilometros;",
+    pista: "Une DistanceMatrix con Bases (dos veces) y Missions. Calcula éxito por ruta y clasifica distancias",
+    puntos: 35,
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+  },
+  {
+    id: 67,
+    fase: 5,
+    nivel: "Maestro",
+    titulo: "🏆 Índice de seguridad integral",
+    descripcion: "Evaluación completa de seguridad usando 6 tablas: personal, ataques, avistamientos, alianzas, armamento",
+    consulta_sugerida: "WITH BaseSeguridad AS (SELECT b.BaseID, b.Nombre AS Base, COUNT(DISTINCT s.SurvivorID) AS Personal, COUNT(DISTINCT a.AttackID) AS AtaquesRecibidos, COUNT(DISTINCT rs.SightingID) AS AvistamientosRobots, COUNT(DISTINCT al.AllianceID) AS AlianzasActivas, COALESCE(r.Armas, 0) AS Armamento, MAX(a.Fecha) AS UltimoAtaque, MAX(rs.NivelAmenaza) AS MaxAmenazaDetectada FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID LEFT JOIN Attacks a ON b.BaseID = a.BaseID LEFT JOIN RobotSightings rs ON b.BaseID = rs.BaseID LEFT JOIN Alliances al ON b.BaseID = al.BaseID1 OR b.BaseID = al.BaseID2 LEFT JOIN Resources r ON b.BaseID = r.BaseID GROUP BY b.BaseID, b.Nombre, r.Armas) SELECT Base, Personal, AtaquesRecibidos, AvistamientosRobots, AlianzasActivas, Armamento, UltimoAtaque, COALESCE(MaxAmenazaDetectada, 0) AS AmenazaMaxima, ROUND(GREATEST(0, LEAST(100, (Personal * 15) + (AlianzasActivas * 20) + (Armamento / 10.0) - (AtaquesRecibidos * 15) - (AvistamientosRobots * 5) - (COALESCE(MaxAmenazaDetectada, 0) * 2))), 2) AS IndiceSeguridadIntegral, CASE WHEN ROUND(GREATEST(0, LEAST(100, (Personal * 15) + (AlianzasActivas * 20) + (Armamento / 10.0) - (AtaquesRecibidos * 15) - (AvistamientosRobots * 5) - (COALESCE(MaxAmenazaDetectada, 0) * 2))), 2) >= 80 THEN '🟢 FORTALEZA SEGURA' WHEN ROUND(GREATEST(0, LEAST(100, (Personal * 15) + (AlianzasActivas * 20) + (Armamento / 10.0) - (AtaquesRecibidos * 15) - (AvistamientosRobots * 5) - (COALESCE(MaxAmenazaDetectada, 0) * 2))), 2) >= 60 THEN '🟡 DEFENSA ACEPTABLE' WHEN ROUND(GREATEST(0, LEAST(100, (Personal * 15) + (AlianzasActivas * 20) + (Armamento / 10.0) - (AtaquesRecibidos * 15) - (AvistamientosRobots * 5) - (COALESCE(MaxAmenazaDetectada, 0) * 2))), 2) >= 40 THEN '🟠 EN RIESGO' ELSE '🔴 CRÍTICO' END AS ClasificacionSeguridad FROM BaseSeguridad ORDER BY IndiceSeguridadIntegral DESC;",
+    pista: "CTE que une 6 tablas para calcular factores de seguridad. Fórmula: suma factores positivos, resta amenazas",
+    puntos: 50,
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
+  },
+  {
+    id: 68,
+    fase: 5,
+    nivel: "Maestro",
+    titulo: "🌐 Matriz de poder e influencia",
+    descripcion: "Análisis supremo usando todas las 10 tablas para determinar la jerarquía de poder entre bases",
+    consulta_sugerida: "WITH PoderMilitar AS (SELECT b.BaseID, b.Nombre AS Base, COUNT(DISTINCT s.SurvivorID) AS Personal, COUNT(CASE WHEN s.Rol = 'Comandante' THEN 1 END) AS Comandantes, COALESCE(r.Armas, 0) AS Armamento, COUNT(DISTINCT su.SupplyID) AS SuministrosRecibidos FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID LEFT JOIN Resources r ON b.BaseID = r.BaseID LEFT JOIN Supplies su ON b.BaseID = su.BaseID GROUP BY b.BaseID, b.Nombre, r.Armas), InfluenciaEstrategica AS (SELECT b.BaseID, COUNT(DISTINCT al.AllianceID) AS AlianzasActivas, COUNT(DISTINCT m.MissionID) AS MisionesLideradas, AVG(CAST(al.NivelConfianza AS FLOAT)) AS ConfianzaPromedio FROM Bases b LEFT JOIN Alliances al ON b.BaseID = al.BaseID1 OR b.BaseID = al.BaseID2 LEFT JOIN Missions m ON b.BaseID = m.OrigenID GROUP BY b.BaseID), VulnerabilidadOperacional AS (SELECT b.BaseID, COUNT(DISTINCT a.AttackID) AS AtaquesRecibidos, COUNT(DISTINCT rs.SightingID) AS AvistamientosRobots, MAX(a.Muertos) AS MaxBajasEnAtaque, AVG(CAST(dm.Kilometros AS FLOAT)) AS DistanciaPromedioAOtrasBases FROM Bases b LEFT JOIN Attacks a ON b.BaseID = a.BaseID LEFT JOIN RobotSightings rs ON b.BaseID = rs.BaseID LEFT JOIN DistanceMatrix dm ON b.BaseID = dm.IDOrigen GROUP BY b.BaseID) SELECT pm.Base, pm.Personal, pm.Comandantes, pm.Armamento, ie.AlianzasActivas, ie.MisionesLideradas, COALESCE(ie.ConfianzaPromedio, 0) AS ConfianzaPromedio, vo.AtaquesRecibidos, vo.AvistamientosRobots, COALESCE(vo.MaxBajasEnAtaque, 0) AS MaxBajas, ROUND(COALESCE(vo.DistanciaPromedioAOtrasBases, 0), 2) AS DistanciaPromedio, ROUND((pm.Personal * 30) + (pm.Comandantes * 50) + (pm.Armamento / 2.0) + (ie.AlianzasActivas * 40) + (ie.MisionesLideradas * 25) + (COALESCE(ie.ConfianzaPromedio, 0) * 10) + (pm.SuministrosRecibidos * 15) - (vo.AtaquesRecibidos * 20) - (vo.AvistamientosRobots * 10) - (COALESCE(vo.MaxBajasEnAtaque, 0) * 30), 2) AS IndicePoder, CASE WHEN ((pm.Personal * 30) + (pm.Comandantes * 50) + (pm.Armamento / 2.0) + (ie.AlianzasActivas * 40) + (ie.MisionesLideradas * 25) + (COALESCE(ie.ConfianzaPromedio, 0) * 10) + (pm.SuministrosRecibidos * 15) - (vo.AtaquesRecibidos * 20) - (vo.AvistamientosRobots * 10) - (COALESCE(vo.MaxBajasEnAtaque, 0) * 30)) >= 500 THEN '👑 POTENCIA HEGEMÓNICA' WHEN ((pm.Personal * 30) + (pm.Comandantes * 50) + (pm.Armamento / 2.0) + (ie.AlianzasActivas * 40) + (ie.MisionesLideradas * 25) + (COALESCE(ie.ConfianzaPromedio, 0) * 10) + (pm.SuministrosRecibidos * 15) - (vo.AtaquesRecibidos * 20) - (vo.AvistamientosRobots * 10) - (COALESCE(vo.MaxBajasEnAtaque, 0) * 30)) >= 300 THEN '🏆 POTENCIA REGIONAL' WHEN ((pm.Personal * 30) + (pm.Comandantes * 50) + (pm.Armamento / 2.0) + (ie.AlianzasActivas * 40) + (ie.MisionesLideradas * 25) + (COALESCE(ie.ConfianzaPromedio, 0) * 10) + (pm.SuministrosRecibidos * 15) - (vo.AtaquesRecibidos * 20) - (vo.AvistamientosRobots * 10) - (COALESCE(vo.MaxBajasEnAtaque, 0) * 30)) >= 100 THEN '🛡️ ACTOR RELEVANTE' ELSE '💀 BASE IRRELEVANTE' END AS ClasificacionPoder FROM PoderMilitar pm JOIN InfluenciaEstrategica ie ON pm.BaseID = ie.BaseID JOIN VulnerabilidadOperacional vo ON pm.BaseID = vo.BaseID ORDER BY IndicePoder DESC;",
+    pista: "Tres CTEs para diferentes aspectos del poder. Fórmula integral que suma factores positivos y resta vulnerabilidades",
+    puntos: 80,
+    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   }
 ];
 
@@ -849,7 +937,7 @@ function verificarReto(consultaEjecutada, resultados) {
             break;
         case 4:
             cumpleRequisitos = queryNormalizada.includes('from survivors') &&
-                               resultados.length === 10; // Ahora hay 10 supervivientes
+                               resultados.length === 8; // Ahora hay 8 supervivientes
             break;
         case 5:
             cumpleRequisitos = queryNormalizada.includes('from resources') &&
@@ -861,7 +949,7 @@ function verificarReto(consultaEjecutada, resultados) {
             break;
         case 7:
             cumpleRequisitos = queryNormalizada.includes('edad > 30') &&
-                               resultados.length >= 4; // Ajustado: Elena(34), Marcus(41), Hugo(39), Viktor(34), Zara(41)
+                               resultados.length === 4; // Elena(34), Marcus(41), Hugo(39), Zara(41)
             break;
         case 8:
             cumpleRequisitos = queryNormalizada.includes('comidaraciones > 500') &&
@@ -891,46 +979,58 @@ function verificarReto(consultaEjecutada, resultados) {
                                queryNormalizada.includes('survivors') &&
                                queryNormalizada.includes('bases') &&
                                queryNormalizada.includes('baseid') &&
-                               resultados.length >= 8; // 8 supervivientes con base válida
+                               resultados.length === 6; // 6 supervivientes con base válida
             break;
         case 13:
             cumpleRequisitos = queryNormalizada.includes('left join') &&
                                queryNormalizada.includes('survivors') &&
                                queryNormalizada.includes('bases') &&
                                queryNormalizada.includes('baseid') &&
-                               resultados.length >= 8; // Todas las bases (incluye bases sin supervivientes)
+                               resultados.length === 10; // Todas las bases incluyendo repeticiones y vacías
             break;
         case 14:
-            cumpleRequisitos = queryNormalizada.includes('capacidad is not null') &&
-                               resultados.length >= 2; // Ajustado
+            cumpleRequisitos = queryNormalizada.includes('right join') &&
+                               queryNormalizada.includes('survivors') &&
+                               queryNormalizada.includes('bases') &&
+                               queryNormalizada.includes('baseid') &&
+                               resultados.length === 8; // Todos los supervivientes, incluso huérfanos
             break;
         case 15:
-            cumpleRequisitos = queryNormalizada.includes('armas > 0') &&
-                               resultados.length >= 1;
+            cumpleRequisitos = queryNormalizada.includes('full outer join') &&
+                               queryNormalizada.includes('survivors') &&
+                               queryNormalizada.includes('bases') &&
+                               queryNormalizada.includes('baseid') &&
+                               resultados.length === 12; // Todo: bases vacías + huérfanos + coincidencias
             break;
         case 16:
-            cumpleRequisitos = (queryNormalizada.includes("rol = 'médica'") || queryNormalizada.includes('rol="médica"')) &&
-                               resultados.length === 1;
+            cumpleRequisitos = queryNormalizada.includes('left join') &&
+                               queryNormalizada.includes('is null') &&
+                               queryNormalizada.includes('where') &&
+                               resultados.length === 4; // Bases vacías: Nido Central, Torre Omega, Estación Fantasma, Centro Nexus
             break;
         case 17:
-            cumpleRequisitos = queryNormalizada.includes('group by') &&
-                               queryNormalizada.includes('case when') &&
-                               resultados.length >= 2;
+            cumpleRequisitos = queryNormalizada.includes('right join') &&
+                               queryNormalizada.includes('is null') &&
+                               queryNormalizada.includes('where') &&
+                               resultados.length === 2; // Huérfanos: Maya Chen y Diego Morales
             break;
         case 18:
-            cumpleRequisitos = queryNormalizada.includes('avg') &&
-                               queryNormalizada.includes('edad') &&
-                               resultados.length === 1;
+            cumpleRequisitos = queryNormalizada.includes('cross join') &&
+                               queryNormalizada.includes('survivors') &&
+                               queryNormalizada.includes('bases') &&
+                               resultados.length === 64; // 8 bases × 8 supervivientes = 64 combinaciones
             break;
         case 19:
-            cumpleRequisitos = queryNormalizada.includes('left join') &&
-                               queryNormalizada.includes('group by') &&
-                               resultados.length >= 3; // Ajustado
+            cumpleRequisitos = queryNormalizada.includes('join') &&
+                               queryNormalizada.includes('survivors') &&
+                               queryNormalizada.includes('bases') &&
+                               queryNormalizada.includes('resources') &&
+                               resultados.length === 6; // Múltiples JOIN: 6 supervivientes con base y recursos
             break;
         case 20:
             cumpleRequisitos = (queryNormalizada.includes('inner join') || queryNormalizada.includes('join')) &&
                                (queryNormalizada.includes('survivors') && queryNormalizada.includes('s2')) &&
-                               resultados.length >= 2; // Ahora hay parejas: Elena+Viktor (34), Li+Diego (27), Marcus+Zara (41)
+                               resultados.length === 2; // Auto-JOIN: Li+Diego (27), Marcus+Zara (41)
             break;
 
         // FASE 2 - INTERMEDIO (21-30) - Verificaciones específicas
@@ -938,7 +1038,7 @@ function verificarReto(consultaEjecutada, resultados) {
             cumpleRequisitos = queryNormalizada.includes('join') &&
                                queryNormalizada.includes('survivors') &&
                                queryNormalizada.includes('bases') &&
-                               resultados.length >= 8; // 8 supervivientes con base
+                               resultados.length === 6; // 6 supervivientes con base asignada
             break;
         case 22:
             cumpleRequisitos = queryNormalizada.includes('join') &&
@@ -994,48 +1094,52 @@ function verificarReto(consultaEjecutada, resultados) {
 
         // FASE 3 - AVANZADO (31-40) - Verificaciones más específicas
         case 31:
-            cumpleRequisitos = queryNormalizada.includes('rank') &&
-                               queryNormalizada.includes('over') &&
-                               queryNormalizada.includes('partition by') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('count') &&
+                               queryNormalizada.includes('sum') &&
+                               queryNormalizada.includes('coalesce') &&
+                               resultados.length === 1; // Una fila de estadísticas generales
             break;
         case 32:
-            cumpleRequisitos = queryNormalizada.includes('having') &&
+            cumpleRequisitos = queryNormalizada.includes('group by') &&
                                queryNormalizada.includes('count') &&
-                               queryNormalizada.includes('group by') &&
-                               resultados.length > 0;
+                               queryNormalizada.includes('avg') &&
+                               resultados.length >= 2; // Al menos 2 grupos por tipo de base
             break;
         case 33:
-            cumpleRequisitos = queryNormalizada.includes('row_number') &&
-                               queryNormalizada.includes('over') &&
-                               queryNormalizada.includes('order by') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('case when') &&
+                               queryNormalizada.includes('group by') &&
+                               queryNormalizada.includes('edad') &&
+                               resultados.length >= 3; // Al menos 3 grupos de edad
             break;
         case 34:
-            cumpleRequisitos = queryNormalizada.includes('sum') &&
-                               queryNormalizada.includes('over') &&
-                               queryNormalizada.includes('partition by') &&
+            cumpleRequisitos = queryNormalizada.includes('window') ||
+                               queryNormalizada.includes('over') ||
+                               (queryNormalizada.includes('rank') && queryNormalizada.includes('partition by')) &&
                                resultados.length > 0;
             break;
         case 35:
-            cumpleRequisitos = queryNormalizada.includes('lag') &&
-                               queryNormalizada.includes('over') &&
-                               queryNormalizada.includes('order by') &&
+            cumpleRequisitos = queryNormalizada.includes('window') ||
+                               queryNormalizada.includes('over') ||
+                               (queryNormalizada.includes('row_number') && queryNormalizada.includes('order by')) &&
                                resultados.length > 0;
             break;
         case 36:
-            cumpleRequisitos = queryNormalizada.includes('dense_rank') &&
-                               queryNormalizada.includes('over') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('join') &&
+                               queryNormalizada.includes('resources') &&
+                               queryNormalizada.includes('round') &&
+                               resultados.length >= 5; // Bases con recursos
             break;
         case 37:
-            cumpleRequisitos = queryNormalizada.includes('percentile') &&
-                               queryNormalizada.includes('over') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('round') &&
+                               queryNormalizada.includes('group by') &&
+                               queryNormalizada.includes('count') &&
+                               resultados.length >= 5; // Análisis de eficiencia por base
             break;
         case 38:
-            cumpleRequisitos = queryNormalizada.includes('first_value') &&
-                               queryNormalizada.includes('over') &&
+            cumpleRequisitos = queryNormalizada.includes('case when') &&
+                               queryNormalizada.includes('string_agg') &&
+                               queryNormalizada.includes('group by') &&
+                               resultados.length >= 3; // Grupos generacionales
                                queryNormalizada.includes('partition by') &&
                                resultados.length > 0;
             break;
@@ -1053,63 +1157,65 @@ function verificarReto(consultaEjecutada, resultados) {
 
         // FASE 4 - EXPERTO (41-50) - Verificaciones con subconsultas
         case 41:
-            cumpleRequisitos = queryNormalizada.includes('exists') &&
-                               queryNormalizada.includes('alliances') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('having') &&
+                               queryNormalizada.includes('count') &&
+                               queryNormalizada.includes('min') &&
+                               resultados.length >= 1; // Bases más vulnerables (mínimo 1 superviviente)
             break;
         case 42:
-            cumpleRequisitos = queryNormalizada.includes('in') &&
-                               queryNormalizada.includes('select') &&
-                               queryNormalizada.includes('alliances') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('where') &&
+                               queryNormalizada.includes('avg') &&
+                               queryNormalizada.includes('resources') &&
+                               resultados.length >= 2; // Bases por encima del promedio
             break;
         case 43:
-            cumpleRequisitos = queryNormalizada.includes('group by') &&
-                               queryNormalizada.includes('ubicacion') &&
-                               queryNormalizada.includes('attacks') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('where') &&
+                               queryNormalizada.includes('avg') &&
+                               queryNormalizada.includes('edad') &&
+                               (queryNormalizada.includes('comandante') || queryNormalizada.includes('médica')) &&
+                               resultados.length >= 2; // Líderes experimentados
             break;
         case 44:
-            cumpleRequisitos = queryNormalizada.includes('abs') &&
-                               queryNormalizada.includes('comidaraciones') &&
-                               queryNormalizada.includes('agualitros') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('having') &&
+                               queryNormalizada.includes('capacidad') &&
+                               queryNormalizada.includes('group by') &&
+                               resultados.length >= 4; // Bases con espacio disponible
             break;
         case 45:
-            cumpleRequisitos = queryNormalizada.includes('ceiling') &&
-                               queryNormalizada.includes('month') &&
-                               queryNormalizada.includes('robotsightings') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('exists') &&
+                               queryNormalizada.includes('case when') &&
+                               queryNormalizada.includes('recursos') &&
+                               resultados.length >= 5; // Clasificación de autonomía
             break;
         case 46:
-            cumpleRequisitos = queryNormalizada.includes('capacidad') &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('porcentaje') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('window') ||
+                               (queryNormalizada.includes('rank') && queryNormalizada.includes('over')) ||
+                               (queryNormalizada.includes('row_number') && queryNormalizada.includes('partition by')) &&
+                               resultados.length >= 5;
             break;
         case 47:
-            cumpleRequisitos = queryNormalizada.includes('min') &&
-                               queryNormalizada.includes('distancematrix') &&
-                               queryNormalizada.includes('grupo by') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('window') ||
+                               (queryNormalizada.includes('lag') && queryNormalizada.includes('over')) ||
+                               (queryNormalizada.includes('lead') && queryNormalizada.includes('order by')) &&
+                               resultados.length >= 5;
             break;
         case 48:
-            cumpleRequisitos = queryNormalizada.includes('indice') &&
-                               queryNormalizada.includes('armas') &&
-                               queryNormalizada.includes('medicinas') &&
-                               resultados.length > 0;
+            cumpleRequisitos = queryNormalizada.includes('window') ||
+                               (queryNormalizada.includes('sum') && queryNormalizada.includes('over')) ||
+                               (queryNormalizada.includes('running') && queryNormalizada.includes('total')) &&
+                               resultados.length >= 5;
             break;
         case 49:
             cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('factores') &&
-                               queryNormalizada.includes('riesgo') &&
-                               resultados.length > 0;
+                               queryNormalizada.includes('recursiv') &&
+                               queryNormalizada.includes('union') &&
+                               resultados.length >= 1;
             break;
         case 50:
             cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('clasificacion') &&
-                               queryNormalizada.includes('row_number') &&
-                               resultados.length > 0;
+                               queryNormalizada.includes('analisis') &&
+                               queryNormalizada.includes('indice') &&
+                               resultados.length >= 5; // Índice de supervivencia completo
             break;
 
         // FASE 5 - MAESTRO (51-60) - Verificaciones complejas con CTEs
@@ -1117,55 +1223,55 @@ function verificarReto(consultaEjecutada, resultados) {
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('comandocentral') &&
                                queryNormalizada.includes('cross join') &&
-                               resultados.length > 0;
+                               resultados.length >= 1; // Solo una base de comando central
             break;
         case 52:
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('consumosimulado') &&
                                queryNormalizada.includes('nullif') &&
-                               resultados.length > 0;
+                               resultados.length >= 6; // Bases con supervivientes
             break;
         case 53:
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('capacidadmilitar') &&
                                queryNormalizada.includes('union all') &&
-                               resultados.length > 0;
+                               resultados.length >= 8; // Análisis de todas las bases
             break;
         case 54:
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('string_agg') &&
                                queryNormalizada.includes('criticidad') &&
-                               resultados.length > 0;
+                               resultados.length >= 6; // Análisis de supervivientes únicos
             break;
         case 55:
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('sqrt') &&
                                queryNormalizada.includes('power') &&
-                               resultados.length > 0;
+                               resultados.length >= 6; // Análisis de conectividad entre bases
             break;
         case 56:
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('capacidadmedica') &&
                                queryNormalizada.includes('cobertura') &&
-                               resultados.length > 0;
+                               resultados.length >= 8; // Análisis médico de todas las bases
             break;
         case 57:
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('intercambios') &&
-                               queryNormalizada.includes('per capita') &&
-                               resultados.length > 0;
+                               (queryNormalizada.includes('per capita') || queryNormalizada.includes('percapita')) &&
+                               resultados.length >= 5; // Análisis de intercambio de recursos
             break;
         case 58:
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('liderazgo') &&
                                queryNormalizada.includes('sucesion') &&
-                               resultados.length > 0;
+                               resultados.length >= 6; // Plan de sucesión para líderes
             break;
         case 59:
             cumpleRequisitos = queryNormalizada.includes('with') &&
                                queryNormalizada.includes('expansion') &&
                                queryNormalizada.includes('viabilidad') &&
-                               resultados.length > 0;
+                               resultados.length >= 8; // Análisis de expansión de todas las bases
             break;
         case 60:
             cumpleRequisitos = queryNormalizada.includes('with') &&
@@ -1173,6 +1279,71 @@ function verificarReto(consultaEjecutada, resultados) {
                                queryNormalizada.includes('proyeccion') &&
                                queryNormalizada.includes('union all') &&
                                resultados.length >= 2; // Debe mostrar estado actual + proyección
+            break;
+
+        // RETOS EXPANDIDOS CON NUEVAS TABLAS (61-68)
+        case 61:
+            cumpleRequisitos = queryNormalizada.includes('robots') &&
+                               queryNormalizada.includes('nivelalenaza') &&
+                               queryNormalizada.includes('case when') &&
+                               queryNormalizada.includes('order by') &&
+                               resultados.length >= 5; // Todos los robots clasificados
+            break;
+            
+        case 62:
+            cumpleRequisitos = queryNormalizada.includes('attacks') &&
+                               queryNormalizada.includes('join') &&
+                               queryNormalizada.includes('count') &&
+                               queryNormalizada.includes('group by') &&
+                               resultados.length >= 5; // Bases con historial de ataques
+            break;
+            
+        case 63:
+            cumpleRequisitos = queryNormalizada.includes('alliances') &&
+                               queryNormalizada.includes('missions') &&
+                               queryNormalizada.includes('exists') &&
+                               queryNormalizada.includes('porcentaje') &&
+                               resultados.length >= 2; // Tipos de cooperación
+            break;
+            
+        case 64:
+            cumpleRequisitos = queryNormalizada.includes('robotsightings') &&
+                               queryNormalizada.includes('attacks') &&
+                               queryNormalizada.includes('datediff') &&
+                               queryNormalizada.includes('with') &&
+                               resultados.length >= 3; // Correlaciones temporales
+            break;
+            
+        case 65:
+            cumpleRequisitos = queryNormalizada.includes('supplies') &&
+                               queryNormalizada.includes('with') &&
+                               queryNormalizada.includes('necesidad') &&
+                               queryNormalizada.includes('deficit') &&
+                               resultados.length >= 5; // Análisis logístico de bases
+            break;
+            
+        case 66:
+            cumpleRequisitos = queryNormalizada.includes('distancematrix') &&
+                               queryNormalizada.includes('missions') &&
+                               queryNormalizada.includes('kilometros') &&
+                               queryNormalizada.includes('join') &&
+                               resultados.length >= 10; // Rutas estratégicas
+            break;
+            
+        case 67:
+            cumpleRequisitos = queryNormalizada.includes('with') &&
+                               queryNormalizada.includes('seguridad') &&
+                               queryNormalizada.includes('indice') &&
+                               (queryNormalizada.split('join').length >= 6 || queryNormalizada.split('left join').length >= 4) &&
+                               resultados.length >= 5; // Índice de seguridad integral
+            break;
+            
+        case 68:
+            cumpleRequisitos = queryNormalizada.includes('with') &&
+                               queryNormalizada.includes('poder') &&
+                               queryNormalizada.includes('indice') &&
+                               (queryNormalizada.split('cte').length >= 3 || queryNormalizada.split('as (').length >= 4) &&
+                               resultados.length >= 5; // Matriz de poder e influencia
             break;
 
         default:
