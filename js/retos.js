@@ -1326,7 +1326,7 @@ function cargarRetos() {
         let faseInfo = {
             1: { titulo: "📚 Fase 1: Fundamentos Básicos", descripcion: "SELECT, WHERE, ORDER BY", color: "var(--primary-green)" },
             2: { titulo: "🔗 Fase 2: Tutorial JOINs & Aplicación", descripcion: "INNER, LEFT, RIGHT, FULL OUTER, CROSS JOIN + Aplicación práctica", color: "var(--accent-cyan)" },
-            3: { titulo: "� Fase 3: Análisis Avanzado", descripcion: "GROUP BY, HAVING, funciones window", color: "var(--accent-orange)" },
+            3: { titulo: "📈 Fase 3: Análisis Avanzado", descripcion: "GROUP BY, HAVING, funciones window", color: "var(--accent-orange)" },
             4: { titulo: "🎯 Fase 4: Consultas Expertas", descripcion: "Subconsultas, EXISTS, análisis estratégico", color: "#ff6b6b" },
             5: { titulo: "🏆 Fase 5: Maestría SQL", descripcion: "CTEs complejas, análisis predictivo", color: "#8b5cf6" }
         };
