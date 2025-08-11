@@ -36,30 +36,85 @@
       </ol>
     </div>
     
-    <!-- Botón de Reset del Progreso -->
+    <!-- Botones de Administración -->
     <div style="margin-top: 2em; padding: 1.5em; background: var(--bg-medium); border-radius: 5px; border-left: 4px solid var(--accent-orange); text-align: center;">
       <h4 style="margin: 0 0 1em 0; color: var(--accent-orange);">⚙️ Administración:</h4>
-      <button 
-        onclick="resetearProgreso()" 
-        style="
-          background: linear-gradient(135deg, #ff4444, #cc3333); 
-          color: white; 
-          border: none; 
-          padding: 0.8em 1.5em; 
-          border-radius: 5px; 
-          font-weight: bold; 
-          cursor: pointer; 
-          font-size: 0.9em;
-          transition: all 0.3s ease;
-        "
-        onmouseover="this.style.transform='scale(1.05)'" 
-        onmouseout="this.style.transform='scale(1)'"
-      >
-        🔄 Resetear Todo el Progreso
-      </button>
-      <p style="margin: 0.5em 0 0 0; color: var(--text-secondary); font-size: 0.8em;">
-        ⚠️ Esto eliminará todos los retos completados, puntos y progreso guardado
-      </p>
+      
+      <div style="display: flex; gap: 1em; justify-content: center; flex-wrap: wrap; margin-bottom: 1em;">
+        <!-- Botón Desbloquear Todos -->
+        <button 
+          onclick="desbloquearTodosLosRetos()" 
+          style="
+            background: linear-gradient(135deg, #00dd00, #00aa00); 
+            color: white; 
+            border: none; 
+            padding: 0.8em 1.5em; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.transform='scale(1.05)'" 
+          onmouseout="this.style.transform='scale(1)'"
+        >
+          🔓 Desbloquear Todos los Retos
+        </button>
+
+        <!-- Botón Modo Desarrollador -->
+        <button 
+          onclick="modoDesarrollador()" 
+          id="btnModoDesarrollador"
+          style="
+            background: linear-gradient(135deg, #4169E1, #1E90FF); 
+            color: white; 
+            border: none; 
+            padding: 0.8em 1.5em; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.transform='scale(1.05)'" 
+          onmouseout="this.style.transform='scale(1)'"
+        >
+          🛠️ Modo Desarrollador
+        </button>
+
+        <!-- Botón Reset -->
+        <button 
+          onclick="resetearProgreso()" 
+          style="
+            background: linear-gradient(135deg, #ff4444, #cc3333); 
+            color: white; 
+            border: none; 
+            padding: 0.8em 1.5em; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+          "
+          onmouseover="this.style.transform='scale(1.05)'" 
+          onmouseout="this.style.transform='scale(1)'"
+        >
+          🔄 Resetear Progreso
+        </button>
+      </div>
+
+      <!-- Descripciones de las opciones -->
+      <div style="text-align: left; color: var(--text-secondary); font-size: 0.85em; line-height: 1.4;">
+        <div style="margin-bottom: 0.5em;">
+          <strong style="color: #00dd00;">🔓 Desbloquear Todos:</strong> Marca todos los retos como completados y otorga puntos máximos
+        </div>
+        <div style="margin-bottom: 0.5em;">
+          <strong style="color: #4169E1;">🛠️ Modo Desarrollador:</strong> Accede a todos los retos sin afectar tu progreso real
+        </div>
+        <div>
+          <strong style="color: #ff4444;">🔄 Resetear Progreso:</strong> Elimina completamente todos los retos completados y puntos
+        </div>
+      </div>
     </div>
   </main>
   <footer>
@@ -208,6 +263,56 @@
           window.location.href = 'sql.html?reto=true';
         }
       }
+
+      // Actualizar interfaz según el modo desarrollador
+      function actualizarInterfazModoDesarrollador() {
+        const modoDesarrollador = localStorage.getItem('modoDesarrollador') === 'true';
+        const btnModoDesarrollador = document.getElementById('btnModoDesarrollador');
+        
+        if (modoDesarrollador) {
+          btnModoDesarrollador.style.background = 'linear-gradient(135deg, #ff6b35, #f7931e)';
+          btnModoDesarrollador.innerHTML = '🟠 Desactivar Modo Dev';
+          
+          // Agregar un indicador visual en la parte superior
+          if (!document.getElementById('indicadorModoDesarrollador')) {
+            const indicador = document.createElement('div');
+            indicador.id = 'indicadorModoDesarrollador';
+            indicador.style.cssText = `
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              background: linear-gradient(135deg, #ff6b35, #f7931e);
+              color: white;
+              text-align: center;
+              padding: 0.5em;
+              font-weight: bold;
+              z-index: 1000;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            `;
+            indicador.innerHTML = '🛠️ MODO DESARROLLADOR ACTIVO - Todos los retos desbloqueados para testing';
+            document.body.insertBefore(indicador, document.body.firstChild);
+            
+            // Ajustar el margen del header para compensar
+            document.querySelector('header').style.marginTop = '3em';
+          }
+        } else {
+          btnModoDesarrollador.style.background = 'linear-gradient(135deg, #4169E1, #1E90FF)';
+          btnModoDesarrollador.innerHTML = '🛠️ Modo Desarrollador';
+          
+          // Remover indicador si existe
+          const indicador = document.getElementById('indicadorModoDesarrollador');
+          if (indicador) {
+            indicador.remove();
+            document.querySelector('header').style.marginTop = '0';
+          }
+        }
+      }
+
+      // Ejecutar al cargar la página
+      document.addEventListener('DOMContentLoaded', function() {
+        actualizarInterfazModoDesarrollador();
+      });
   </script>
 </body>
 </html>

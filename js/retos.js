@@ -853,6 +853,13 @@ function obtenerRetoActual() {
 
 // Función para verificar si un reto está desbloqueado
 function estaDesbloqueado(retoId) {
+    // Verificar si está en modo desarrollador
+    const modoDesarrollador = localStorage.getItem('modoDesarrollador') === 'true';
+    
+    if (modoDesarrollador) {
+        return true; // En modo desarrollador, todos los retos están desbloqueados
+    }
+    
     return retoId <= retoActual;
 }
 
@@ -884,10 +891,70 @@ function obtenerEstadisticas() {
 
 // Función para resetear el progreso
 function resetearProgreso() {
-    retoActual = 1;
-    puntosTotal = 0;
-    retosCompletados = [];
-    localStorage.removeItem('progresoAtapuerca');
+    if (confirm('🔄 ¿Estás seguro de que quieres RESETEAR TODO el progreso?\n\n⚠️ Esto eliminará:\n• Todos los retos completados\n• Todos los puntos ganados\n• El progreso guardado\n• El modo desarrollador (si está activo)\n\n❌ Esta acción NO se puede deshacer.')) {
+        retoActual = 1;
+        puntosTotal = 0;
+        retosCompletados = [];
+        localStorage.removeItem('progresoAtapuerca');
+        localStorage.removeItem('modoDesarrollador');
+        
+        alert('✅ Progreso completamente reseteado.\nLa página se recargará.');
+        window.location.reload();
+    }
+}
+
+// Función para desbloquear todos los retos
+function desbloquearTodosLosRetos() {
+    if (confirm('🔓 ¿Estás seguro de que quieres desbloquear TODOS los 68 retos?\n\nEsto te permitirá acceder a cualquier reto sin completar los anteriores.\n\n⚠️ Nota: Mantiene tus puntos y retos completados actuales.')) {
+        // Marcar todos los retos como completados para desbloquearlos
+        retosCompletados = [];
+        for (let i = 1; i <= 68; i++) {
+            retosCompletados.push(i);
+        }
+        
+        // Calcular puntos totales si se completan todos los retos
+        puntosTotal = retos.reduce((total, reto) => total + reto.puntos, 0);
+        
+        // Guardar progreso
+        guardarProgreso();
+        
+        // Mostrar confirmación
+        alert('🎉 ¡TODOS LOS RETOS DESBLOQUEADOS!\n\n' +
+              '✅ 68 retos disponibles\n' +
+              '🏆 ' + puntosTotal + ' puntos totales\n' +
+              '🚀 Ahora puedes acceder a cualquier reto\n\n' +
+              'La página se actualizará para mostrar todos los retos disponibles.');
+        
+        // Recargar la página para mostrar todos los retos desbloqueados
+        window.location.reload();
+    }
+}
+
+// Función para modo desarrollador (desbloquear sin marcar como completados)
+function modoDesarrollador() {
+    const modoActivo = localStorage.getItem('modoDesarrollador') === 'true';
+    
+    if (modoActivo) {
+        // Si ya está activo, preguntar si quiere desactivarlo
+        if (confirm('🛠️ MODO DESARROLLADOR ACTIVO\n\n¿Desactivar el modo desarrollador?\n\nEsto volverá a mostrar solo los retos que realmente has completado.')) {
+            localStorage.removeItem('modoDesarrollador');
+            alert('✅ Modo desarrollador desactivado.\nLa página se recargará para mostrar tu progreso real.');
+            window.location.reload();
+        }
+    } else {
+        // Si no está activo, activarlo
+        if (confirm('🛠️ MODO DESARROLLADOR\n\n¿Activar modo desarrollador?\n\nEsto desbloqueará todos los retos SIN marcarlos como completados, perfecto para testing y desarrollo.\n\n⚠️ No afecta tu progreso actual.')) {
+            localStorage.setItem('modoDesarrollador', 'true');
+            
+            alert('🛠️ ¡MODO DESARROLLADOR ACTIVADO!\n\n' +
+                  '✅ Todos los retos desbloqueados para testing\n' +
+                  '📊 Tu progreso real se mantiene intacto\n' +
+                  '🔄 Usa este botón nuevamente para desactivarlo\n\n' +
+                  'La página se actualizará.');
+            
+            window.location.reload();
+        }
+    }
 }
 
 // Inicializar el sistema al cargar
