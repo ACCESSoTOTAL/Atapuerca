@@ -35,7 +35,7 @@ const retos = [
     titulo: "👥 Bases humanas vs bases IA",
     descripcion: "Filtrar y mostrar solo las bases de tipo 'Humana' (deberías encontrar 3 bases)",
     consulta_sugerida: "SELECT * FROM Bases WHERE TipoBase = 'Humana';",
-    pista: "Usa WHERE para filtrar. Las bases humanas son: Fortaleza Norte, Refugio Delta y Cúpula Esperanza",
+    pista: "Usa WHERE para filtrar. Ojo con el uso de comillas simples o dobles. Las bases humanas son: Fortaleza Norte, Refugio Delta y Cúpula Esperanza",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
@@ -57,7 +57,7 @@ const retos = [
     titulo: "📦 Inventario de recursos",
     descripcion: "Explorar todos los recursos disponibles en las bases (3 bases tienen recursos registrados)",
     consulta_sugerida: "SELECT * FROM Resources;",
-    pista: "Los recursos incluyen: AguaLitros, ComidaRaciones, Armas y Medicinas. Solo 3 bases tienen recursos registrados",
+    pista: "Los recursos incluyen: AguaLitros, ComidaRaciones, Armas y Medicinas. Solo 3 bases tienen recursos registrados. No se pide unir con Survivors o Bases. SOLO LOS RECURSOS DISPONIBLES",
     puntos: 5,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
