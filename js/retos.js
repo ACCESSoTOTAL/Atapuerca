@@ -3,9 +3,6 @@
 // Datos verificados: 5 bases, 5 supervivientes, 3 recursos, ataques reales
 
 const retos = [
-  // ========================================
-  // FASE 1 - NIVEL BÁSICO (1-10) - Fundamentos SQL
-  // ========================================
   {
     id: 1,
     fase: 1,
@@ -116,11 +113,6 @@ const retos = [
     puntos: 8,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
-
-  // ========================================
-  // FASE ESPECIAL - TUTORIAL DE JOINS (11-20)
-  // Basado en la infografía de tipos de JOIN
-  // ========================================
   {
     id: 11,
     fase: 1.5,
@@ -232,76 +224,6 @@ const retos = [
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
-    id: 5,
-    fase: 1,
-    nivel: "Básico",
-    titulo: "Inventario de recursos",
-    descripcion: "Explorar todos los recursos disponibles en las bases (3 bases tienen recursos registrados)",
-    consulta_sugerida: "SELECT * FROM Resources;",
-    pista: "Los recursos incluyen: AguaLitros, ComidaRaciones, Armas y Medicinas. Solo 3 bases tienen recursos registrados",
-    puntos: 5,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 6,
-    fase: 1,
-    nivel: "Básico",
-    titulo: "El comando central",
-    descripcion: "Identificar cuál es la base comando central (pista: EsComandoCentral = '1')",
-    consulta_sugerida: "SELECT * FROM Bases WHERE EsComandoCentral = '1';",
-    pista: "Solo una base es el comando central. Debería ser la Fortaleza Norte",
-    puntos: 8,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 7,
-    fase: 1,
-    nivel: "Básico",
-    titulo: "Supervivientes veteranos",
-    descripcion: "Encontrar supervivientes mayores de 30 años (deberías encontrar a Elena, Marcus y Hugo)",
-    consulta_sugerida: "SELECT * FROM Survivors WHERE Edad > 30;",
-    pista: "Usa el operador > para comparar edades. Los veteranos son los más experimentados",
-    puntos: 8,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 8,
-    fase: 1,
-    nivel: "Básico",
-    titulo: "Bases bien abastecidas de comida",
-    descripcion: "Mostrar bases con más de 500 raciones de comida",
-    consulta_sugerida: "SELECT * FROM Resources WHERE ComidaRaciones > 500;",
-    pista: "Filtra la tabla Resources. Deberías encontrar Fortaleza Norte (900 raciones) y Cúpula Esperanza (600 raciones)",
-    puntos: 8,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 9,
-    fase: 1,
-    nivel: "Básico",
-    titulo: "Scout más joven",
-    descripcion: "Encontrar el superviviente más joven del equipo",
-    consulta_sugerida: "SELECT * FROM Survivors WHERE Edad = (SELECT MIN(Edad) FROM Survivors);",
-    pista: "Usa MIN para encontrar la edad mínima. La más joven es Sara Kim con 16 años",
-    puntos: 10,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 10,
-    fase: 1,
-    nivel: "Básico",
-    titulo: "Bases en el hemisferio norte",
-    descripcion: "Mostrar bases ubicadas en el hemisferio norte (Latitud > 0)",
-    consulta_sugerida: "SELECT Nombre, Ubicacion, Latitud FROM Bases WHERE Latitud > 0;",
-    pista: "Filtra por latitud positiva. Deberías encontrar 4 bases en el hemisferio norte",
-    puntos: 8,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-
-  // ========================================
-  // FASE 2 - NIVEL INTERMEDIO (21-30) - JOINs aplicados y análisis
-  // ========================================
-  {
     id: 21,
     fase: 2,
     nivel: "Intermedio",
@@ -411,124 +333,6 @@ const retos = [
     puntos: 18,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
-
-  // ========================================
-  // FASE 4 - NIVEL EXPERTO (41-50) - Subconsultas y análisis estratégico
-  // ========================================
-  {
-    id: 41,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "🎯 Misión crítica: Base más vulnerable",
-    descripcion: "Encontrar la base con menos supervivientes que aún tenga gente asignada",
-    consulta_sugerida: "SELECT b.Nombre AS Base, COUNT(s.SurvivorID) AS NumSupervivientes FROM Bases b JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY b.BaseID, b.Nombre HAVING COUNT(s.SurvivorID) = (SELECT MIN(cuenta) FROM (SELECT COUNT(s2.SurvivorID) AS cuenta FROM Bases b2 JOIN Survivors s2 ON b2.BaseID = s2.BaseID GROUP BY b2.BaseID) AS subconsulta);",
-    pista: "Usa subconsulta para encontrar el mínimo número de supervivientes y luego filtrar por esa cantidad",
-    puntos: 25,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 42,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "📊 Análisis comparativo de recursos",
-    descripcion: "Mostrar bases que tienen más recursos que el promedio general",
-    consulta_sugerida: "SELECT b.Nombre AS Base, (r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas) AS RecursosTotales FROM Bases b JOIN Resources r ON b.BaseID = r.BaseID WHERE (r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas) > (SELECT AVG(ComidaRaciones + AguaLitros + Armas + Medicinas) FROM Resources) ORDER BY RecursosTotales DESC;",
-    pista: "Subconsulta en WHERE para comparar con el promedio. Las bases por encima del promedio son estratégicamente importantes",
-    puntos: 22,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 43,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "👑 Liderazgo y experiencia crítica",
-    descripcion: "Encontrar supervivientes mayores que la edad promedio en roles de liderazgo",
-    consulta_sugerida: "SELECT s.Nombre, s.Edad, s.Rol, b.Nombre AS Base FROM Survivors s JOIN Bases b ON s.BaseID = b.BaseID WHERE s.Edad > (SELECT AVG(CAST(Edad AS FLOAT)) FROM Survivors) AND s.Rol IN ('Comandante', 'Médica') ORDER BY s.Edad DESC;",
-    pista: "Combina filtro de edad (subconsulta) con filtro de roles críticos. La experiencia es vital para la supervivencia",
-    puntos: 20,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 44,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "🏗️ Capacidad subutilizada",
-    descripcion: "Identificar bases con capacidad disponible para reubicación de supervivientes",
-    consulta_sugerida: "SELECT b.Nombre AS Base, b.Capacidad, COUNT(s.SurvivorID) AS Ocupantes, (b.Capacidad - COUNT(s.SurvivorID)) AS EspacioDisponible FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.Capacidad IS NOT NULL GROUP BY b.BaseID, b.Nombre, b.Capacidad HAVING b.Capacidad > COUNT(s.SurvivorID) ORDER BY EspacioDisponible DESC;",
-    pista: "HAVING filtra grupos después de GROUP BY. Solo bases humanas tienen capacidad definida",
-    puntos: 25,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 45,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "⚡ Bases autónomas vs dependientes",
-    descripcion: "Clasificar bases según su nivel de autosuficiencia en recursos críticos",
-    consulta_sugerida: "SELECT b.Nombre AS Base, CASE WHEN EXISTS (SELECT 1 FROM Resources r WHERE r.BaseID = b.BaseID AND r.ComidaRaciones >= 500 AND r.AguaLitros >= 500) THEN 'Autónoma' WHEN EXISTS (SELECT 1 FROM Resources r WHERE r.BaseID = b.BaseID) THEN 'Dependiente' ELSE 'Sin recursos' END AS NivelAutonomia, COALESCE(r.ComidaRaciones, 0) AS Comida, COALESCE(r.AguaLitros, 0) AS Agua FROM Bases b LEFT JOIN Resources r ON b.BaseID = r.BaseID ORDER BY CASE WHEN EXISTS (SELECT 1 FROM Resources r2 WHERE r2.BaseID = b.BaseID AND r2.ComidaRaciones >= 500 AND r2.AguaLitros >= 500) THEN 1 ELSE 2 END;",
-    pista: "EXISTS verifica si existe al menos un registro que cumpla la condición. Bases autónomas necesitan 500+ de comida y agua",
-    puntos: 28,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 46,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "🔍 Supervivientes únicos por características",
-    descripcion: "Encontrar supervivientes con características únicas (mayor/menor edad, roles específicos)",
-    consulta_sugerida: "SELECT s.Nombre, s.Edad, s.Rol, b.Nombre AS Base, CASE WHEN s.Edad = (SELECT MAX(Edad) FROM Survivors) THEN 'Más veterano' WHEN s.Edad = (SELECT MIN(Edad) FROM Survivors) THEN 'Más joven' WHEN s.Rol = 'Comandante' THEN 'Líder militar' WHEN s.Rol = 'Médica' THEN 'Soporte vital' ELSE 'Especialista' END AS Caracteristica FROM Survivors s JOIN Bases b ON s.BaseID = b.BaseID ORDER BY s.Edad;",
-    pista: "Múltiples subconsultas para identificar características únicas. Cada superviviente tiene un valor estratégico específico",
-    puntos: 22,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 47,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "📈 Análisis de concentración poblacional",
-    descripcion: "Determinar si hay sobrepoblación o dispersión excesiva en las bases",
-    consulta_sugerida: "WITH BasePopulation AS (SELECT b.BaseID, b.Nombre, COUNT(s.SurvivorID) AS NumSupervivientes FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY b.BaseID, b.Nombre), StatsGenerales AS (SELECT AVG(CAST(NumSupervivientes AS FLOAT)) AS PromedioSupervivientes FROM BasePopulation WHERE NumSupervivientes > 0) SELECT bp.Nombre AS Base, bp.NumSupervivientes, sg.PromedioSupervivientes, CASE WHEN bp.NumSupervivientes > sg.PromedioSupervivientes * 1.5 THEN 'Sobrepoblada' WHEN bp.NumSupervivientes < sg.PromedioSupervivientes * 0.5 AND bp.NumSupervivientes > 0 THEN 'Subpoblada' WHEN bp.NumSupervivientes = 0 THEN 'Abandonada' ELSE 'Equilibrada' END AS EstadoPoblacional FROM BasePopulation bp CROSS JOIN StatsGenerales sg ORDER BY bp.NumSupervivientes DESC;",
-    pista: "CTE (Common Table Expression) para cálculos complejos. Analiza la distribución poblacional para detectar desequilibrios",
-    puntos: 30,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 48,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "🛡️ Evaluación de seguridad por zona",
-    descripcion: "Analizar la seguridad basándose en armamento y personal por área geográfica",
-    consulta_sugerida: "SELECT CASE WHEN b.Latitud > 42 THEN 'Zona Norte' WHEN b.Latitud > 35 THEN 'Zona Central' ELSE 'Zona Sur' END AS AreaGeografica, COUNT(DISTINCT b.BaseID) AS NumBases, COUNT(s.SurvivorID) AS TotalSupervivientes, SUM(COALESCE(r.Armas, 0)) AS ArmasTotal, ROUND(AVG(CAST(COALESCE(r.Armas, 0) AS FLOAT)), 2) AS ArmasPromedioPorBase, CASE WHEN SUM(COALESCE(r.Armas, 0)) >= COUNT(s.SurvivorID) THEN 'Bien armada' WHEN SUM(COALESCE(r.Armas, 0)) >= COUNT(s.SurvivorID) * 0.5 THEN 'Armamento moderado' ELSE 'Vulnerable' END AS NivelSeguridad FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID LEFT JOIN Resources r ON b.BaseID = r.BaseID GROUP BY CASE WHEN b.Latitud > 42 THEN 'Zona Norte' WHEN b.Latitud > 35 THEN 'Zona Central' ELSE 'Zona Sur' END ORDER BY ArmasTotal DESC;",
-    pista: "Agrupa por zonas geográficas y calcula ratios de seguridad. Una persona por arma es el ideal mínimo",
-    puntos: 25,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 49,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "🔄 Simulación de evacuación de emergencia",
-    descripcion: "Planificar evacuación identificando bases de origen y destino según capacidad",
-    consulta_sugerida: "WITH BasesOrigen AS (SELECT b.BaseID, b.Nombre, COUNT(s.SurvivorID) AS Ocupantes FROM Bases b JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY b.BaseID, b.Nombre), BasesDestino AS (SELECT b.BaseID, b.Nombre, b.Capacidad, COALESCE(COUNT(s.SurvivorID), 0) AS OcupantesActuales, (b.Capacidad - COALESCE(COUNT(s.SurvivorID), 0)) AS EspacioDisponible FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.Capacidad IS NOT NULL GROUP BY b.BaseID, b.Nombre, b.Capacidad HAVING b.Capacidad > COALESCE(COUNT(s.SurvivorID), 0)) SELECT bo.Nombre AS BaseOrigen, bo.Ocupantes AS PersonasAEvacuar, bd.Nombre AS BaseDestino, bd.EspacioDisponible, CASE WHEN bd.EspacioDisponible >= bo.Ocupantes THEN 'Evacuación completa posible' ELSE 'Evacuación parcial (' + CAST(bd.EspacioDisponible AS VARCHAR) + ' personas)' END AS PlanEvacuacion FROM BasesOrigen bo CROSS JOIN BasesDestino bd WHERE bo.BaseID != bd.BaseID ORDER BY bo.Ocupantes DESC, bd.EspacioDisponible DESC;",
-    pista: "Dos CTEs para separar bases origen (con gente) y destino (con espacio). CROSS JOIN simula todas las posibilidades",
-    puntos: 35,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 50,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "🏆 Evaluación integral de supervivencia",
-    descripcion: "Crear un índice de supervivencia integral considerando todos los factores críticos",
-    consulta_sugerida: "WITH AnalisisCompleto AS (SELECT b.BaseID, b.Nombre AS Base, b.TipoBase, COUNT(s.SurvivorID) AS NumSupervivientes, COALESCE(b.Capacidad, 0) AS Capacidad, COALESCE(r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas, 0) AS RecursosTotales, CASE WHEN COUNT(s.SurvivorID) = 0 THEN 0 ELSE COALESCE(r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas, 0) / CAST(COUNT(s.SurvivorID) AS FLOAT) END AS RecursosPerCapita, COUNT(CASE WHEN s.Rol IN ('Comandante', 'Médica') THEN 1 END) AS LiderazgoPresente FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID LEFT JOIN Resources r ON b.BaseID = r.BaseID GROUP BY b.BaseID, b.Nombre, b.TipoBase, b.Capacidad, r.ComidaRaciones, r.AguaLitros, r.Armas, r.Medicinas) SELECT Base, TipoBase, NumSupervivientes, RecursosTotales, ROUND(RecursosPerCapita, 2) AS RecursosPerCapita, LiderazgoPresente, ROUND((NumSupervivientes * 20 + RecursosTotales / 10.0 + RecursosPerCapita * 5 + LiderazgoPresente * 50 + CASE WHEN TipoBase = 'Humana' THEN 25 ELSE 0 END), 2) AS IndiceSupervivenvia, CASE WHEN (NumSupervivientes * 20 + RecursosTotales / 10.0 + RecursosPerCapita * 5 + LiderazgoPresente * 50 + CASE WHEN TipoBase = 'Humana' THEN 25 ELSE 0 END) >= 200 THEN '🟢 Excelente' WHEN (NumSupervivientes * 20 + RecursosTotales / 10.0 + RecursosPerCapita * 5 + LiderazgoPresente * 50 + CASE WHEN TipoBase = 'Humana' THEN 25 ELSE 0 END) >= 100 THEN '🟡 Aceptable' ELSE '🔴 Crítico' END AS EstadoSupervivencia FROM AnalisisCompleto ORDER BY IndiceSupervivenvia DESC;",
-    pista: "CTE mega-complejo que integra población, recursos, liderazgo y tipo de base en un índice único de supervivencia",
-    puntos: 40,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-
-  // ========================================
-  // FASE 3 - NIVEL AVANZADO (31-40) - Agregaciones y análisis complejo
-  // ========================================
   {
     id: 31,
     fase: 3,
@@ -639,346 +443,116 @@ const retos = [
     puntos: 30,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
-
-  // FASE 3 - Nivel avanzado (21-30) - Análisis profundo y agregaciones
-  {
-    id: 21,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Promedio de edad por base",
-    descripcion: "Calcular la edad promedio de los supervivientes en cada base",
-    consulta_sugerida: "SELECT b.Nombre, AVG(CAST(s.Edad AS FLOAT)) AS EdadPromedio FROM Bases b JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY b.Nombre;",
-    pista: "Usa AVG y GROUP BY para calcular promedios por base",
-    puntos: 15,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 22,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Base más atacada",
-    descripcion: "Mostrar qué base ha sufrido más ataques",
-    consulta_sugerida: "SELECT TOP 1 b.Nombre, COUNT(*) AS NumeroAtaques FROM Bases b JOIN Attacks a ON b.BaseID = a.BaseID GROUP BY b.Nombre ORDER BY COUNT(*) DESC;",
-    pista: "Usa COUNT, GROUP BY y ORDER BY DESC con TOP 1",
-    puntos: 18,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 23,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Recursos totales por tipo de base",
-    descripcion: "Sumar todos los recursos por tipo de base (Humana vs IA)",
-    consulta_sugerida: "SELECT b.TipoBase, SUM(r.ComidaRaciones) AS TotalComida, SUM(r.AguaLitros) AS TotalAgua FROM Bases b JOIN Resources r ON b.BaseID = r.BaseID GROUP BY b.TipoBase;",
-    pista: "Agrupa por TipoBase y suma los recursos",
-    puntos: 15,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 24,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Robots más peligrosos",
-    descripcion: "Mostrar los 3 tipos de robots con mayor nivel de amenaza",
-    consulta_sugerida: "SELECT TOP 3 Modelo, NivelAmenaza, Funciones FROM Robots ORDER BY NivelAmenaza DESC;",
-    pista: "Usa TOP 3 y ORDER BY DESC para obtener los más peligrosos",
-    puntos: 12,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 25,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Distancias entre bases",
-    descripcion: "Mostrar las distancias entre bases usando la matriz de distancias",
-    consulta_sugerida: "SELECT bo.Nombre AS BaseOrigen, bd.Nombre AS BaseDestino, dm.Kilometros FROM DistanceMatrix dm JOIN Bases bo ON dm.IDOrigen = bo.BaseID JOIN Bases bd ON dm.IDDestino = bd.BaseID;",
-    pista: "Une DistanceMatrix con Bases dos veces para origen y destino",
-    puntos: 18,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 26,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Bases con mayor capacidad",
-    descripcion: "Mostrar las bases ordenadas por capacidad de mayor a menor",
-    consulta_sugerida: "SELECT Nombre, TipoBase, Capacidad FROM Bases WHERE Capacidad IS NOT NULL ORDER BY Capacidad DESC;",
-    pista: "Filtra las bases que tienen capacidad definida y ordénalas",
-    puntos: 10,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 27,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Avistamientos por mes",
-    descripcion: "Contar cuántos avistamientos de robots hubo por mes",
-    consulta_sugerida: "SELECT YEAR(Fecha) AS Año, MONTH(Fecha) AS Mes, COUNT(*) AS Avistamientos FROM RobotSightings GROUP BY YEAR(Fecha), MONTH(Fecha) ORDER BY Año, Mes;",
-    pista: "Usa funciones de fecha YEAR y MONTH para agrupar",
-    puntos: 18,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 28,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Bases sin ataques",
-    descripcion: "Encontrar bases que nunca han sido atacadas",
-    consulta_sugerida: "SELECT b.Nombre FROM Bases b LEFT JOIN Attacks a ON b.BaseID = a.BaseID WHERE a.BaseID IS NULL;",
-    pista: "Usa LEFT JOIN para encontrar bases sin ataques correspondientes",
-    puntos: 15,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 29,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Alianzas más confiables",
-    descripcion: "Mostrar las alianzas con nivel de confianza mayor a 8",
-    consulta_sugerida: "SELECT b1.Nombre AS Base1, b2.Nombre AS Base2, a.NivelConfianza FROM Alliances a JOIN Bases b1 ON a.BaseID1 = b1.BaseID JOIN Bases b2 ON a.BaseID2 = b2.BaseID WHERE a.NivelConfianza > 8;",
-    pista: "Filtra las alianzas por nivel de confianza alto",
-    puntos: 15,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 30,
-    fase: 3,
-    nivel: "Avanzado",
-    titulo: "Supervivientes jóvenes en bases humanas",
-    descripcion: "Mostrar supervivientes menores de 25 años que están en bases humanas",
-    consulta_sugerida: "SELECT s.Nombre, s.Edad, b.Nombre AS Base FROM Survivors s JOIN Bases b ON s.BaseID = b.BaseID WHERE s.Edad < 25 AND b.TipoBase = 'Humana';",
-    pista: "Combina filtros de edad y tipo de base con AND",
-    puntos: 15,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-
-  // FASE 4 - Nivel experto (31-40) - Consultas complejas y subconsultas
-  {
-    id: 31,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Base con más supervivientes",
-    descripcion: "Encontrar qué base tiene el mayor número de supervivientes",
-    consulta_sugerida: "SELECT TOP 1 b.Nombre, COUNT(s.SurvivorID) AS NumSupervivientes FROM Bases b JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY b.Nombre ORDER BY COUNT(s.SurvivorID) DESC;",
-    pista: "Agrupa por base, cuenta supervivientes y toma el máximo",
-    puntos: 20,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 32,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Eficiencia de suministros",
-    descripcion: "Calcular la cantidad promedio de cada tipo de suministro entregado",
-    consulta_sugerida: "SELECT Tipo, AVG(CAST(Cantidad AS FLOAT)) AS CantidadPromedio FROM Supplies GROUP BY Tipo ORDER BY CantidadPromedio DESC;",
-    pista: "Agrupa por tipo de suministro y calcula el promedio",
-    puntos: 18,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 33,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Robots por generación",
-    descripcion: "Mostrar cuántos robots hay de cada generación y su nivel de amenaza promedio",
-    consulta_sugerida: "SELECT Generacion, COUNT(*) AS NumRobots, AVG(CAST(NivelAmenaza AS FLOAT)) AS AmenazaPromedio FROM Robots GROUP BY Generacion ORDER BY Generacion;",
-    pista: "Agrupa por generación y calcula estadísticas",
-    puntos: 18,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 34,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Misiones por duración",
-    descripcion: "Calcular la duración en días de cada misión completada",
-    consulta_sugerida: "SELECT Nombre, DATEDIFF(day, FechaInicio, FechaFin) AS DuracionDias FROM Missions WHERE Estado = 'Completada' AND FechaFin IS NOT NULL;",
-    pista: "Usa DATEDIFF para calcular días entre fechas",
-    puntos: 20,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 35,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Bases autosuficientes",
-    descripcion: "Encontrar bases que tienen más de 50 raciones de comida Y más de 100 litros de agua",
-    consulta_sugerida: "SELECT b.Nombre, r.ComidaRaciones, r.AguaLitros FROM Bases b JOIN Resources r ON b.BaseID = r.BaseID WHERE r.ComidaRaciones > 50 AND r.AguaLitros > 100;",
-    pista: "Usa múltiples condiciones con AND",
-    puntos: 15,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 36,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Avistamientos de alta amenaza",
-    descripcion: "Mostrar bases que han reportado avistamientos de robots con amenaza nivel 8 o mayor",
-    consulta_sugerida: "SELECT DISTINCT b.Nombre FROM Bases b JOIN RobotSightings rs ON b.BaseID = rs.BaseID WHERE rs.NivelAmenaza >= 8;",
-    pista: "Usa DISTINCT para evitar duplicados de bases",
-    puntos: 18,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 37,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Análisis de bajas por ataque",
-    descripcion: "Calcular el total de muertos por tipo de robot atacante",
-    consulta_sugerida: "SELECT TipoRobot, SUM(Muertos) AS TotalMuertos FROM Attacks GROUP BY TipoRobot ORDER BY TotalMuertos DESC;",
-    pista: "Agrupa por tipo de robot y suma las bajas",
-    puntos: 18,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 38,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Rutas más largas",
-    descripcion: "Encontrar las 5 rutas más largas entre bases",
-    consulta_sugerida: "SELECT TOP 5 bo.Nombre AS Origen, bd.Nombre AS Destino, dm.Kilometros FROM DistanceMatrix dm JOIN Bases bo ON dm.IDOrigen = bo.BaseID JOIN Bases bd ON dm.IDDestino = bd.BaseID ORDER BY dm.Kilometros DESC;",
-    pista: "Ordena por distancia descendente y toma los primeros 5",
-    puntos: 20,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 39,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Cobertura médica",
-    descripcion: "Mostrar bases que tienen medicinas disponibles junto con la cantidad",
-    consulta_sugerida: "SELECT b.Nombre, r.Medicinas FROM Bases b JOIN Resources r ON b.BaseID = r.BaseID WHERE r.Medicinas > 0 ORDER BY r.Medicinas DESC;",
-    pista: "Filtra bases con medicinas y ordena por cantidad",
-    puntos: 15,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-  {
-    id: 40,
-    fase: 4,
-    nivel: "Experto",
-    titulo: "Supervivientes por base humana",
-    descripcion: "Contar supervivientes solo en bases de tipo humana",
-    consulta_sugerida: "SELECT b.Nombre, COUNT(s.SurvivorID) AS NumSupervivientes FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.TipoBase = 'Humana' GROUP BY b.Nombre ORDER BY COUNT(s.SurvivorID) DESC;",
-    pista: "Filtra por tipo humana, agrupa y cuenta supervivientes",
-    puntos: 20,
-    videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
-  },
-
-  // FASE 5 - Nivel maestro (41-50) - Análisis estratégico avanzado
   {
     id: 41,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Análisis de vulnerabilidad",
-    descripcion: "Identificar bases con pocos recursos (menos de 30 raciones) que han sido atacadas",
-    consulta_sugerida: "SELECT DISTINCT b.Nombre, r.ComidaRaciones FROM Bases b JOIN Resources r ON b.BaseID = r.BaseID JOIN Attacks a ON b.BaseID = a.BaseID WHERE r.ComidaRaciones < 30;",
-    pista: "Une tres tablas y filtra por recursos bajos",
+    fase: 4,
+    nivel: "Experto",
+    titulo: "🎯 Misión crítica: Base más vulnerable",
+    descripcion: "Encontrar la base con menos supervivientes que aún tenga gente asignada",
+    consulta_sugerida: "SELECT b.Nombre AS Base, COUNT(s.SurvivorID) AS NumSupervivientes FROM Bases b JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY b.BaseID, b.Nombre HAVING COUNT(s.SurvivorID) = (SELECT MIN(cuenta) FROM (SELECT COUNT(s2.SurvivorID) AS cuenta FROM Bases b2 JOIN Survivors s2 ON b2.BaseID = s2.BaseID GROUP BY b2.BaseID) AS subconsulta);",
+    pista: "Usa subconsulta para encontrar el mínimo número de supervivientes y luego filtrar por esa cantidad",
     puntos: 25,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 42,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Red de alianzas fuertes",
-    descripcion: "Mostrar todas las bases que tienen alianzas con nivel de confianza mayor a 7",
-    consulta_sugerida: "SELECT DISTINCT b.Nombre FROM Bases b WHERE b.BaseID IN (SELECT BaseID1 FROM Alliances WHERE NivelConfianza > 7) OR b.BaseID IN (SELECT BaseID2 FROM Alliances WHERE NivelConfianza > 7);",
-    pista: "Usa subconsultas con IN para encontrar bases en alianzas fuertes",
-    puntos: 25,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "📊 Análisis comparativo de recursos",
+    descripcion: "Mostrar bases que tienen más recursos que el promedio general",
+    consulta_sugerida: "SELECT b.Nombre AS Base, (r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas) AS RecursosTotales FROM Bases b JOIN Resources r ON b.BaseID = r.BaseID WHERE (r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas) > (SELECT AVG(ComidaRaciones + AguaLitros + Armas + Medicinas) FROM Resources) ORDER BY RecursosTotales DESC;",
+    pista: "Subconsulta en WHERE para comparar con el promedio. Las bases por encima del promedio son estratégicamente importantes",
+    puntos: 22,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 43,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Patrón de ataques por ubicación",
-    descripcion: "Analizar si las bases en ciertas ubicaciones son más atacadas",
-    consulta_sugerida: "SELECT b.Ubicacion, COUNT(a.AttackID) AS NumAtaques, AVG(CAST(a.Muertos AS FLOAT)) AS PromedioMuertos FROM Bases b LEFT JOIN Attacks a ON b.BaseID = a.BaseID GROUP BY b.Ubicacion ORDER BY NumAtaques DESC;",
-    pista: "Agrupa por ubicación y analiza estadísticas de ataques",
-    puntos: 25,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "👑 Liderazgo y experiencia crítica",
+    descripcion: "Encontrar supervivientes mayores que la edad promedio en roles de liderazgo",
+    consulta_sugerida: "SELECT s.Nombre, s.Edad, s.Rol, b.Nombre AS Base FROM Survivors s JOIN Bases b ON s.BaseID = b.BaseID WHERE s.Edad > (SELECT AVG(CAST(Edad AS FLOAT)) FROM Survivors) AND s.Rol IN ('Comandante', 'Médica') ORDER BY s.Edad DESC;",
+    pista: "Combina filtro de edad (subconsulta) con filtro de roles críticos. La experiencia es vital para la supervivencia",
+    puntos: 20,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 44,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Optimización de recursos",
-    descripcion: "Encontrar bases que tienen recursos desbalanceados (mucha comida pero poca agua o viceversa)",
-    consulta_sugerida: "SELECT b.Nombre, r.ComidaRaciones, r.AguaLitros, ABS(r.ComidaRaciones - r.AguaLitros) AS Desbalance FROM Bases b JOIN Resources r ON b.BaseID = r.BaseID WHERE ABS(r.ComidaRaciones - r.AguaLitros) > 50 ORDER BY Desbalance DESC;",
-    pista: "Usa ABS para calcular diferencia absoluta entre recursos",
+    fase: 4,
+    nivel: "Experto",
+    titulo: "🏗️ Capacidad subutilizada",
+    descripcion: "Identificar bases con capacidad disponible para reubicación de supervivientes",
+    consulta_sugerida: "SELECT b.Nombre AS Base, b.Capacidad, COUNT(s.SurvivorID) AS Ocupantes, (b.Capacidad - COUNT(s.SurvivorID)) AS EspacioDisponible FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.Capacidad IS NOT NULL GROUP BY b.BaseID, b.Nombre, b.Capacidad HAVING b.Capacidad > COUNT(s.SurvivorID) ORDER BY EspacioDisponible DESC;",
+    pista: "HAVING filtra grupos después de GROUP BY. Solo bases humanas tienen capacidad definida",
     puntos: 25,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 45,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Evolución temporal de amenazas",
-    descripcion: "Mostrar cómo ha evolucionado el nivel de amenaza promedio de los avistamientos por trimestre",
-    consulta_sugerida: "SELECT YEAR(Fecha) AS Año, CEILING(MONTH(Fecha)/3.0) AS Trimestre, AVG(CAST(NivelAmenaza AS FLOAT)) AS AmenazaPromedio FROM RobotSightings GROUP BY YEAR(Fecha), CEILING(MONTH(Fecha)/3.0) ORDER BY Año, Trimestre;",
-    pista: "Usa CEILING para calcular trimestres y agrupa por año y trimestre",
-    puntos: 30,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "⚡ Bases autónomas vs dependientes",
+    descripcion: "Clasificar bases según su nivel de autosuficiencia en recursos críticos",
+    consulta_sugerida: "SELECT b.Nombre AS Base, CASE WHEN EXISTS (SELECT 1 FROM Resources r WHERE r.BaseID = b.BaseID AND r.ComidaRaciones >= 500 AND r.AguaLitros >= 500) THEN 'Autónoma' WHEN EXISTS (SELECT 1 FROM Resources r WHERE r.BaseID = b.BaseID) THEN 'Dependiente' ELSE 'Sin recursos' END AS NivelAutonomia, COALESCE(r.ComidaRaciones, 0) AS Comida, COALESCE(r.AguaLitros, 0) AS Agua FROM Bases b LEFT JOIN Resources r ON b.BaseID = r.BaseID ORDER BY CASE WHEN EXISTS (SELECT 1 FROM Resources r2 WHERE r2.BaseID = b.BaseID AND r2.ComidaRaciones >= 500 AND r2.AguaLitros >= 500) THEN 1 ELSE 2 END;",
+    pista: "EXISTS verifica si existe al menos un registro que cumpla la condición. Bases autónomas necesitan 500+ de comida y agua",
+    puntos: 28,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 46,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Análisis de supervivencia",
-    descripcion: "Calcular la tasa de supervivencia por base (supervivientes actuales vs capacidad máxima)",
-    consulta_sugerida: "SELECT b.Nombre, COUNT(s.SurvivorID) AS Supervivientes, b.Capacidad, ROUND((COUNT(s.SurvivorID) * 100.0 / NULLIF(b.Capacidad, 0)), 2) AS PorcentajeOcupacion FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.Capacidad IS NOT NULL GROUP BY b.Nombre, b.Capacidad ORDER BY PorcentajeOcupacion DESC;",
-    pista: "Calcula porcentaje de ocupación y maneja división por cero",
-    puntos: 30,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "🔍 Supervivientes únicos por características",
+    descripcion: "Encontrar supervivientes con características únicas (mayor/menor edad, roles específicos)",
+    consulta_sugerida: "SELECT s.Nombre, s.Edad, s.Rol, b.Nombre AS Base, CASE WHEN s.Edad = (SELECT MAX(Edad) FROM Survivors) THEN 'Más veterano' WHEN s.Edad = (SELECT MIN(Edad) FROM Survivors) THEN 'Más joven' WHEN s.Rol = 'Comandante' THEN 'Líder militar' WHEN s.Rol = 'Médica' THEN 'Soporte vital' ELSE 'Especialista' END AS Caracteristica FROM Survivors s JOIN Bases b ON s.BaseID = b.BaseID ORDER BY s.Edad;",
+    pista: "Múltiples subconsultas para identificar características únicas. Cada superviviente tiene un valor estratégico específico",
+    puntos: 22,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 47,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Ruta de evacuación óptima",
-    descripcion: "Encontrar la ruta más corta desde cada base hacia el comando central",
-    consulta_sugerida: "SELECT bo.Nombre AS BaseOrigen, MIN(dm.Kilometros) AS DistanciaMinima FROM Bases bo JOIN DistanceMatrix dm ON bo.BaseID = dm.IDOrigen JOIN Bases bd ON dm.IDDestino = bd.BaseID WHERE bd.EsComandoCentral = 1 GROUP BY bo.Nombre ORDER BY DistanciaMinima;",
-    pista: "Encuentra la distancia mínima de cada base al comando central",
+    fase: 4,
+    nivel: "Experto",
+    titulo: "📈 Análisis de concentración poblacional",
+    descripcion: "Determinar si hay sobrepoblación o dispersión excesiva en las bases",
+    consulta_sugerida: "WITH BasePopulation AS (SELECT b.BaseID, b.Nombre, COUNT(s.SurvivorID) AS NumSupervivientes FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY b.BaseID, b.Nombre), StatsGenerales AS (SELECT AVG(CAST(NumSupervivientes AS FLOAT)) AS PromedioSupervivientes FROM BasePopulation WHERE NumSupervivientes > 0) SELECT bp.Nombre AS Base, bp.NumSupervivientes, sg.PromedioSupervivientes, CASE WHEN bp.NumSupervivientes > sg.PromedioSupervivientes * 1.5 THEN 'Sobrepoblada' WHEN bp.NumSupervivientes < sg.PromedioSupervivientes * 0.5 AND bp.NumSupervivientes > 0 THEN 'Subpoblada' WHEN bp.NumSupervivientes = 0 THEN 'Abandonada' ELSE 'Equilibrada' END AS EstadoPoblacional FROM BasePopulation bp CROSS JOIN StatsGenerales sg ORDER BY bp.NumSupervivientes DESC;",
+    pista: "CTE (Common Table Expression) para cálculos complejos. Analiza la distribución poblacional para detectar desequilibrios",
     puntos: 30,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 48,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Índice de fortaleza estratégica",
-    descripcion: "Crear un índice compuesto de fortaleza basado en recursos, supervivientes y posición defensiva",
-    consulta_sugerida: "SELECT b.Nombre, (r.ComidaRaciones + r.AguaLitros + r.Armas*10 + r.Medicinas*5 + COUNT(s.SurvivorID)*3) AS IndiceFortaleza FROM Bases b JOIN Resources r ON b.BaseID = r.BaseID LEFT JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.TipoBase = 'Humana' GROUP BY b.Nombre, r.ComidaRaciones, r.AguaLitros, r.Armas, r.Medicinas ORDER BY IndiceFortaleza DESC;",
-    pista: "Combina múltiples factores con pesos diferentes para crear un índice",
-    puntos: 35,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "🛡️ Evaluación de seguridad por zona",
+    descripcion: "Analizar la seguridad basándose en armamento y personal por área geográfica",
+    consulta_sugerida: "SELECT CASE WHEN b.Latitud > 42 THEN 'Zona Norte' WHEN b.Latitud > 35 THEN 'Zona Central' ELSE 'Zona Sur' END AS AreaGeografica, COUNT(DISTINCT b.BaseID) AS NumBases, COUNT(s.SurvivorID) AS TotalSupervivientes, SUM(COALESCE(r.Armas, 0)) AS ArmasTotal, ROUND(AVG(CAST(COALESCE(r.Armas, 0) AS FLOAT)), 2) AS ArmasPromedioPorBase, CASE WHEN SUM(COALESCE(r.Armas, 0)) >= COUNT(s.SurvivorID) THEN 'Bien armada' WHEN SUM(COALESCE(r.Armas, 0)) >= COUNT(s.SurvivorID) * 0.5 THEN 'Armamento moderado' ELSE 'Vulnerable' END AS NivelSeguridad FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID LEFT JOIN Resources r ON b.BaseID = r.BaseID GROUP BY CASE WHEN b.Latitud > 42 THEN 'Zona Norte' WHEN b.Latitud > 35 THEN 'Zona Central' ELSE 'Zona Sur' END ORDER BY ArmasTotal DESC;",
+    pista: "Agrupa por zonas geográficas y calcula ratios de seguridad. Una persona por arma es el ideal mínimo",
+    puntos: 25,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 49,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Análisis predictivo de amenazas",
-    descripcion: "Identificar patrones de ataques y predecir qué bases están en mayor riesgo",
-    consulta_sugerida: "WITH FactoresRiesgo AS (SELECT b.BaseID, b.Nombre, COUNT(DISTINCT a.AttackID) AS HistorialAtaques, COUNT(DISTINCT rs.SightingID) AS Avistamientos, AVG(CAST(rs.NivelAmenaza AS FLOAT)) AS AmenazaPromedia FROM Bases b LEFT JOIN Attacks a ON b.BaseID = a.BaseID LEFT JOIN RobotSightings rs ON b.BaseID = rs.BaseID GROUP BY b.BaseID, b.Nombre) SELECT Nombre, (HistorialAtaques * 3 + Avistamientos * 2 + ISNULL(AmenazaPromedia, 0)) AS IndicePeligro FROM FactoresRiesgo ORDER BY IndicePeligro DESC;",
-    pista: "Usa CTE para crear un modelo predictivo basado en múltiples factores de riesgo",
-    puntos: 40,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "🔄 Simulación de evacuación de emergencia",
+    descripcion: "Planificar evacuación identificando bases de origen y destino según capacidad",
+    consulta_sugerida: "WITH BasesOrigen AS (SELECT b.BaseID, b.Nombre, COUNT(s.SurvivorID) AS Ocupantes FROM Bases b JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY b.BaseID, b.Nombre), BasesDestino AS (SELECT b.BaseID, b.Nombre, b.Capacidad, COALESCE(COUNT(s.SurvivorID), 0) AS OcupantesActuales, (b.Capacidad - COALESCE(COUNT(s.SurvivorID), 0)) AS EspacioDisponible FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.Capacidad IS NOT NULL GROUP BY b.BaseID, b.Nombre, b.Capacidad HAVING b.Capacidad > COALESCE(COUNT(s.SurvivorID), 0)) SELECT bo.Nombre AS BaseOrigen, bo.Ocupantes AS PersonasAEvacuar, bd.Nombre AS BaseDestino, bd.EspacioDisponible, CASE WHEN bd.EspacioDisponible >= bo.Ocupantes THEN 'Evacuación completa posible' ELSE 'Evacuación parcial (' + CAST(bd.EspacioDisponible AS VARCHAR) + ' personas)' END AS PlanEvacuacion FROM BasesOrigen bo CROSS JOIN BasesDestino bd WHERE bo.BaseID != bd.BaseID ORDER BY bo.Ocupantes DESC, bd.EspacioDisponible DESC;",
+    pista: "Dos CTEs para separar bases origen (con gente) y destino (con espacio). CROSS JOIN simula todas las posibilidades",
+    puntos: 35,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
   {
     id: 50,
-    fase: 5,
-    nivel: "Maestro",
-    titulo: "Algoritmo maestro de supervivencia",
-    descripcion: "Crear el análisis definitivo: combinar todos los factores para el plan de supervivencia global",
-    consulta_sugerida: "WITH AnalisisCompleto AS (SELECT b.BaseID, b.Nombre, b.TipoBase, COUNT(s.SurvivorID) AS Poblacion, COUNT(DISTINCT s.Rol) AS DiversidadRoles, (r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas) AS RecursosTotales FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID JOIN Resources r ON b.BaseID = r.BaseID GROUP BY b.BaseID, b.Nombre, b.TipoBase, r.ComidaRaciones, r.AguaLitros, r.Armas, r.Medicinas), Clasificacion AS (SELECT *, CASE WHEN RecursosTotales >= 200 AND Poblacion >= 3 AND DiversidadRoles >= 3 THEN 'FORTALEZA' WHEN RecursosTotales >= 100 AND Poblacion >= 2 THEN 'REFUGIO' WHEN Poblacion > 0 THEN 'SUPERVIVENCIA' ELSE 'CRITICA' END AS EstadoEstrategico FROM AnalisisCompleto) SELECT ROW_NUMBER() OVER (ORDER BY RecursosTotales DESC, Poblacion DESC) AS Ranking, Nombre, TipoBase, EstadoEstrategico, Poblacion, DiversidadRoles, RecursosTotales FROM Clasificacion ORDER BY Ranking;",
-    pista: "Combina todas las métricas, crea clasificaciones estratégicas y rankings finales",
-    puntos: 50,
+    fase: 4,
+    nivel: "Experto",
+    titulo: "🏆 Evaluación integral de supervivencia",
+    descripcion: "Crear un índice de supervivencia integral considerando todos los factores críticos",
+    consulta_sugerida: "WITH AnalisisCompleto AS (SELECT b.BaseID, b.Nombre AS Base, b.TipoBase, COUNT(s.SurvivorID) AS NumSupervivientes, COALESCE(b.Capacidad, 0) AS Capacidad, COALESCE(r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas, 0) AS RecursosTotales, CASE WHEN COUNT(s.SurvivorID) = 0 THEN 0 ELSE COALESCE(r.ComidaRaciones + r.AguaLitros + r.Armas + r.Medicinas, 0) / CAST(COUNT(s.SurvivorID) AS FLOAT) END AS RecursosPerCapita, COUNT(CASE WHEN s.Rol IN ('Comandante', 'Médica') THEN 1 END) AS LiderazgoPresente FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID LEFT JOIN Resources r ON b.BaseID = r.BaseID GROUP BY b.BaseID, b.Nombre, b.TipoBase, b.Capacidad, r.ComidaRaciones, r.AguaLitros, r.Armas, r.Medicinas) SELECT Base, TipoBase, NumSupervivientes, RecursosTotales, ROUND(RecursosPerCapita, 2) AS RecursosPerCapita, LiderazgoPresente, ROUND((NumSupervivientes * 20 + RecursosTotales / 10.0 + RecursosPerCapita * 5 + LiderazgoPresente * 50 + CASE WHEN TipoBase = 'Humana' THEN 25 ELSE 0 END), 2) AS IndiceSupervivenvia, CASE WHEN (NumSupervivientes * 20 + RecursosTotales / 10.0 + RecursosPerCapita * 5 + LiderazgoPresente * 50 + CASE WHEN TipoBase = 'Humana' THEN 25 ELSE 0 END) >= 200 THEN '🟢 Excelente' WHEN (NumSupervivientes * 20 + RecursosTotales / 10.0 + RecursosPerCapita * 5 + LiderazgoPresente * 50 + CASE WHEN TipoBase = 'Humana' THEN 25 ELSE 0 END) >= 100 THEN '🟡 Aceptable' ELSE '🔴 Crítico' END AS EstadoSupervivencia FROM AnalisisCompleto ORDER BY IndiceSupervivenvia DESC;",
+    pista: "CTE mega-complejo que integra población, recursos, liderazgo y tipo de base en un índice único de supervivencia",
+    puntos: 40,
     videoUrl: "https://www.youtube.com/shorts/GX_u6MhiMxs"
   },
-
-  // ========================================
-  // FASE 5 - NIVEL MAESTRO (51-60) - Consultas estratégicas y análisis predictivo
-  // ========================================
   {
     id: 51,
     fase: 5,
