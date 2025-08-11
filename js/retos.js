@@ -1182,7 +1182,7 @@ function verificarReto(consultaEjecutada, resultados) {
         let mensajePersonalizado = "";
         if (retoActualObj.fase === 1) {
             mensajePersonalizado = "🎯 ¡Excelente! Has dominado los fundamentos básicos de SQL.";
-        } else if (retoActualObj.fase === 2 && retoActualObj.id <= 20) {
+        } else if (retoActualObj.fase === 1.5) {
             mensajePersonalizado = "🔗 ¡Impresionante! Has aprendido a unir tablas con JOINs.";
         } else if (retoActualObj.fase === 2) {
             mensajePersonalizado = "📊 ¡Genial! Estás aplicando JOINs como un verdadero analista.";
@@ -1247,7 +1247,7 @@ function obtenerRetosPorFase(fase) {
 // ========================================
 function obtenerEstadisticasDetalladas() {
     const stats = obtenerEstadisticas();
-    const fases = [1, 2, 3, 4, 5];
+    const fases = [1, 1.5, 2, 3, 4, 5];
     const detallesPorFase = {};
 
     fases.forEach(fase => {
@@ -1317,8 +1317,8 @@ function cargarRetos() {
         </div>
     `;
 
-    // Agrupar retos por fase
-    const fases = [1, 2, 3, 4, 5];
+    // Agrupar retos por fase, incluyendo fase 1.5
+    const fases = [1, 1.5, 2, 3, 4, 5];
     
     fases.forEach(fase => {
         const retosFase = retos.filter(r => r.fase === fase);
@@ -1327,60 +1327,56 @@ function cargarRetos() {
         // Información de la fase
         let faseInfo = {
             1: { titulo: "📚 Fase 1: Fundamentos Básicos", descripcion: "SELECT, WHERE, ORDER BY", color: "var(--primary-green)" },
-            2: { titulo: "🔗 Fase 2: Dominio de JOINs", descripcion: "INNER, LEFT, RIGHT, FULL OUTER, CROSS JOIN", color: "var(--accent-cyan)" },
-            3: { titulo: "📊 Fase 3: Análisis Avanzado", descripcion: "GROUP BY, HAVING, funciones window", color: "var(--accent-orange)" },
+            1.5: { titulo: "🔗 Fase 1.5: Tutorial Completo de JOINs", descripcion: "INNER, LEFT, RIGHT, FULL OUTER, CROSS JOIN", color: "var(--accent-cyan)" },
+            2: { titulo: "📊 Fase 2: Aplicación de JOINs", descripcion: "JOINs aplicados a análisis real", color: "var(--accent-cyan)" },
+            3: { titulo: "� Fase 3: Análisis Avanzado", descripcion: "GROUP BY, HAVING, funciones window", color: "var(--accent-orange)" },
             4: { titulo: "🎯 Fase 4: Consultas Expertas", descripcion: "Subconsultas, EXISTS, análisis estratégico", color: "#ff6b6b" },
             5: { titulo: "🏆 Fase 5: Maestría SQL", descripcion: "CTEs complejas, análisis predictivo", color: "#8b5cf6" }
         };
 
-        // Para la fase especial de JOIN tutorial
-        if (fase === 2) {
-            const retosJoinTutorial = retosFase.filter(r => r.id >= 11 && r.id <= 20);
-            const retosIntermedios = retosFase.filter(r => r.id >= 21 && r.id <= 30);
+        // Manejar la fase 1.5 (Tutorial JOINs) de manera especial
+        if (fase === 1.5) {
+            html += `
+                <div style="margin-bottom: 2em;">
+                    <h3 style="color: ${faseInfo[fase].color}; margin-bottom: 1em;">
+                        ${faseInfo[fase].titulo} (11-20)
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5em;">
+                        Domina todos los tipos de JOIN basados en el infográfico TSQL
+                    </p>
+                    <div style="display: grid; gap: 1em;">
+            `;
             
-            if (retosJoinTutorial.length > 0) {
-                html += `
-                    <div style="margin-bottom: 2em;">
-                        <h3 style="color: var(--accent-cyan); margin-bottom: 1em;">
-                            🔗 Fase 1.5: Tutorial Completo de JOINs (11-20)
-                        </h3>
-                        <p style="color: var(--text-secondary); margin-bottom: 1.5em;">
-                            Domina todos los tipos de JOIN basados en el infográfico TSQL
-                        </p>
-                        <div style="display: grid; gap: 1em;">
-                `;
+            retosFase.forEach(reto => {
+                const completado = retosCompletados.includes(reto.id);
+                const bloqueado = reto.id > retoActual + 1;
                 
-                retosJoinTutorial.forEach(reto => {
-                    const completado = retosCompletados.includes(reto.id);
-                    const bloqueado = reto.id > retoActual + 1;
-                    
-                    html += crearTarjetaReto(reto, completado, bloqueado);
-                });
-                
-                html += `</div></div>`;
-            }
+                html += crearTarjetaReto(reto, completado, bloqueado);
+            });
             
-            if (retosIntermedios.length > 0) {
-                html += `
-                    <div style="margin-bottom: 2em;">
-                        <h3 style="color: ${faseInfo[fase].color}; margin-bottom: 1em;">
-                            ${faseInfo[fase].titulo} - Aplicación Práctica (21-30)
-                        </h3>
-                        <p style="color: var(--text-secondary); margin-bottom: 1.5em;">
-                            ${faseInfo[fase].descripcion} aplicado a datos reales
-                        </p>
-                        <div style="display: grid; gap: 1em;">
-                `;
+            html += `</div></div>`;
+        }
+        // Fase 2 normal (retos 21-30)
+        else if (fase === 2) {
+            html += `
+                <div style="margin-bottom: 2em;">
+                    <h3 style="color: ${faseInfo[fase].color}; margin-bottom: 1em;">
+                        ${faseInfo[fase].titulo} (21-30)
+                    </h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5em;">
+                        ${faseInfo[fase].descripcion}
+                    </p>
+                    <div style="display: grid; gap: 1em;">
+            `;
+            
+            retosFase.forEach(reto => {
+                const completado = retosCompletados.includes(reto.id);
+                const bloqueado = reto.id > retoActual + 1;
                 
-                retosIntermedios.forEach(reto => {
-                    const completado = retosCompletados.includes(reto.id);
-                    const bloqueado = reto.id > retoActual + 1;
-                    
-                    html += crearTarjetaReto(reto, completado, bloqueado);
-                });
-                
-                html += `</div></div>`;
-            }
+                html += crearTarjetaReto(reto, completado, bloqueado);
+            });
+            
+            html += `</div></div>`;
         } else {
             // Fases normales
             html += `
