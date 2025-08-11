@@ -1394,9 +1394,21 @@ function crearTarjetaReto(reto, completado, bloqueado) {
             transition: all 0.3s ease;
         " ${!bloqueado ? 'onmouseover="this.style.transform=\'scale(1.02)\'" onmouseout="this.style.transform=\'scale(1)\'"' : ''}>
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1em;">
-                <h4 style="margin: 0; color: var(--text-primary); flex: 1;">
-                    ${iconoEstado} ${reto.titulo}
-                </h4>
+                <div style="display: flex; align-items: center; gap: 0.5em; flex: 1;">
+                    <span style="
+                        background: var(--accent-cyan); 
+                        color: var(--bg-dark); 
+                        padding: 0.3em 0.6em; 
+                        border-radius: 50%; 
+                        font-size: 0.8em; 
+                        font-weight: bold;
+                        min-width: 1.5em;
+                        text-align: center;
+                    ">${reto.id}</span>
+                    <h4 style="margin: 0; color: var(--text-primary);">
+                        ${iconoEstado} ${reto.titulo}
+                    </h4>
+                </div>
                 <span style="
                     background: ${colorBorde}; 
                     color: var(--bg-dark); 
