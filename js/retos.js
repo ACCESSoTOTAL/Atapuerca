@@ -115,7 +115,7 @@ const retos = [
   },
   {
     id: 11,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "🔗 JOIN Básico - Dos tablas separadas",
     descripcion: "Antes de unir tablas, veamos qué datos tenemos por separado. Primero supervivientes, luego bases.",
@@ -126,7 +126,7 @@ const retos = [
   },
   {
     id: 12,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "🔗 INNER JOIN - Solo coincidencias",
     descripcion: "INNER JOIN devuelve solo los registros que tienen coincidencias en ambas tablas. Supervivientes CON base asignada.",
@@ -137,7 +137,7 @@ const retos = [
   },
   {
     id: 13,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "◀️ LEFT OUTER JOIN - Todos de la izquierda",
     descripcion: "LEFT JOIN devuelve TODOS los registros de la tabla izquierda, incluso si no tienen coincidencias en la derecha.",
@@ -148,7 +148,7 @@ const retos = [
   },
   {
     id: 14,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "▶️ RIGHT OUTER JOIN - Todos de la derecha",
     descripcion: "RIGHT JOIN devuelve TODOS los registros de la tabla derecha, incluso si no tienen coincidencias en la izquierda.",
@@ -159,7 +159,7 @@ const retos = [
   },
   {
     id: 15,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "🔗 FULL OUTER JOIN - Todo combinado",
     descripcion: "FULL OUTER JOIN devuelve TODOS los registros cuando hay coincidencia en cualquiera de las tablas.",
@@ -170,7 +170,7 @@ const retos = [
   },
   {
     id: 16,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "❌ LEFT JOIN con exclusión - Solo sin coincidencias",
     descripcion: "LEFT JOIN con WHERE NULL encuentra registros de la tabla izquierda SIN coincidencias en la derecha.",
@@ -181,7 +181,7 @@ const retos = [
   },
   {
     id: 17,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "❌ RIGHT JOIN con exclusión - Huérfanos",
     descripcion: "RIGHT JOIN con WHERE NULL encuentra registros de la tabla derecha SIN coincidencias en la izquierda.",
@@ -192,7 +192,7 @@ const retos = [
   },
   {
     id: 18,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "🔗 CROSS JOIN - Producto cartesiano",
     descripcion: "CROSS JOIN combina cada registro de una tabla con CADA registro de la otra tabla.",
@@ -203,7 +203,7 @@ const retos = [
   },
   {
     id: 19,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "🔗🔗 Múltiples JOINs - Tres tablas",
     descripcion: "Combinar Supervivientes, Bases y Resources en una sola consulta.",
@@ -214,7 +214,7 @@ const retos = [
   },
   {
     id: 20,
-    fase: 1.5,
+    fase: 2,
     nivel: "JOIN Tutorial",
     titulo: "🎯 Auto-JOIN - La tabla consigo misma",
     descripcion: "Usar alias para comparar registros de la misma tabla. Encuentra supervivientes de la misma edad.",
@@ -1182,10 +1182,8 @@ function verificarReto(consultaEjecutada, resultados) {
         let mensajePersonalizado = "";
         if (retoActualObj.fase === 1) {
             mensajePersonalizado = "🎯 ¡Excelente! Has dominado los fundamentos básicos de SQL.";
-        } else if (retoActualObj.fase === 1.5) {
-            mensajePersonalizado = "🔗 ¡Impresionante! Has aprendido a unir tablas con JOINs.";
         } else if (retoActualObj.fase === 2) {
-            mensajePersonalizado = "📊 ¡Genial! Estás aplicando JOINs como un verdadero analista.";
+            mensajePersonalizado = "🔗 ¡Genial! Estás dominando JOINs y aplicando análisis complejo.";
         } else if (retoActualObj.fase === 3) {
             mensajePersonalizado = "📈 ¡Increíble! Dominas las agregaciones y análisis complejo.";
         } else if (retoActualObj.fase === 4) {
@@ -1247,7 +1245,7 @@ function obtenerRetosPorFase(fase) {
 // ========================================
 function obtenerEstadisticasDetalladas() {
     const stats = obtenerEstadisticas();
-    const fases = [1, 1.5, 2, 3, 4, 5];
+    const fases = [1, 2, 3, 4, 5];
     const detallesPorFase = {};
 
     fases.forEach(fase => {
@@ -1317,8 +1315,8 @@ function cargarRetos() {
         </div>
     `;
 
-    // Agrupar retos por fase, incluyendo fase 1.5
-    const fases = [1, 1.5, 2, 3, 4, 5];
+    // Agrupar retos por fase
+    const fases = [1, 2, 3, 4, 5];
     
     fases.forEach(fase => {
         const retosFase = retos.filter(r => r.fase === fase);
@@ -1327,44 +1325,21 @@ function cargarRetos() {
         // Información de la fase
         let faseInfo = {
             1: { titulo: "📚 Fase 1: Fundamentos Básicos", descripcion: "SELECT, WHERE, ORDER BY", color: "var(--primary-green)" },
-            1.5: { titulo: "🔗 Fase 1.5: Tutorial Completo de JOINs", descripcion: "INNER, LEFT, RIGHT, FULL OUTER, CROSS JOIN", color: "var(--accent-cyan)" },
-            2: { titulo: "📊 Fase 2: Aplicación de JOINs", descripcion: "JOINs aplicados a análisis real", color: "var(--accent-cyan)" },
+            2: { titulo: "🔗 Fase 2: Tutorial JOINs & Aplicación", descripcion: "INNER, LEFT, RIGHT, FULL OUTER, CROSS JOIN + Aplicación práctica", color: "var(--accent-cyan)" },
             3: { titulo: "� Fase 3: Análisis Avanzado", descripcion: "GROUP BY, HAVING, funciones window", color: "var(--accent-orange)" },
             4: { titulo: "🎯 Fase 4: Consultas Expertas", descripcion: "Subconsultas, EXISTS, análisis estratégico", color: "#ff6b6b" },
             5: { titulo: "🏆 Fase 5: Maestría SQL", descripcion: "CTEs complejas, análisis predictivo", color: "#8b5cf6" }
         };
 
-        // Manejar la fase 1.5 (Tutorial JOINs) de manera especial
-        if (fase === 1.5) {
+        // Mostrar información especial para la fase 2 que ahora incluye JOINs
+        if (fase === 2) {
             html += `
                 <div style="margin-bottom: 2em;">
                     <h3 style="color: ${faseInfo[fase].color}; margin-bottom: 1em;">
-                        ${faseInfo[fase].titulo} (11-20)
+                        ${faseInfo[fase].titulo} (11-30)
                     </h3>
                     <p style="color: var(--text-secondary); margin-bottom: 1.5em;">
-                        Domina todos los tipos de JOIN basados en el infográfico TSQL
-                    </p>
-                    <div style="display: grid; gap: 1em;">
-            `;
-            
-            retosFase.forEach(reto => {
-                const completado = retosCompletados.includes(reto.id);
-                const bloqueado = reto.id > retoActual + 1;
-                
-                html += crearTarjetaReto(reto, completado, bloqueado);
-            });
-            
-            html += `</div></div>`;
-        }
-        // Fase 2 normal (retos 21-30)
-        else if (fase === 2) {
-            html += `
-                <div style="margin-bottom: 2em;">
-                    <h3 style="color: ${faseInfo[fase].color}; margin-bottom: 1em;">
-                        ${faseInfo[fase].titulo} (21-30)
-                    </h3>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5em;">
-                        ${faseInfo[fase].descripcion}
+                        Tutorial completo de JOINs (11-20) + Aplicación práctica (21-30)
                     </p>
                     <div style="display: grid; gap: 1em;">
             `;
