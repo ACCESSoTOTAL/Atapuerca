@@ -887,15 +887,18 @@ function verificarReto(consultaEjecutada, resultados) {
                                resultados.length >= 1; // Flexible para aceptar cualquiera de las dos consultas
             break;
         case 12:
-            cumpleRequisitos = queryNormalizada.includes('join') &&
+            cumpleRequisitos = (queryNormalizada.includes('inner join') || queryNormalizada.includes('join')) &&
+                               queryNormalizada.includes('survivors') &&
                                queryNormalizada.includes('bases') &&
-                               queryNormalizada.includes('resources') &&
-                               resultados.length === 3;
+                               queryNormalizada.includes('baseid') &&
+                               resultados.length >= 3;
             break;
         case 13:
-            cumpleRequisitos = queryNormalizada.includes('order by') && 
-                               queryNormalizada.includes('edad') &&
-                               resultados.length === 5;
+            cumpleRequisitos = queryNormalizada.includes('left join') &&
+                               queryNormalizada.includes('survivors') &&
+                               queryNormalizada.includes('bases') &&
+                               queryNormalizada.includes('baseid') &&
+                               resultados.length >= 5; // Incluye bases sin supervivientes
             break;
         case 14:
             cumpleRequisitos = queryNormalizada.includes('capacidad is not null') &&
