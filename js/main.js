@@ -5,7 +5,7 @@ async function runQuery() {
   output.style.color = 'var(--accent-cyan)';
 
   try {
-    const res = await fetch('https://atapuerca-backend.onrender.com/query', {
+    const res = await fetch('/query-azure.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query })

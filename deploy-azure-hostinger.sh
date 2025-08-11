@@ -6,14 +6,14 @@
 echo "🚀 INICIANDO MIGRACIÓN ATAPUERCANET → HOSTINGER + AZURE SQL SERVER"
 echo "=================================================================="
 
-# Variables de configuración (EDITAR CON TUS DATOS)
-FTP_HOST="ftp.tu-dominio.com"  # Cambiar por tu host Hostinger
-FTP_USER="tu_usuario_ftp"
-FTP_PASS="tu_password_ftp"
-FTP_DIR="/public_html"
-AZURE_SERVER="tu_servidor.database.windows.net"
-AZURE_DB="atapuerca_db"
-AZURE_USER="tu_usuario_azure"
+# Variables de configuración (CONFIGURADAS CON TUS DATOS)
+FTP_HOST="147.93.92.5"  # IP FTP directa - CORREGIDA
+FTP_USER="u722312752.lunasoft"
+FTP_PASS="Atapuerca-net.2025"  # Nueva contraseña sin caracteres problemáticos
+FTP_DIR="/home/u722312752/domains/atapuerca-net.es/public_html"
+AZURE_SERVER="atapuerca.database.windows.net"
+AZURE_DB="AtapuercaNet"
+AZURE_USER="matusalen"
 
 # Colores para output
 RED='\033[0;31m'
@@ -28,12 +28,15 @@ required_files=(
     "index.html"
     "retos.html" 
     "sql.html"
+    "contacto.html"
+    "descargas.html"
     "css/estilos.css"
     "js/main.js"
     "js/retos.js"
     "config/database.php"
     "api/query.php"
     "test-azure-connection.php"
+    "test-multiple-drivers.php"
     ".htaccess"
 )
 
@@ -46,21 +49,11 @@ for file in "${required_files[@]}"; do
     fi
 done
 
-# Verificar configuración Azure
-echo -e "${BLUE}🔧 Verificando configuración Azure SQL Server...${NC}"
-if [[ "$AZURE_SERVER" == "tu_servidor.database.windows.net" ]]; then
-    echo -e "${YELLOW}⚠️  ATENCIÓN: Necesitas configurar las credenciales Azure SQL Server${NC}"
-    echo "Edita este script y actualiza:"
-    echo "  - AZURE_SERVER (tu_servidor.database.windows.net)"
-    echo "  - AZURE_DB (nombre de tu base de datos)" 
-    echo "  - AZURE_USER (tu usuario Azure)"
-    echo ""
-    read -p "¿Continuar de todas formas? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
-    fi
-fi
+# Verificar configuración FTP
+echo -e "${BLUE}🔧 Verificando configuración FTP...${NC}"
+echo -e "${GREEN}✅ Usuario FTP: $FTP_USER${NC}"
+echo -e "${GREEN}✅ Host FTP: $FTP_HOST${NC}"
+echo -e "${GREEN}✅ Directorio: $FTP_DIR${NC}"
 
 # Crear backup de configuración
 echo -e "${BLUE}📝 Creando configuración temporal...${NC}"
@@ -105,12 +98,21 @@ FILES_TO_UPLOAD=(
     "config/database.php"
     "api/query.php"
     "test-azure-connection.php"
+    "test-multiple-drivers.php"
     ".htaccess"
 )
 
-# Verificar si existe el PDF
+# Verificar si existen archivos adicionales en docs
 if [[ -f "docs/AtapuercaNet_Retos_Completos.pdf" ]]; then
     FILES_TO_UPLOAD+=("docs/AtapuercaNet_Retos_Completos.pdf")
+fi
+
+if [[ -f "docs/archivosAccess.zip" ]]; then
+    FILES_TO_UPLOAD+=("docs/archivosAccess.zip")
+fi
+
+if [[ -f "docs/Manual_Misiones_AtapuercaNet_Dossier_Militar_con_logo_comprimido.pdf" ]]; then
+    FILES_TO_UPLOAD+=("docs/Manual_Misiones_AtapuercaNet_Dossier_Militar_con_logo_comprimido.pdf")
 fi
 
 # Función de subida con lftp (más robusto que ftp)
@@ -201,12 +203,15 @@ echo -e "${GREEN}🎉 ¡MIGRACIÓN COMPLETADA!${NC}"
 echo "========================"
 echo ""
 echo -e "${BLUE}📋 PASOS SIGUIENTES:${NC}"
-echo "1. Accede a tu sitio: https://tu-dominio.com"
-echo "2. Prueba la conexión Azure: https://tu-dominio.com/test-azure-connection.php"
-echo "3. Si hay errores, verifica:"
-echo "   - Credenciales Azure SQL Server en config/database.php"
-echo "   - Firewall Azure (agregar IP de Hostinger)"
-echo "   - Drivers SQL Server en Hostinger (contactar soporte si es necesario)"
+echo "1. Accede a tu sitio: https://atapuerca-net.es"
+echo "2. Prueba drivers completo: https://atapuerca-net.es/test-drivers-complete.php"
+echo "3. Prueba conexión simple: https://atapuerca-net.es/test-azure-connection.php"
+echo "4. Si hay errores de drivers:"
+echo "   - Contacta soporte Hostinger (ver hostinger-support-request.md)"
+echo "   - Solicita instalar: php-sqlsrv, php-pdo_sqlsrv, php-odbc"
+echo "5. Si hay errores de conexión:"
+echo "   - Verifica credenciales Azure SQL Server en config/database.php"
+echo "   - Verifica firewall Azure (agregar IP de Hostinger)"
 echo ""
 echo -e "${BLUE}📖 Documentación completa:${NC}"
 echo "   - HOSTINGER-MIGRATION-AZURE.md"

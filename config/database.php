@@ -3,34 +3,59 @@
 
 class DatabaseConfig {
     // Configuración para Azure SQL Server (EDITAR CON TUS DATOS)
-    private $server = 'tu_servidor.database.windows.net';
-    private $database = 'atapuerca_db';
-    private $username = 'tu_usuario';
-    private $password = 'tu_password';
+    private $server = 'atapuerca.database.windows.net';
+    private $database = 'AtapuercaNet';
+    private $username = 'matusalen';
+    private $password = 'Access.2010';
     private $port = 1433;
     
     private $pdo;
     
     public function connect() {
         if ($this->pdo === null) {
-            try {
-                // Para Azure SQL Server usamos sqlsrv driver
-                $dsn = "sqlsrv:Server={$this->server},{$this->port};Database={$this->database}";
-                $options = [
-                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES => false,
-                ];
-                
-                $this->pdo = new PDO($dsn, $this->username, $this->password, $options);
-            } catch (PDOException $e) {
-                // Si sqlsrv no está disponible, intentar con odbc
+            $options = [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_TIMEOUT => 30
+            ];
+            
+            // Lista de drivers ODBC a probar en orden de preferencia
+            $drivers_to_try = [
+                // Driver nativo SQL Server (ideal)
+                "sqlsrv:Server={$this->server},{$this->port};Database={$this->database}",
+                // ODBC Driver 17 (Microsoft oficial)
+                "odbc:Driver={ODBC Driver 17 for SQL Server};Server={$this->server},{$this->port};Database={$this->database}",
+                // ODBC Driver 13 (versión anterior)
+                "odbc:Driver={ODBC Driver 13 for SQL Server};Server={$this->server},{$this->port};Database={$this->database}",
+                // ODBC Driver 11 (compatible)
+                "odbc:Driver={ODBC Driver 11 for SQL Server};Server={$this->server},{$this->port};Database={$this->database}",
+                // Driver genérico SQL Server
+                "odbc:Driver={SQL Server};Server={$this->server},{$this->port};Database={$this->database}",
+                // Driver FreeTDS (Open Source)
+                "odbc:Driver={FreeTDS};Server={$this->server},{$this->port};Database={$this->database};TDS_Version=8.0",
+                // Driver más genérico
+                "odbc:DSN=;DRIVER={SQL Server Native Client 11.0};SERVER={$this->server},{$this->port};DATABASE={$this->database}"
+            ];
+            
+            $last_error = "";
+            
+            foreach ($drivers_to_try as $dsn) {
                 try {
-                    $dsn = "odbc:Driver={ODBC Driver 17 for SQL Server};Server={$this->server},{$this->port};Database={$this->database}";
                     $this->pdo = new PDO($dsn, $this->username, $this->password, $options);
-                } catch (PDOException $e2) {
-                    throw new Exception("Error de conexión a Azure SQL Server: " . $e->getMessage());
+                    // Si llegamos aquí, la conexión fue exitosa
+                    error_log("✅ Conexión exitosa con driver: " . $dsn);
+                    break;
+                } catch (PDOException $e) {
+                    $last_error = $e->getMessage();
+                    error_log("❌ Falló driver: " . $dsn . " - Error: " . $last_error);
+                    continue;
                 }
+            }
+            
+            // Si ningún driver funcionó
+            if ($this->pdo === null) {
+                throw new Exception("Error de conexión a Azure SQL Server. Ningún driver ODBC disponible. Último error: " . $last_error);
             }
         }
         

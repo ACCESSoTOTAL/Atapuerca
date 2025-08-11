@@ -10,11 +10,16 @@ try {
     
     // Test básico de conexión
     echo "1. Probando conexión básica...\n";
-    $result = $db->testConnection();
+    $pdo = $db->connect();
     
-    if ($result['success']) {
-        echo "   ✅ Conexión exitosa\n";
-        echo "   📊 Info servidor: " . $result['server_info'] . "\n\n";
+    if ($pdo) {
+        echo "   ✅ Conexión exitosa con driver FreeTDS\n";
+        
+        // Obtener información del servidor
+        $stmt = $pdo->query("SELECT @@VERSION as version, GETDATE() as fecha");
+        $info = $stmt->fetch();
+        echo "   📊 Servidor: " . substr($info['version'], 0, 50) . "...\n";
+        echo "   🕐 Fecha servidor: " . $info['fecha'] . "\n\n";
         
         // Test de consulta simple
         echo "2. Probando consulta simple...\n";

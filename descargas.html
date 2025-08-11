@@ -7,7 +7,10 @@
 </head>
 <body>
   <header>
-    <h1>Zona de Descargas</h1>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 1em; flex-wrap: wrap;">
+      <img src="docs/logo-atapuerca.png" alt="Logo Atapuerca" style="height: 100px; filter: drop-shadow(0 0 10px var(--primary-green));">
+      <h1>Zona de Descargas</h1>
+    </div>
     <nav>
       <a href="index.html">Inicio</a>
       <a href="sql.html">Consulta SQL</a>
@@ -18,12 +21,30 @@
   </header>
   <main>
     <h2>💾 Herramientas de la resistencia</h2>
-    <ul>
-      <li><a href="#">📄 PDF con retos SQL (próximamente)</a></li>
-      <li><a href="#">📂 Plantilla Access conectada</a></li>
-      <li><a href="#">🔧 Script para insertar datos de ejemplo</a></li>
-    </ul>
-    <p>Archivos disponibles próximamente. Mantente atento.</p>
+    <div class="downloads-section">
+      <h3>📚 Documentación Oficial</h3>
+      <ul>
+        <li><a href="docs/Manual_Misiones_AtapuercaNet_Dossier_Militar_con_logo_comprimido.pdf" target="_blank">📋 Manual de Misiones - Dossier Militar Completo</a></li>
+      </ul>
+      
+      <h3>🛠️ Herramientas y Recursos</h3>
+      <ul>
+        <li><a href="docs/archivosAccess.zip" target="_blank">📂 Archivos Access - Base de Datos Local</a></li>
+      </ul>
+      
+      <h3>🔗 Enlaces Útiles</h3>
+      <ul>
+        <li><a href="sql.html">💻 Terminal SQL en Vivo</a></li>
+        <li><a href="retos.html">🎯 Sistema de Retos Interactivo</a></li>
+        <li><a href="test-azure-connection.php" target="_blank">🔍 Test de Conexión Azure</a></li>
+      </ul>
+    </div>
+    
+    <div class="download-info">
+      <h3>ℹ️ Información de Descarga</h3>
+      <p><strong>Manual de Misiones:</strong> Guía completa con contexto narrativo, instrucciones detalladas y soluciones de todos los retos SQL.</p>
+      <p><strong>Archivos Access:</strong> Base de datos local compatible con Microsoft Access para práctica offline.</p>
+    </div>
   </main>
   <footer>
     <p>&copy; 2025 Atapuerca Net</p>
