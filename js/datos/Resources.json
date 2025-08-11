@@ -22,5 +22,21 @@
     "ComidaRaciones": 600,
     "Armas": 40,
     "Medicinas": 200
+  },
+  {
+    "RecursosID": 4,
+    "BaseID": 6,
+    "AguaLitros": 300,
+    "ComidaRaciones": 150,
+    "Armas": 15,
+    "Medicinas": 80
+  },
+  {
+    "RecursosID": 5,
+    "BaseID": 7,
+    "AguaLitros": 0,
+    "ComidaRaciones": 0,
+    "Armas": 0,
+    "Medicinas": 0
   }
 ]

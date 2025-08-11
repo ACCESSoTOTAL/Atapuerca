@@ -33,5 +33,40 @@
     "Edad": 39,
     "Rol": "Comandante",
     "BaseID": 1
+  },
+  {
+    "SurvivorID": 6,
+    "Nombre": "Ana Restrepo",
+    "Edad": 29,
+    "Rol": "Ingeniera",
+    "BaseID": 2
+  },
+  {
+    "SurvivorID": 7,
+    "Nombre": "Viktor Petrov",
+    "Edad": 34,
+    "Rol": "Soldado",
+    "BaseID": 5
+  },
+  {
+    "SurvivorID": 8,
+    "Nombre": "Maya Chen",
+    "Edad": 22,
+    "Rol": "Médica",
+    "BaseID": null
+  },
+  {
+    "SurvivorID": 9,
+    "Nombre": "Diego Morales",
+    "Edad": 27,
+    "Rol": "Scout",
+    "BaseID": null
+  },
+  {
+    "SurvivorID": 10,
+    "Nombre": "Zara Al-Rashid",
+    "Edad": 41,
+    "Rol": "Comandante",
+    "BaseID": 6
   }
 ]

@@ -835,25 +835,25 @@ function verificarReto(consultaEjecutada, resultados) {
         case 1:
             cumpleRequisitos = queryNormalizada.includes('select') && 
                                queryNormalizada.includes('from bases') &&
-                               resultados.length === 5;
+                               resultados.length === 8; // Ahora hay 8 bases
             break;
         case 2:
             cumpleRequisitos = (queryNormalizada.includes('select nombre') || queryNormalizada.includes('select\nnombre')) && 
                                queryNormalizada.includes('tipobase') &&
                                queryNormalizada.includes('order by') &&
-                               resultados.length === 5;
+                               resultados.length === 8; // Ahora hay 8 bases
             break;
         case 3:
             cumpleRequisitos = (queryNormalizada.includes("tipobase = 'humana'") || queryNormalizada.includes('tipobase="humana"')) &&
-                               resultados.length === 3;
+                               resultados.length === 5; // 5 bases humanas
             break;
         case 4:
             cumpleRequisitos = queryNormalizada.includes('from survivors') &&
-                               resultados.length === 5;
+                               resultados.length === 10; // Ahora hay 10 supervivientes
             break;
         case 5:
             cumpleRequisitos = queryNormalizada.includes('from resources') &&
-                               resultados.length === 3;
+                               resultados.length === 5; // Ahora hay 5 recursos
             break;
         case 6:
             cumpleRequisitos = (queryNormalizada.includes("escomandocentral = '1'") || queryNormalizada.includes('escomandocentral="1"') || queryNormalizada.includes("escomandocentral=1")) &&
@@ -861,11 +861,11 @@ function verificarReto(consultaEjecutada, resultados) {
             break;
         case 7:
             cumpleRequisitos = queryNormalizada.includes('edad > 30') &&
-                               resultados.length >= 2; // Ajustado para ser más flexible
+                               resultados.length >= 4; // Ajustado: Elena(34), Marcus(41), Hugo(39), Viktor(34), Zara(41)
             break;
         case 8:
             cumpleRequisitos = queryNormalizada.includes('comidaraciones > 500') &&
-                               resultados.length >= 1; // Ajustado para ser más flexible
+                               resultados.length >= 2; // Fortaleza Norte (900) y Cúpula Esperanza (600)
             break;
         case 9:
             cumpleRequisitos = (queryNormalizada.includes('min') && queryNormalizada.includes('edad')) ||
@@ -876,7 +876,7 @@ function verificarReto(consultaEjecutada, resultados) {
         case 10:
             cumpleRequisitos = queryNormalizada.includes('latitud > 0') &&
                                queryNormalizada.includes('from bases') &&
-                               resultados.length >= 3; // Ajustado para ser flexible
+                               resultados.length >= 6; // Más bases en hemisferio norte
             break;
 
         // FASE 2 - TUTORIAL JOIN (11-20)
@@ -891,14 +891,14 @@ function verificarReto(consultaEjecutada, resultados) {
                                queryNormalizada.includes('survivors') &&
                                queryNormalizada.includes('bases') &&
                                queryNormalizada.includes('baseid') &&
-                               resultados.length >= 3;
+                               resultados.length >= 8; // 8 supervivientes con base válida
             break;
         case 13:
             cumpleRequisitos = queryNormalizada.includes('left join') &&
                                queryNormalizada.includes('survivors') &&
                                queryNormalizada.includes('bases') &&
                                queryNormalizada.includes('baseid') &&
-                               resultados.length >= 5; // Incluye bases sin supervivientes
+                               resultados.length >= 8; // Todas las bases (incluye bases sin supervivientes)
             break;
         case 14:
             cumpleRequisitos = queryNormalizada.includes('capacidad is not null') &&
@@ -930,7 +930,7 @@ function verificarReto(consultaEjecutada, resultados) {
         case 20:
             cumpleRequisitos = (queryNormalizada.includes('inner join') || queryNormalizada.includes('join')) &&
                                (queryNormalizada.includes('survivors') && queryNormalizada.includes('s2')) &&
-                               resultados.length >= 1;
+                               resultados.length >= 2; // Ahora hay parejas: Elena+Viktor (34), Li+Diego (27), Marcus+Zara (41)
             break;
 
         // FASE 2 - INTERMEDIO (21-30) - Verificaciones específicas
@@ -938,7 +938,7 @@ function verificarReto(consultaEjecutada, resultados) {
             cumpleRequisitos = queryNormalizada.includes('join') &&
                                queryNormalizada.includes('survivors') &&
                                queryNormalizada.includes('bases') &&
-                               resultados.length === 5;
+                               resultados.length >= 8; // 8 supervivientes con base
             break;
         case 22:
             cumpleRequisitos = queryNormalizada.includes('join') &&

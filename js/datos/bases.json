@@ -48,5 +48,35 @@
     "Latitud": -3.465,
     "Longitud": -62.215,
     "EsComandoCentral": "0"
+  },
+  {
+    "BaseID": 6,
+    "Nombre": "Puesto Avanzado Alpha",
+    "Ubicacion": "Tundra Ártica",
+    "TipoBase": "Humana",
+    "Capacidad": 30,
+    "Latitud": 71.006,
+    "Longitud": -8.003,
+    "EsComandoCentral": "0"
+  },
+  {
+    "BaseID": 7,
+    "Nombre": "Estación Fantasma",
+    "Ubicacion": "Valle Perdido",
+    "TipoBase": "Humana",
+    "Capacidad": 25,
+    "Latitud": 42.123,
+    "Longitud": 12.456,
+    "EsComandoCentral": "0"
+  },
+  {
+    "BaseID": 8,
+    "Nombre": "Centro Nexus",
+    "Ubicacion": "Plataforma Orbital",
+    "TipoBase": "IA",
+    "Capacidad": null,
+    "Latitud": null,
+    "Longitud": null,
+    "EsComandoCentral": "0"
   }
 ]
