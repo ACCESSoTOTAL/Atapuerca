@@ -879,12 +879,12 @@ function verificarReto(consultaEjecutada, resultados) {
                                resultados.length >= 3; // Ajustado para ser flexible
             break;
 
-        // FASE 1.5 - TUTORIAL JOIN (11-20)
+        // FASE 2 - TUTORIAL JOIN (11-20)
         case 11:
-            cumpleRequisitos = queryNormalizada.includes('join') &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('bases') &&
-                               resultados.length === 5;
+            cumpleRequisitos = (queryNormalizada.includes('select') && queryNormalizada.includes('from survivors')) ||
+                               (queryNormalizada.includes('select') && queryNormalizada.includes('from bases')) ||
+                               (queryNormalizada.includes('survivors') && queryNormalizada.includes('bases')) &&
+                               resultados.length >= 1; // Flexible para aceptar cualquiera de las dos consultas
             break;
         case 12:
             cumpleRequisitos = queryNormalizada.includes('join') &&
