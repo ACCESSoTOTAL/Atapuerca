@@ -68,23 +68,6 @@
           🔓 Desbloquear Todos los Retos
         </button>
         
-        <!-- Botón Modo Desarrollador -->
-        <button 
-          onclick="modoDesarrollador()" 
-          style="
-            background: linear-gradient(135deg, var(--accent-cyan), #0066cc); 
-            color: var(--bg-dark); 
-            border: none; 
-            padding: 1em 2em; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(0, 221, 255, 0.3);
-          "
-        >
-          🔧 Modo Desarrollador
-        </button>
-        
         <!-- Botón Reset -->
         <button 
           onclick="resetearProgreso()" 
@@ -420,13 +403,6 @@
       localStorage.setItem('puntuacionAtapuerca', puntuacionTotal.toString());
       
       alert(`¡Todos los retos desbloqueados!\n${retosCache.length} retos completados\n${puntuacionTotal} puntos totales`);
-      location.reload();
-    }
-
-    function modoDesarrollador() {
-      const estado = localStorage.getItem('modoDesarrollador') === 'true';
-      localStorage.setItem('modoDesarrollador', (!estado).toString());
-      alert('Modo desarrollador ' + (!estado ? 'activado' : 'desactivado'));
       location.reload();
     }
 
