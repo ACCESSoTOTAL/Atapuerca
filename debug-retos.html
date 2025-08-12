@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Retos</title>
+    <style>
+        body { font-family: monospace; background: #000; color: #0f0; padding: 20px; }
+        .error { color: #f44; }
+        .success { color: #0f0; }
+        .warning { color: #fa0; }
+        .info { color: #09f; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Diagnóstico de Retos.html</h1>
+    <div id="output"></div>
+
+    <script>
+        function log(mensaje, clase = 'info') {
+            const div = document.createElement('div');
+            div.className = clase;
+            div.innerHTML = mensaje;
+            document.getElementById('output').appendChild(div);
+        }
+
+        // Función de diagnóstico
+        async function diagnosticar() {
+            log('🚀 Iniciando diagnóstico...', 'info');
+            
+            // 1. Verificar si se cargan las funciones
+            log('\n📋 VERIFICANDO FUNCIONES DISPONIBLES:', 'info');
+            
+            const funciones = [
+                'cargarRetos',
+                'desbloquearTodosLosRetos', 
+                'modoDesarrollador',
+                'irAlReto',
+                'mostrarPistaSimple',
+                'cargarEjemplo'
+            ];
+            
+            funciones.forEach(func => {
+                if (typeof window[func] === 'function') {
+                    log(`✅ ${func}: disponible`, 'success');
+                } else {
+                    log(`❌ ${func}: NO disponible`, 'error');
+                }
+            });
+            
+            // 2. Verificar API
+            log('\n🌐 VERIFICANDO API:', 'info');
+            try {
+                const response = await fetch('https://atapuerca-net.es/api/retos.php?action=list');
+                const data = await response.json();
+                
+                if (data.success && data.data) {
+                    log(`✅ API: ${data.data.length} retos disponibles`, 'success');
+                } else {
+                    log(`❌ API: ${data.error || 'Error desconocido'}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ API: Error de conexión - ${error.message}`, 'error');
+            }
+            
+            // 3. Verificar variables globales
+            log('\n🔧 VERIFICANDO VARIABLES GLOBALES:', 'info');
+            
+            if (typeof RetosDB !== 'undefined') {
+                log('✅ RetosDB: disponible', 'success');
+                log(`📊 Cache: ${RetosDB.loaded() ? 'cargado' : 'no cargado'}`, RetosDB.loaded() ? 'success' : 'warning');
+            } else {
+                log('❌ RetosDB: NO disponible', 'error');
+            }
+            
+            // 4. Verificar DOM
+            log('\n📄 VERIFICANDO ELEMENTOS DOM:', 'info');
+            const elementos = ['retos-container'];
+            elementos.forEach(id => {
+                const elem = document.getElementById(id);
+                if (elem) {
+                    log(`✅ #${id}: encontrado`, 'success');
+                } else {
+                    log(`❌ #${id}: NO encontrado`, 'error');
+                }
+            });
+            
+            // 5. Verificar errores de consola
+            log('\n🚨 CAPTURANDO ERRORES:', 'info');
+            
+            window.addEventListener('error', function(e) {
+                log(`❌ Error JS: ${e.message} en ${e.filename}:${e.lineno}`, 'error');
+            });
+            
+            // 6. Intentar cargar retos manualmente
+            log('\n🔄 INTENTANDO CARGAR RETOS MANUALMENTE:', 'info');
+            try {
+                if (typeof cargarRetos === 'function') {
+                    await cargarRetos();
+                    log('✅ cargarRetos() ejecutada exitosamente', 'success');
+                } else {
+                    log('❌ Función cargarRetos no disponible', 'error');
+                }
+            } catch (error) {
+                log(`❌ Error ejecutando cargarRetos: ${error.message}`, 'error');
+            }
+            
+            log('\n🏁 Diagnóstico completado', 'info');
+        }
+        
+        // Ejecutar diagnóstico cuando cargue la página
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', diagnosticar);
+        } else {
+            diagnosticar();
+        }
+    </script>
+    
+    <!-- Cargar los mismos scripts que retos.html -->
+    <script src="js/dataLoader.js"></script>
+    <script src="js/retos-db-simple.js"></script>
+</body>
+</html>

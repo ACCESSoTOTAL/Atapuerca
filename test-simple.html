@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Simple API</title>
+    <style>
+        body { font-family: monospace; background: #000; color: #0f0; padding: 20px; }
+        .error { color: #f44; }
+        .success { color: #0f0; }
+        .warning { color: #fa0; }
+        .info { color: #09f; }
+        button { padding: 10px 20px; margin: 10px; background: #333; color: #fff; border: 1px solid #666; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test Simple de API</h1>
+    <div id="output"></div>
+    
+    <button onclick="testAPI()">🔗 Test API</button>
+    <button onclick="testFunciones()">⚙️ Test Funciones</button>
+    <button onclick="testDOM()">📄 Test DOM</button>
+
+    <script>
+        function log(mensaje, clase = 'info') {
+            const div = document.createElement('div');
+            div.className = clase;
+            div.innerHTML = mensaje;
+            document.getElementById('output').appendChild(div);
+        }
+
+        async function testAPI() {
+            log('🌐 Probando API directamente...', 'info');
+            
+            try {
+                const response = await fetch('https://atapuerca-net.es/api/retos.php?action=list');
+                log('📡 Response status: ' + response.status, response.ok ? 'success' : 'error');
+                
+                const text = await response.text();
+                log('📋 Response text (primeros 200 chars): ' + text.substring(0, 200), 'info');
+                
+                try {
+                    const data = JSON.parse(text);
+                    log('✅ JSON válido:', 'success');
+                    log('🔢 Success: ' + data.success, data.success ? 'success' : 'error');
+                    if (data.data) {
+                        log('📊 Retos encontrados: ' + data.data.length, 'success');
+                    }
+                    if (data.error) {
+                        log('❌ Error: ' + data.error, 'error');
+                    }
+                } catch (jsonError) {
+                    log('❌ Error parseando JSON: ' + jsonError.message, 'error');
+                }
+                
+            } catch (fetchError) {
+                log('❌ Error en fetch: ' + fetchError.message, 'error');
+            }
+        }
+
+        function testFunciones() {
+            log('⚙️ Probando funciones...', 'info');
+            
+            const funciones = [
+                'cargarRetos',
+                'desbloquearTodosLosRetos', 
+                'modoDesarrollador',
+                'irAlReto',
+                'mostrarPistaSimple',
+                'cargarEjemplo'
+            ];
+            
+            funciones.forEach(function(func) {
+                if (typeof window[func] === 'function') {
+                    log('✅ ' + func + ': disponible', 'success');
+                } else {
+                    log('❌ ' + func + ': NO disponible (tipo: ' + typeof window[func] + ')', 'error');
+                }
+            });
+        }
+
+        function testDOM() {
+            log('📄 Probando elementos DOM...', 'info');
+            
+            const elementos = ['retos-container'];
+            elementos.forEach(function(id) {
+                const elem = document.getElementById(id);
+                if (elem) {
+                    log('✅ #' + id + ': encontrado', 'success');
+                } else {
+                    log('❌ #' + id + ': NO encontrado', 'error');
+                }
+            });
+        }
+
+        // Crear elemento DOM de prueba
+        window.addEventListener('DOMContentLoaded', function() {
+            const testContainer = document.createElement('div');
+            testContainer.id = 'retos-container';
+            testContainer.style.display = 'none';
+            document.body.appendChild(testContainer);
+            
+            log('🚀 Página cargada. Puedes hacer las pruebas.', 'info');
+        });
+
+        // Capturar errores
+        window.addEventListener('error', function(e) {
+            log('❌ Error JS: ' + e.message + ' en línea ' + e.lineno, 'error');
+        });
+    </script>
+    
+    <!-- Scripts de retos -->
+    <script src="js/dataLoader.js"></script>
+    <script src="js/retos-db-simple.js"></script>
+</body>
+</html>

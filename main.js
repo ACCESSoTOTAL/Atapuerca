@@ -26,7 +26,7 @@ async function runQuery() {
         
         // Verificar si se completó un reto
         if (typeof verificarReto === 'function') {
-          const retoResult = await verificarReto(query, data.rows);
+          const retoResult = verificarReto(query, data.rows);
           if (retoResult.completado) {
             resultHTML = `
               <div style="
@@ -136,7 +136,7 @@ function mostrarRetoActual() {
     retoInfo.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1em;">
         <h3 style="margin: 0; color: var(--accent-orange); display: flex; align-items: center; gap: 0.5em;">
-          🎯 Reto Actual: ${retoActual.titulo}
+          🎯 Reto #${retoActual.id}: ${retoActual.titulo}
         </h3>
         <span style="
           background: var(--accent-orange); 
@@ -167,6 +167,33 @@ function mostrarRetoActual() {
           allowfullscreen
           style="display: block;">
         </iframe>
+      </div>
+      
+      <!-- Navegación entre retos -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin: 1em 0; padding: 1em; background: var(--bg-dark); border-radius: 5px; border: 1px solid var(--border-color);">
+        <button onclick="navegarReto(${retoActual.id - 1})" ${retoActual.id <= 1 ? 'disabled' : ''} style="
+          background: ${retoActual.id <= 1 ? 'var(--bg-medium)' : 'var(--accent-cyan)'}; 
+          color: ${retoActual.id <= 1 ? 'var(--text-secondary)' : 'var(--bg-dark)'}; 
+          border: none; 
+          padding: 0.5em 1em; 
+          border-radius: 3px; 
+          font-size: 0.9em;
+          cursor: ${retoActual.id <= 1 ? 'not-allowed' : 'pointer'};
+        ">◀️ Reto Anterior</button>
+        
+        <span style="color: var(--text-secondary); font-size: 0.9em;">
+          Reto ${retoActual.id} de 68
+        </span>
+        
+        <button onclick="navegarReto(${retoActual.id + 1})" ${retoActual.id >= 68 ? 'disabled' : ''} style="
+          background: ${retoActual.id >= 68 ? 'var(--bg-medium)' : 'var(--accent-cyan)'}; 
+          color: ${retoActual.id >= 68 ? 'var(--text-secondary)' : 'var(--bg-dark)'}; 
+          border: none; 
+          padding: 0.5em 1em; 
+          border-radius: 3px; 
+          font-size: 0.9em;
+          cursor: ${retoActual.id >= 68 ? 'not-allowed' : 'pointer'};
+        ">Reto Siguiente ▶️</button>
       </div>
       
       <div style="display: flex; flex-wrap: wrap; gap: 0.5em; margin-top: 1em;">
@@ -406,3 +433,61 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => info.remove(), 8000);
   }
 });
+
+// Nueva función para navegar entre retos
+async function navegarReto(nuevoRetoId) {
+  if (nuevoRetoId < 1 || nuevoRetoId > 68) {
+    console.warn('❌ ID de reto fuera de rango:', nuevoRetoId);
+    return;
+  }
+  
+  try {
+    // Cargar datos de retos si no están disponibles
+    if (!window.retosData) {
+      console.log('🔄 Cargando datos de retos...');
+      const response = await fetch('/api/retos.php?action=get_all');
+      const result = await response.json();
+      
+      if (result.success && result.data) {
+        window.retosData = result.data;
+      } else {
+        throw new Error('Error cargando datos de retos');
+      }
+    }
+    
+    // Buscar el reto específico
+    const nuevoReto = window.retosData.find(r => r.id == nuevoRetoId);
+    
+    if (!nuevoReto) {
+      throw new Error(`Reto ${nuevoRetoId} no encontrado`);
+    }
+    
+    // Actualizar el reto actual en localStorage
+    localStorage.setItem('retoActual', JSON.stringify(nuevoReto));
+    
+    // Actualizar la interfaz
+    const retoInfoAnterior = document.getElementById('reto-info');
+    if (retoInfoAnterior) {
+      retoInfoAnterior.remove();
+    }
+    
+    // Mostrar el nuevo reto
+    const nuevoRetoInfo = mostrarRetoActual();
+    if (nuevoRetoInfo) {
+      const main = document.querySelector('main');
+      main.insertBefore(nuevoRetoInfo, main.children[2]);
+    }
+    
+    // Limpiar el textarea para el nuevo reto
+    const sqlInput = document.getElementById('sqlInput');
+    if (sqlInput) {
+      sqlInput.value = '-- Escribe tu consulta aquí para el reto #' + nuevoRetoId;
+    }
+    
+    console.log(`✅ Navegado al reto #${nuevoRetoId}: ${nuevoReto.titulo}`);
+    
+  } catch (error) {
+    console.error('❌ Error navegando al reto:', error);
+    alert('Error cargando el reto. Inténtalo de nuevo.');
+  }
+}

@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Retos - AtapuercaNet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff41;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            background: rgba(0, 255, 65, 0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            padding: 20px;
+            border: 1px solid #00ff41;
+            border-radius: 8px;
+            background: rgba(0, 255, 65, 0.05);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00ff41;
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        button {
+            background: #00ff41;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: #00cc33;
+        }
+        
+        select, input {
+            background: #1a1a1a;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        .retos-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(0, 255, 65, 0.02);
+        }
+        
+        .retos-table th,
+        .retos-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #00ff41;
+        }
+        
+        .retos-table th {
+            background: rgba(0, 255, 65, 0.1);
+            font-weight: bold;
+        }
+        
+        .retos-table tr:hover {
+            background: rgba(0, 255, 65, 0.05);
+        }
+        
+        .fase-badge {
+            background: #00ff41;
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .puntos {
+            color: #ffff00;
+            font-weight: bold;
+        }
+        
+        .consulta-preview {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 0.9em;
+            color: #cccccc;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .btn-small {
+            padding: 4px 8px;
+            font-size: 0.8em;
+        }
+        
+        .btn-edit {
+            background: #ffaa00;
+        }
+        
+        .btn-delete {
+            background: #ff4444;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            padding: 30px;
+            border: 2px solid #00ff41;
+            border-radius: 10px;
+            width: 95%;
+            max-width: 1200px;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: #0a0a0a;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-group textarea.large {
+            min-height: 200px;
+        }
+        
+        .form-group textarea.extra-large {
+            min-height: 250px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+        }
+        
+        .error {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .success {
+            color: #00ff41;
+            background: rgba(0, 255, 65, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .nav-admin {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .nav-admin a {
+            color: #00ff41;
+            text-decoration: none;
+            margin: 0 15px;
+            padding: 8px 15px;
+            border: 1px solid #00ff41;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-admin a:hover {
+            background: #00ff41;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛰️ AtapuercaNet - Admin Retos MySQL</h1>
+            <p>Panel de administración para gestión de retos en base de datos</p>
+        </header>
+        
+        <!-- Navegación de Admin -->
+        <nav class="nav-admin">
+            <a href="../index.html">🏠 Inicio</a>
+            <a href="../retos.html">⚔️ Retos</a>
+            <a href="../sql.html">💻 Terminal SQL</a>
+            <a href="../descargas.html">📥 Descargas</a>
+            <a href="../contacto.html">📞 Contacto</a>
+        </nav>
+        
+        <div id="stats" class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalRetos">-</div>
+                <div>Total Retos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalPuntos">-</div>
+                <div>Total Puntos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalFases">-</div>
+                <div>Fases</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="promedioRetos">-</div>
+                <div>Promedio por Fase</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="cargarRetos()">🔄 Recargar</button>
+            <button onclick="abrirModalNuevo()">➕ Nuevo Reto</button>
+            <button onclick="migrarDesdeJS()">📥 Migrar desde JS</button>
+            <button onclick="exportarJSON()">📤 Exportar JSON</button>
+            
+            <select id="filtroFase" onchange="filtrarRetos()">
+                <option value="">Todas las Fases</option>
+                <option value="1">Fase 1</option>
+                <option value="2">Fase 2</option>
+                <option value="3">Fase 3</option>
+                <option value="4">Fase 4</option>
+                <option value="5">Fase 5</option>
+            </select>
+            
+            <input type="text" id="busqueda" placeholder="Buscar..." oninput="buscarRetos()">
+        </div>
+        
+        <div id="mensajes"></div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            🔄 Cargando retos...
+        </div>
+        
+        <table class="retos-table" id="tablaRetos" style="display: none;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fase</th>
+                    <th>Nivel</th>
+                    <th>Título</th>
+                    <th>Puntos</th>
+                    <th>Consulta</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Modal para editar/crear reto -->
+    <div id="modalReto" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitulo">Nuevo Reto</h2>
+            <form id="formReto">
+                <div class="form-group">
+                    <label>Número de Reto:</label>
+                    <input type="number" id="retoNumero" min="1" max="999" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Fase:</label>
+                    <select id="retoFase" required>
+                        <option value="1">Fase 1 - Básico</option>
+                        <option value="2">Fase 2 - Intermedio</option>
+                        <option value="3">Fase 3 - Avanzado</option>
+                        <option value="4">Fase 4 - Experto</option>
+                        <option value="5">Fase 5 - Maestro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Nivel:</label>
+                    <input type="text" id="retoNivel" required placeholder="Ej: Básico, Intermedio, Avanzado">
+                </div>
+                
+                <div class="form-group">
+                    <label>Título:</label>
+                    <input type="text" id="retoTitulo" required placeholder="Título descriptivo del reto">
+                </div>
+                
+                <div class="form-group">
+                    <label>Descripción:</label>
+                    <textarea id="retoDescripcion" class="large" required placeholder="Descripción detallada del reto"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Consulta Sugerida:</label>
+                    <textarea id="retoConsulta" class="extra-large" required placeholder="SELECT ..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Pista:</label>
+                    <textarea id="retoPista" class="large" placeholder="Pista para resolver el reto"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Puntos:</label>
+                    <input type="number" id="retoPuntos" min="1" max="100" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>URL del Video:</label>
+                    <input type="url" id="retoVideo" placeholder="https://...">
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit">💾 Guardar</button>
+                    <button type="button" onclick="cerrarModal()">❌ Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Configuración
+        const API_URL = '/api/retos.php';
+        const DOMAIN = 'atapuerca-net.es';
+        let retosData = [];
+        let editandoReto = null;
+        
+        // Cargar retos al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarRetos();
+        });
+        
+        // Funciones principales
+        async function cargarRetos() {
+            mostrarLoading(true);
+            try {
+                const response = await fetch(`${API_URL}?action=list`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    retosData = data.data;
+                    mostrarRetos(retosData);
+                    actualizarEstadisticas();
+                    mostrarMensaje('Retos cargados exitosamente', 'success');
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                mostrarMensaje('Error cargando retos: ' + error.message, 'error');
+            } finally {
+                mostrarLoading(false);
+            }
+        }
+        
+        function mostrarRetos(retos) {
+            const cuerpo = document.getElementById('cuerpoTabla');
+            cuerpo.innerHTML = '';
+            
+            retos.forEach(reto => {
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                    <td>${reto.id}</td>
+                    <td><span class="fase-badge">F${reto.fase}</span></td>
+                    <td>${reto.nivel}</td>
+                    <td>${reto.titulo}</td>
+                    <td><span class="puntos">${reto.puntos}</span></td>
+                    <td><div class="consulta-preview">${reto.consulta_sugerida}</div></td>
+                    <td class="actions">
+                        <button class="btn-small btn-edit" onclick="editarReto(${reto.id})">✏️</button>
+                        <button class="btn-small btn-delete" onclick="eliminarReto(${reto.id})">🗑️</button>
+                    </td>
+                `;
+                cuerpo.appendChild(fila);
+            });
+            
+            document.getElementById('tablaRetos').style.display = 'table';
+        }
+        
+        function actualizarEstadisticas() {
+            const totalRetos = retosData.length;
+            const totalPuntos = retosData.reduce((sum, reto) => sum + reto.puntos, 0);
+            const fases = [...new Set(retosData.map(r => r.fase))].length;
+            const promedioRetos = Math.round(totalRetos / fases);
+            
+            document.getElementById('totalRetos').textContent = totalRetos;
+            document.getElementById('totalPuntos').textContent = totalPuntos;
+            document.getElementById('totalFases').textContent = fases;
+            document.getElementById('promedioRetos').textContent = promedioRetos;
+        }
+        
+        function mostrarLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+            document.getElementById('tablaRetos').style.display = show ? 'none' : 'table';
+        }
+        
+        function mostrarMensaje(mensaje, tipo) {
+            const div = document.createElement('div');
+            div.className = tipo;
+            div.textContent = mensaje;
+            
+            const contenedor = document.getElementById('mensajes');
+            contenedor.innerHTML = '';
+            contenedor.appendChild(div);
+            
+            setTimeout(() => {
+                contenedor.innerHTML = '';
+            }, 5000);
+        }
+        
+        function filtrarRetos() {
+            const fase = document.getElementById('filtroFase').value;
+            const filtrados = fase ? retosData.filter(r => r.fase == fase) : retosData;
+            mostrarRetos(filtrados);
+        }
+        
+        function buscarRetos() {
+            const busqueda = document.getElementById('busqueda').value.toLowerCase();
+            const filtrados = retosData.filter(r => 
+                r.titulo.toLowerCase().includes(busqueda) ||
+                r.descripcion.toLowerCase().includes(busqueda) ||
+                r.id.toString().includes(busqueda)
+            );
+            mostrarRetos(filtrados);
+        }
+        
+        // Funciones del modal
+        function abrirModalNuevo() {
+            editandoReto = null;
+            document.getElementById('modalTitulo').textContent = 'Nuevo Reto';
+            document.getElementById('formReto').reset();
+            document.getElementById('retoNumero').disabled = false;
+            document.getElementById('modalReto').style.display = 'block';
+        }
+        
+        function editarReto(id) {
+            const reto = retosData.find(r => r.id === id);
+            if (!reto) return;
+            
+            editandoReto = reto;
+            document.getElementById('modalTitulo').textContent = `Editar Reto ${id}`;
+            
+            // Llenar formulario
+            document.getElementById('retoNumero').value = reto.id;
+            document.getElementById('retoNumero').disabled = true;
+            document.getElementById('retoFase').value = reto.fase;
+            document.getElementById('retoNivel').value = reto.nivel;
+            document.getElementById('retoTitulo').value = reto.titulo;
+            document.getElementById('retoDescripcion').value = reto.descripcion;
+            document.getElementById('retoConsulta').value = reto.consulta_sugerida;
+            document.getElementById('retoPista').value = reto.pista || '';
+            document.getElementById('retoPuntos').value = reto.puntos;
+            document.getElementById('retoVideo').value = reto.video_url || '';
+            
+            document.getElementById('modalReto').style.display = 'block';
+        }
+        
+        function cerrarModal() {
+            document.getElementById('modalReto').style.display = 'none';
+            editandoReto = null;
+        }
+        
+        // Manejar envío del formulario
+        document.getElementById('formReto').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const datos = {
+                reto_numero: parseInt(document.getElementById('retoNumero').value),
+                fase: parseInt(document.getElementById('retoFase').value),
+                nivel: document.getElementById('retoNivel').value,
+                titulo: document.getElementById('retoTitulo').value,
+                descripcion: document.getElementById('retoDescripcion').value,
+                consulta_sugerida: document.getElementById('retoConsulta').value,
+                pista: document.getElementById('retoPista').value,
+                puntos: parseInt(document.getElementById('retoPuntos').value),
+                video_url: document.getElementById('retoVideo').value
+            };
+            
+            try {
+                const response = await fetch(`${API_URL}?action=${editandoReto ? 'update' : 'create'}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    mostrarMensaje(`Reto ${editandoReto ? 'actualizado' : 'creado'} exitosamente`, 'success');
+                    cerrarModal();
+                    cargarRetos();
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                mostrarMensaje('Error guardando reto: ' + error.message, 'error');
+            }
+        });
+        
+        async function eliminarReto(id) {
+            if (!confirm(`¿Estás seguro de eliminar el reto ${id}?`)) return;
+            
+            try {
+                const response = await fetch(`${API_URL}?action=delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reto_numero: id })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    mostrarMensaje('Reto eliminado exitosamente', 'success');
+                    cargarRetos();
+                } else {
+                    throw new Error(result.error);
+                }
+            } catch (error) {
+                mostrarMensaje('Error eliminando reto: ' + error.message, 'error');
+            }
+        }
+        
+        function exportarJSON() {
+            const dataStr = JSON.stringify(retosData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = 'retos_atapuerca.json';
+            link.click();
+        }
+        
+        function migrarDesdeJS() {
+            if (confirm('¿Migrar retos desde el archivo JS? Esto puede sobrescribir datos existentes.')) {
+                mostrarMensaje('Funcionalidad de migración pendiente de implementar', 'error');
+            }
+        }
+        
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('modalReto');
+            if (event.target === modal) {
+                cerrarModal();
+            }
+        }
+    </script>
+</body>
+</html>

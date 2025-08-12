@@ -101,23 +101,6 @@
         >
           🔄 Reset Progreso
         </button>
-        
-        <!-- Botón Panel Administración -->
-        <button 
-          onclick="accederAdministracion()" 
-          style="
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9); 
-            color: white; 
-            border: none; 
-            padding: 1em 2em; 
-            border-radius: 8px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-          "
-        >
-          🔐 Panel Administración
-        </button>
       </div>
     </div>
   </main>
@@ -127,26 +110,7 @@
     // VARIABLES GLOBALES
     // ========================================
     let retosCache = [];
-    let progresoUsuario = {};
     const API_URL = 'https://atapuerca-net.es/api/retos.php';
-    // ========================================
-    // CONFIGURACIÓN DE USUARIO
-    // ========================================
-    function obtenerUsuarioId() {
-      // Intentar obtener ID existente del localStorage
-      let usuarioId = localStorage.getItem('atapuerca_usuario_id');
-      
-      if (!usuarioId) {
-        // Generar ID único basado en timestamp y random
-        usuarioId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('atapuerca_usuario_id', usuarioId);
-        console.log('🆔 Nuevo usuario ID generado:', usuarioId);
-      }
-      
-      return usuarioId;
-    }
-    
-    const USUARIO_ID = obtenerUsuarioId(); // ID único por navegador
 
     // ========================================
     // FUNCIÓN PRINCIPAL DE CARGA
@@ -159,8 +123,7 @@
         document.getElementById('loading').style.display = 'block';
         document.getElementById('retos-container').style.display = 'none';
         
-        // Cargar retos SOLO (sin progreso desde API)
-        const retosResponse = await fetch(API_URL + '?action=list&activo=1&_t=' + Date.now(), {
+        const response = await fetch(API_URL + '?action=list&activo=1&_t=' + Date.now(), {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -170,44 +133,18 @@
           }
         });
         
-        if (!retosResponse.ok) {
-          throw new Error('HTTP ' + retosResponse.status + ': ' + retosResponse.statusText);
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status + ': ' + response.statusText);
         }
         
-        const retosData = await retosResponse.json();
+        const data = await response.json();
         
-        if (!retosData.success) {
-          throw new Error(retosData.error || 'Error desconocido en la API');
+        if (!data.success) {
+          throw new Error(data.error || 'Error desconocido en la API');
         }
         
-        retosCache = retosData.data;
-        console.log('✅ ' + retosData.total + ' retos cargados');
-        
-        // Cargar progreso SOLO desde localStorage
-        console.log('🔄 Cargando progreso desde localStorage...');
-        const localProgress = localStorage.getItem('retoProgress');
-        if (localProgress) {
-          try {
-            const localData = JSON.parse(localProgress);
-            progresoUsuario = {};
-            Object.keys(localData).forEach(retoId => {
-              if (localData[retoId].completado) {
-                progresoUsuario[retoId] = {
-                  completado: localData[retoId].completado,
-                  puntos_ganados: localData[retoId].puntos || 10,
-                  fecha_completion: localData[retoId].fecha || new Date().toISOString()
-                };
-              }
-            });
-            console.log('✅ Progreso cargado desde localStorage: ' + Object.keys(progresoUsuario).length + ' retos completados');
-          } catch (localError) {
-            console.error('❌ Error parseando localStorage:', localError);
-            progresoUsuario = {};
-          }
-        } else {
-          console.log('📝 No hay progreso previo en localStorage');
-          progresoUsuario = {};
-        }
+        retosCache = data.data;
+        console.log('✅ ' + data.total + ' retos cargados');
         
         mostrarRetos(retosCache);
         
@@ -266,44 +203,25 @@
       container.innerHTML = html;
       loading.style.display = 'none';
       container.style.display = 'block';
-      
-      // Actualizar gamificación después de cargar los retos
-      actualizarGamificacion();
     }
 
     // ========================================
     // CREAR TARJETA DE RETO
     // ========================================
     function crearTarjetaReto(reto) {
-      const completado = progresoUsuario[reto.id] ? progresoUsuario[reto.id].completado : false;
-      
-      // Verificar si el reto está bloqueado (retos anteriores no completados)
-      let bloqueado = false;
-      if (reto.id > 1) {
-        // Verificar que todos los retos anteriores estén completados
-        for (let i = 1; i < reto.id; i++) {
-          if (!progresoUsuario[i] || !progresoUsuario[i].completado) {
-            bloqueado = true;
-            break;
-          }
-        }
-      }
-      
-      const icono = completado ? '✅' : (bloqueado ? '🔒' : '🎯');
-      const borderColor = completado ? 'var(--primary-green)' : (bloqueado ? '#666' : 'var(--border-color)');
-      const opacity = bloqueado ? '0.5' : '1';
+      const completado = localStorage.getItem('reto_' + reto.id + '_completado') === 'true';
+      const icono = completado ? '✅' : '🎯';
       
       return `
         <div style="
           background: var(--bg-light);
-          border: 1px solid ${borderColor};
+          border: 1px solid ${completado ? 'var(--primary-green)' : 'var(--border-color)'};
           border-radius: 8px;
           padding: 1.5em;
-          opacity: ${opacity};
         ">
           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1em;">
             <h4 style="margin: 0; color: var(--text-primary); flex: 1;">
-              ${icono} #${reto.id} - ${reto.titulo}
+              ${icono} ${reto.titulo}
             </h4>
             <div style="display: flex; gap: 0.5em; align-items: center;">
               <span style="background: var(--accent-orange); color: var(--bg-dark); padding: 0.2em 0.6em; border-radius: 12px; font-size: 0.8em; font-weight: bold;">
@@ -316,21 +234,21 @@
           </div>
           
           <p style="color: var(--text-secondary); margin-bottom: 1em; font-size: 0.9em;">
-            ${bloqueado ? '🔒 Completa los retos anteriores para desbloquear este.' : reto.descripcion}
+            ${reto.descripcion}
           </p>
           
           <div style="display: flex; gap: 0.5em; flex-wrap: wrap;">
-            <button onclick="${bloqueado ? 'mostrarMensajeBloqueo()' : `irAlReto(${reto.id})`}" style="
-              background: ${bloqueado ? '#666' : 'var(--accent-cyan)'};
+            <button onclick="irAlReto(${reto.id})" style="
+              background: var(--accent-cyan);
               color: var(--bg-dark);
               border: none;
               padding: 0.5em 1em;
               border-radius: 5px;
               font-weight: bold;
-              cursor: ${bloqueado ? 'not-allowed' : 'pointer'};
-            ">${bloqueado ? '🔒 Bloqueado' : '🚀 Ir al Terminal'}</button>
+              cursor: pointer;
+            ">🚀 Ir al Terminal</button>
             
-            ${!bloqueado && reto.pista ? `<button onclick="mostrarPista(${reto.id})" style="
+            ${reto.pista ? `<button onclick="mostrarPista(${reto.id})" style="
               background: var(--accent-orange);
               color: var(--bg-dark);
               border: none;
@@ -340,7 +258,7 @@
               cursor: pointer;
             ">💡 Pista</button>` : ''}
             
-            ${!bloqueado && reto.consulta_sugerida ? `<button onclick="cargarEjemplo(${reto.id})" style="
+            ${reto.consulta_sugerida ? `<button onclick="cargarEjemplo(${reto.id})" style="
               background: var(--bg-medium);
               color: var(--text-primary);
               border: 1px solid var(--border-color);
@@ -383,37 +301,18 @@
       }
     }
 
-    function mostrarMensajeBloqueo() {
-      alert('🔒 Este reto está bloqueado.\n\nCompleta los retos anteriores para desbloquearlo.');
-    }
-
-    function accederAdministracion() {
-      const password = prompt('🔐 Introduce la contraseña de administración:');
-      if (password === 'ILoveAccess') {
-        // Contraseña correcta - redirigir al panel de administración
-        window.open('admin/adminretos.html', '_blank');
-      } else if (password !== null) {
-        // Contraseña incorrecta (pero no canceló)
-        alert('❌ Contraseña incorrecta. Acceso denegado.');
-      }
-      // Si password es null (canceló), no hacer nada
-    }
-
     function desbloquearTodosLosRetos() {
-      if (!confirm('¿Desbloquear todos los retos? Esto guardará el progreso en la base de datos.')) return;
+      if (!confirm('¿Desbloquear todos los retos?')) return;
       
-      let promesas = [];
+      let totalPuntos = 0;
       retosCache.forEach(function(reto) {
-        promesas.push(guardarProgreso(reto.id, true, reto.puntos));
+        localStorage.setItem('reto_' + reto.id + '_completado', 'true');
+        totalPuntos += reto.puntos;
       });
       
-      Promise.all(promesas).then(function() {
-        alert('¡Todos los retos desbloqueados y guardados en MySQL!');
-        location.reload();
-      }).catch(function(error) {
-        console.error('Error al desbloquear retos:', error);
-        alert('Error al guardar en MySQL: ' + error.message);
-      });
+      localStorage.setItem('puntuacionAtapuerca', totalPuntos.toString());
+      alert('¡Todos los retos desbloqueados! Puntos: ' + totalPuntos);
+      location.reload();
     }
 
     function modoDesarrollador() {
@@ -424,71 +323,12 @@
     }
 
     function resetearProgreso() {
-      if (!confirm('¿Resetear todo el progreso en MySQL?')) return;
-      if (!confirm('¿Estás SEGURO? Esto eliminará el progreso de la base de datos.')) return;
+      if (!confirm('¿Resetear todo el progreso?')) return;
+      if (!confirm('¿Estás SEGURO? No se puede deshacer.')) return;
       
-      // Solo limpiar localStorage, el progreso de MySQL se puede resetear desde el admin
       localStorage.clear();
-      alert('LocalStorage limpiado. Usa el panel de administración para resetear MySQL.');
+      alert('Progreso reseteado');
       location.reload();
-    }
-
-    // ========================================
-    // FUNCIÓN PARA GUARDAR PROGRESO EN MYSQL
-    // ========================================
-    async function guardarProgreso(retoId, completado, puntos) {
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            action: 'save_progress',
-            usuario_id: USUARIO_ID,
-            reto_numero: retoId,
-            completado: completado,
-            puntos_ganados: puntos
-          })
-        });
-        
-        const result = await response.json();
-        if (!result.success) {
-          throw new Error(result.error || 'Error al guardar progreso');
-        }
-        
-        // Actualizar cache local
-        progresoUsuario[retoId] = {
-          completado: completado,
-          puntos_ganados: puntos,
-          fecha_completion: new Date().toISOString()
-        };
-        
-        return result;
-      } catch (error) {
-        console.error('Error al guardar progreso:', error);
-        throw error;
-      }
-    }
-
-    // ========================================
-    // FUNCIÓN PARA MARCAR RETO COMO COMPLETADO
-    // ========================================
-    async function marcarRetoCompletado(retoId, puntos) {
-      try {
-        await guardarProgreso(retoId, true, puntos);
-        console.log('✅ Reto ' + retoId + ' marcado como completado en MySQL');
-        
-        // Recargar la página para mostrar el cambio
-        setTimeout(function() {
-          location.reload();
-        }, 1000);
-        
-      } catch (error) {
-        console.error('Error al marcar reto completado:', error);
-        alert('Error al guardar progreso: ' + error.message);
-      }
     }
 
     function mostrarError(mensaje) {
@@ -519,80 +359,6 @@
         </div>
       `;
       container.style.display = 'block';
-    }
-
-    // ========================================
-    // GAMIFICACIÓN
-    // ========================================
-    
-    function actualizarGamificacion() {
-      const progreso = JSON.parse(localStorage.getItem('retoProgress') || '{}');
-      const retosCompletados = Object.keys(progreso).length;
-      
-      // Calcular nivel y experiencia
-      const experiencia = retosCompletados * 100;
-      const nivel = Math.floor(experiencia / 500) + 1;
-      const expEnNivel = experiencia % 500;
-      const expParaSiguienteNivel = 500;
-      const porcentajeExp = (expEnNivel / expParaSiguienteNivel) * 100;
-      
-      // Determinar fase actual
-      const fases = [
-        { titulo: "🔰 Fase 1: Novato", color: "#4ade80" },
-        { titulo: "⚔️ Fase 2: Iniciado", color: "#60a5fa" },
-        { titulo: "🛡️ Fase 3: Veterano", color: "#a78bfa" },
-        { titulo: "⚡ Fase 4: Experto", color: "#fb7185" },
-        { titulo: "🏆 Fase 5: Maestría SQL", color: "#8b5cf6" }
-      ];
-      
-      const faseActual = Math.min(Math.floor(nivel / 2), fases.length - 1);
-      const fase = fases[faseActual];
-      
-      // Actualizar interfaz de gamificación
-      let gamificacionHTML = `
-        <div style="margin-bottom: 2em; padding: 1.5em; background: linear-gradient(135deg, var(--bg-medium), var(--bg-dark)); border-radius: 10px; border: 2px solid ${fase.color};">
-          <h3 style="margin: 0 0 1em 0; color: ${fase.color};">🎮 Tu Progreso Hacker</h3>
-          
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1em; margin-bottom: 1em;">
-            <div style="text-align: center;">
-              <div style="font-size: 2em; color: ${fase.color};">Nivel ${nivel}</div>
-              <div style="color: var(--text-secondary);">${fase.titulo}</div>
-            </div>
-            
-            <div style="text-align: center;">
-              <div style="font-size: 2em; color: var(--accent-cyan);">${retosCompletados}</div>
-              <div style="color: var(--text-secondary);">Retos Completados</div>
-            </div>
-            
-            <div style="text-align: center;">
-              <div style="font-size: 2em; color: var(--accent-orange);">${experiencia}</div>
-              <div style="color: var(--text-secondary);">Puntos de Experiencia</div>
-            </div>
-          </div>
-          
-          <div style="margin-top: 1em;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5em;">
-              <span style="color: var(--text-secondary);">Progreso al siguiente nivel:</span>
-              <span style="color: ${fase.color};">${expEnNivel}/${expParaSiguienteNivel} EXP</span>
-            </div>
-            <div style="background: var(--bg-dark); border-radius: 20px; overflow: hidden; height: 20px;">
-              <div style="background: linear-gradient(90deg, ${fase.color}, ${fase.color}aa); width: ${porcentajeExp}%; height: 100%; transition: width 0.5s ease;"></div>
-            </div>
-          </div>
-        </div>
-      `;
-      
-      // Insertar la gamificación al principio del contenedor de retos
-      const retosContainer = document.getElementById('retos-container');
-      if (retosContainer) {
-        // Buscar si ya existe la gamificación
-        const gamificacionExistente = retosContainer.querySelector('[style*="🎮 Tu Progreso Hacker"]');
-        if (gamificacionExistente) {
-          gamificacionExistente.outerHTML = gamificacionHTML;
-        } else {
-          retosContainer.insertAdjacentHTML('afterbegin', gamificacionHTML);
-        }
-      }
     }
 
     // ========================================

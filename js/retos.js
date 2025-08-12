@@ -972,478 +972,141 @@ function verificarReto(consultaEjecutada, resultados) {
         return { completado: false, mensaje: "" };
     }
 
-    const retoActualObj = retos.find(r => r.id === retoActual);
-    if (!retoActualObj) {
+    // Obtener el reto actual desde localStorage
+    const retoActualStorage = JSON.parse(localStorage.getItem('retoActual') || 'null');
+    if (!retoActualStorage || !retoActualStorage.consulta_sugerida) {
         return { completado: false, mensaje: "" };
     }
 
-    // Normalizar la consulta ejecutada
-    const queryNormalizada = consultaEjecutada.toLowerCase()
-        .replace(/\s+/g, ' ')
-        .trim()
-        .replace(/;$/, '');
+    // Nueva verificación basada en comparación de resultados
+    return verificarPorComparacionResultados(retoActualStorage, consultaEjecutada, resultados);
+}
 
-    // Verificación específica por ID de reto
-    let cumpleRequisitos = false;
+async function verificarPorComparacionResultados(reto, consultaUsuario, resultadosUsuario) {
+    try {
+        // Ejecutar la consulta sugerida del reto para obtener el resultado correcto
+        const response = await fetch('api/sql_proxy.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                query: reto.consulta_sugerida
+            })
+        });
 
-    switch (retoActualObj.id) {
-        // FASE 1 - BÁSICO (1-10)
-        case 1:
-            cumpleRequisitos = queryNormalizada.includes('select') && 
-                               queryNormalizada.includes('from bases') &&
-                               resultados.length === 8; // Ahora hay 8 bases
-            break;
-        case 2:
-            cumpleRequisitos = (queryNormalizada.includes('select nombre') || queryNormalizada.includes('select\nnombre')) && 
-                               queryNormalizada.includes('tipobase') &&
-                               queryNormalizada.includes('order by') &&
-                               resultados.length === 8; // Ahora hay 8 bases
-            break;
-        case 3:
-            cumpleRequisitos = (queryNormalizada.includes("tipobase = 'humana'") || queryNormalizada.includes('tipobase="humana"')) &&
-                               resultados.length === 5; // 5 bases humanas
-            break;
-        case 4:
-            cumpleRequisitos = queryNormalizada.includes('from survivors') &&
-                               resultados.length === 8; // Ahora hay 8 supervivientes
-            break;
-        case 5:
-            cumpleRequisitos = queryNormalizada.includes('from resources') &&
-                               resultados.length === 5; // Ahora hay 5 recursos
-            break;
-        case 6:
-            cumpleRequisitos = (queryNormalizada.includes("escomandocentral = '1'") || queryNormalizada.includes('escomandocentral="1"') || queryNormalizada.includes("escomandocentral=1")) &&
-                               resultados.length === 1;
-            break;
-        case 7:
-            cumpleRequisitos = queryNormalizada.includes('edad > 30') &&
-                               resultados.length === 4; // Elena(34), Marcus(41), Hugo(39), Zara(41)
-            break;
-        case 8:
-            cumpleRequisitos = queryNormalizada.includes('comidaraciones > 500') &&
-                               resultados.length >= 2; // Fortaleza Norte (900) y Cúpula Esperanza (600)
-            break;
-        case 9:
-            cumpleRequisitos = (queryNormalizada.includes('min') && queryNormalizada.includes('edad')) ||
-                               (queryNormalizada.includes('edad') && queryNormalizada.includes('order by') && queryNormalizada.includes('limit 1')) ||
-                               (queryNormalizada.includes('survivors') && queryNormalizada.includes('edad')) &&
-                               resultados.length >= 1;
-            break;
-        case 10:
-            cumpleRequisitos = queryNormalizada.includes('latitud > 0') &&
-                               queryNormalizada.includes('from bases') &&
-                               resultados.length >= 6; // Más bases en hemisferio norte
-            break;
-
-        // FASE 2 - TUTORIAL JOIN (11-20)
-        case 11:
-            cumpleRequisitos = (queryNormalizada.includes('select') && queryNormalizada.includes('from survivors')) ||
-                               (queryNormalizada.includes('select') && queryNormalizada.includes('from bases')) ||
-                               (queryNormalizada.includes('survivors') && queryNormalizada.includes('bases')) &&
-                               resultados.length >= 1; // Flexible para aceptar cualquiera de las dos consultas
-            break;
-        case 12:
-            cumpleRequisitos = (queryNormalizada.includes('inner join') || queryNormalizada.includes('join')) &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('bases') &&
-                               queryNormalizada.includes('baseid') &&
-                               resultados.length === 6; // 6 supervivientes con base válida
-            break;
-        case 13:
-            cumpleRequisitos = queryNormalizada.includes('left join') &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('bases') &&
-                               queryNormalizada.includes('baseid') &&
-                               resultados.length === 10; // Todas las bases incluyendo repeticiones y vacías
-            break;
-        case 14:
-            cumpleRequisitos = queryNormalizada.includes('right join') &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('bases') &&
-                               queryNormalizada.includes('baseid') &&
-                               resultados.length === 8; // Todos los supervivientes, incluso huérfanos
-            break;
-        case 15:
-            cumpleRequisitos = queryNormalizada.includes('full outer join') &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('bases') &&
-                               queryNormalizada.includes('baseid') &&
-                               resultados.length === 12; // Todo: bases vacías + huérfanos + coincidencias
-            break;
-        case 16:
-            cumpleRequisitos = queryNormalizada.includes('left join') &&
-                               queryNormalizada.includes('is null') &&
-                               queryNormalizada.includes('where') &&
-                               resultados.length === 4; // Bases vacías: Nido Central, Torre Omega, Estación Fantasma, Centro Nexus
-            break;
-        case 17:
-            cumpleRequisitos = queryNormalizada.includes('right join') &&
-                               queryNormalizada.includes('is null') &&
-                               queryNormalizada.includes('where') &&
-                               resultados.length === 2; // Huérfanos: Maya Chen y Diego Morales
-            break;
-        case 18:
-            cumpleRequisitos = queryNormalizada.includes('cross join') &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('bases') &&
-                               resultados.length === 64; // 8 bases × 8 supervivientes = 64 combinaciones
-            break;
-        case 19:
-            cumpleRequisitos = queryNormalizada.includes('join') &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('bases') &&
-                               queryNormalizada.includes('resources') &&
-                               resultados.length === 6; // Múltiples JOIN: 6 supervivientes con base y recursos
-            break;
-        case 20:
-            cumpleRequisitos = (queryNormalizada.includes('inner join') || queryNormalizada.includes('join')) &&
-                               (queryNormalizada.includes('survivors') && queryNormalizada.includes('s2')) &&
-                               resultados.length === 2; // Auto-JOIN: Li+Diego (27), Marcus+Zara (41)
-            break;
-
-        // FASE 2 - INTERMEDIO (21-30) - Verificaciones específicas
-        case 21:
-            cumpleRequisitos = queryNormalizada.includes('join') &&
-                               queryNormalizada.includes('survivors') &&
-                               queryNormalizada.includes('bases') &&
-                               resultados.length === 6; // 6 supervivientes con base asignada
-            break;
-        case 22:
-            cumpleRequisitos = queryNormalizada.includes('join') &&
-                               queryNormalizada.includes('resources') &&
-                               queryNormalizada.includes('bases') &&
-                               resultados.length >= 2;
-            break;
-        case 23:
-            cumpleRequisitos = queryNormalizada.includes('join') &&
-                               queryNormalizada.includes("escomandocentral = '1'") &&
-                               resultados.length >= 1;
-            break;
-        case 24:
-            cumpleRequisitos = queryNormalizada.includes('case when') &&
-                               queryNormalizada.includes('group by') &&
-                               queryNormalizada.includes('latitud') &&
-                               resultados.length >= 1;
-            break;
-        case 25:
-            cumpleRequisitos = queryNormalizada.includes('join') &&
-                               queryNormalizada.includes('armas') &&
-                               queryNormalizada.includes('survivors') &&
-                               resultados.length >= 3;
-            break;
-        case 26:
-            cumpleRequisitos = queryNormalizada.includes('avg') &&
-                               queryNormalizada.includes('edad') &&
-                               queryNormalizada.includes('group by') &&
-                               resultados.length >= 2;
-            break;
-        case 27:
-            cumpleRequisitos = queryNormalizada.includes('max') &&
-                               queryNormalizada.includes('recursos') &&
-                               resultados.length >= 1;
-            break;
-        case 28:
-            cumpleRequisitos = queryNormalizada.includes('count') &&
-                               queryNormalizada.includes('distinct') &&
-                               queryNormalizada.includes('rol') &&
-                               resultados.length >= 1;
-            break;
-        case 29:
-            cumpleRequisitos = queryNormalizada.includes('distance') &&
-                               queryNormalizada.includes('join') &&
-                               resultados.length >= 1;
-            break;
-        case 30:
-            cumpleRequisitos = queryNormalizada.includes('left join') &&
-                               queryNormalizada.includes('coalesce') &&
-                               queryNormalizada.includes('survivors') &&
-                               resultados.length >= 3;
-            break;
-
-        // FASE 3 - AVANZADO (31-40) - Verificaciones más específicas
-        case 31:
-            cumpleRequisitos = queryNormalizada.includes('count') &&
-                               queryNormalizada.includes('sum') &&
-                               queryNormalizada.includes('coalesce') &&
-                               resultados.length === 1; // Una fila de estadísticas generales
-            break;
-        case 32:
-            cumpleRequisitos = queryNormalizada.includes('group by') &&
-                               queryNormalizada.includes('count') &&
-                               queryNormalizada.includes('avg') &&
-                               resultados.length >= 2; // Al menos 2 grupos por tipo de base
-            break;
-        case 33:
-            cumpleRequisitos = queryNormalizada.includes('case when') &&
-                               queryNormalizada.includes('group by') &&
-                               queryNormalizada.includes('edad') &&
-                               resultados.length >= 3; // Al menos 3 grupos de edad
-            break;
-        case 34:
-            cumpleRequisitos = queryNormalizada.includes('window') ||
-                               queryNormalizada.includes('over') ||
-                               (queryNormalizada.includes('rank') && queryNormalizada.includes('partition by')) &&
-                               resultados.length > 0;
-            break;
-        case 35:
-            cumpleRequisitos = queryNormalizada.includes('window') ||
-                               queryNormalizada.includes('over') ||
-                               (queryNormalizada.includes('row_number') && queryNormalizada.includes('order by')) &&
-                               resultados.length > 0;
-            break;
-        case 36:
-            cumpleRequisitos = queryNormalizada.includes('join') &&
-                               queryNormalizada.includes('resources') &&
-                               queryNormalizada.includes('round') &&
-                               resultados.length >= 5; // Bases con recursos
-            break;
-        case 37:
-            cumpleRequisitos = queryNormalizada.includes('round') &&
-                               queryNormalizada.includes('group by') &&
-                               queryNormalizada.includes('count') &&
-                               resultados.length >= 5; // Análisis de eficiencia por base
-            break;
-        case 38:
-            cumpleRequisitos = queryNormalizada.includes('case when') &&
-                               queryNormalizada.includes('string_agg') &&
-                               queryNormalizada.includes('group by') &&
-                               resultados.length >= 3; // Grupos generacionales
-                               queryNormalizada.includes('partition by') &&
-                               resultados.length > 0;
-            break;
-        case 39:
-            cumpleRequisitos = queryNormalizada.includes('cume_dist') &&
-                               queryNormalizada.includes('over') &&
-                               resultados.length > 0;
-            break;
-        case 40:
-            cumpleRequisitos = queryNormalizada.includes('ntile') &&
-                               queryNormalizada.includes('over') &&
-                               queryNormalizada.includes('order by') &&
-                               resultados.length > 0;
-            break;
-
-        // FASE 4 - EXPERTO (41-50) - Verificaciones con subconsultas
-        case 41:
-            cumpleRequisitos = queryNormalizada.includes('having') &&
-                               queryNormalizada.includes('count') &&
-                               queryNormalizada.includes('min') &&
-                               resultados.length >= 1; // Bases más vulnerables (mínimo 1 superviviente)
-            break;
-        case 42:
-            cumpleRequisitos = queryNormalizada.includes('where') &&
-                               queryNormalizada.includes('avg') &&
-                               queryNormalizada.includes('resources') &&
-                               resultados.length >= 2; // Bases por encima del promedio
-            break;
-        case 43:
-            cumpleRequisitos = queryNormalizada.includes('where') &&
-                               queryNormalizada.includes('avg') &&
-                               queryNormalizada.includes('edad') &&
-                               (queryNormalizada.includes('comandante') || queryNormalizada.includes('médica')) &&
-                               resultados.length >= 2; // Líderes experimentados
-            break;
-        case 44:
-            cumpleRequisitos = queryNormalizada.includes('having') &&
-                               queryNormalizada.includes('capacidad') &&
-                               queryNormalizada.includes('group by') &&
-                               resultados.length >= 4; // Bases con espacio disponible
-            break;
-        case 45:
-            cumpleRequisitos = queryNormalizada.includes('exists') &&
-                               queryNormalizada.includes('case when') &&
-                               queryNormalizada.includes('recursos') &&
-                               resultados.length >= 5; // Clasificación de autonomía
-            break;
-        case 46:
-            cumpleRequisitos = queryNormalizada.includes('window') ||
-                               (queryNormalizada.includes('rank') && queryNormalizada.includes('over')) ||
-                               (queryNormalizada.includes('row_number') && queryNormalizada.includes('partition by')) &&
-                               resultados.length >= 5;
-            break;
-        case 47:
-            cumpleRequisitos = queryNormalizada.includes('window') ||
-                               (queryNormalizada.includes('lag') && queryNormalizada.includes('over')) ||
-                               (queryNormalizada.includes('lead') && queryNormalizada.includes('order by')) &&
-                               resultados.length >= 5;
-            break;
-        case 48:
-            cumpleRequisitos = queryNormalizada.includes('window') ||
-                               (queryNormalizada.includes('sum') && queryNormalizada.includes('over')) ||
-                               (queryNormalizada.includes('running') && queryNormalizada.includes('total')) &&
-                               resultados.length >= 5;
-            break;
-        case 49:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('recursiv') &&
-                               queryNormalizada.includes('union') &&
-                               resultados.length >= 1;
-            break;
-        case 50:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('analisis') &&
-                               queryNormalizada.includes('indice') &&
-                               resultados.length >= 5; // Índice de supervivencia completo
-            break;
-
-        // FASE 5 - MAESTRO (51-60) - Verificaciones complejas con CTEs
-        case 51:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('comandocentral') &&
-                               queryNormalizada.includes('cross join') &&
-                               resultados.length >= 1; // Solo una base de comando central
-            break;
-        case 52:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('consumosimulado') &&
-                               queryNormalizada.includes('nullif') &&
-                               resultados.length >= 6; // Bases con supervivientes
-            break;
-        case 53:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('capacidadmilitar') &&
-                               queryNormalizada.includes('union all') &&
-                               resultados.length >= 8; // Análisis de todas las bases
-            break;
-        case 54:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('string_agg') &&
-                               queryNormalizada.includes('criticidad') &&
-                               resultados.length >= 6; // Análisis de supervivientes únicos
-            break;
-        case 55:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('sqrt') &&
-                               queryNormalizada.includes('power') &&
-                               resultados.length >= 6; // Análisis de conectividad entre bases
-            break;
-        case 56:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('capacidadmedica') &&
-                               queryNormalizada.includes('cobertura') &&
-                               resultados.length >= 8; // Análisis médico de todas las bases
-            break;
-        case 57:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('intercambios') &&
-                               (queryNormalizada.includes('per capita') || queryNormalizada.includes('percapita')) &&
-                               resultados.length >= 5; // Análisis de intercambio de recursos
-            break;
-        case 58:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('liderazgo') &&
-                               queryNormalizada.includes('sucesion') &&
-                               resultados.length >= 6; // Plan de sucesión para líderes
-            break;
-        case 59:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('expansion') &&
-                               queryNormalizada.includes('viabilidad') &&
-                               resultados.length >= 8; // Análisis de expansión de todas las bases
-            break;
-        case 60:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('baselineactual') &&
-                               queryNormalizada.includes('proyeccion') &&
-                               queryNormalizada.includes('union all') &&
-                               resultados.length >= 2; // Debe mostrar estado actual + proyección
-            break;
-
-        // RETOS EXPANDIDOS CON NUEVAS TABLAS (61-68)
-        case 61:
-            cumpleRequisitos = queryNormalizada.includes('robots') &&
-                               queryNormalizada.includes('nivelalenaza') &&
-                               queryNormalizada.includes('case when') &&
-                               queryNormalizada.includes('order by') &&
-                               resultados.length >= 5; // Todos los robots clasificados
-            break;
-            
-        case 62:
-            cumpleRequisitos = queryNormalizada.includes('attacks') &&
-                               queryNormalizada.includes('join') &&
-                               queryNormalizada.includes('count') &&
-                               queryNormalizada.includes('group by') &&
-                               resultados.length >= 5; // Bases con historial de ataques
-            break;
-            
-        case 63:
-            cumpleRequisitos = queryNormalizada.includes('alliances') &&
-                               queryNormalizada.includes('missions') &&
-                               queryNormalizada.includes('exists') &&
-                               queryNormalizada.includes('porcentaje') &&
-                               resultados.length >= 2; // Tipos de cooperación
-            break;
-            
-        case 64:
-            cumpleRequisitos = queryNormalizada.includes('robotsightings') &&
-                               queryNormalizada.includes('attacks') &&
-                               queryNormalizada.includes('datediff') &&
-                               queryNormalizada.includes('with') &&
-                               resultados.length >= 3; // Correlaciones temporales
-            break;
-            
-        case 65:
-            cumpleRequisitos = queryNormalizada.includes('supplies') &&
-                               queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('necesidad') &&
-                               queryNormalizada.includes('deficit') &&
-                               resultados.length >= 5; // Análisis logístico de bases
-            break;
-            
-        case 66:
-            cumpleRequisitos = queryNormalizada.includes('distancematrix') &&
-                               queryNormalizada.includes('missions') &&
-                               queryNormalizada.includes('kilometros') &&
-                               queryNormalizada.includes('join') &&
-                               resultados.length >= 10; // Rutas estratégicas
-            break;
-            
-        case 67:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('seguridad') &&
-                               queryNormalizada.includes('indice') &&
-                               (queryNormalizada.split('join').length >= 6 || queryNormalizada.split('left join').length >= 4) &&
-                               resultados.length >= 5; // Índice de seguridad integral
-            break;
-            
-        case 68:
-            cumpleRequisitos = queryNormalizada.includes('with') &&
-                               queryNormalizada.includes('poder') &&
-                               queryNormalizada.includes('indice') &&
-                               (queryNormalizada.split('cte').length >= 3 || queryNormalizada.split('as (').length >= 4) &&
-                               resultados.length >= 5; // Matriz de poder e influencia
-            break;
-
-        default:
-            cumpleRequisitos = resultados.length > 0;
-    }
-
-    if (cumpleRequisitos) {
-        completarReto(retoActualObj.id, retoActualObj.puntos);
+        const data = await response.json();
         
-        // Mensajes personalizados por fase
-        let mensajePersonalizado = "";
-        if (retoActualObj.fase === 1) {
-            mensajePersonalizado = "🎯 ¡Excelente! Has dominado los fundamentos básicos de SQL.";
-        } else if (retoActualObj.fase === 2) {
-            mensajePersonalizado = "🔗 ¡Genial! Estás dominando JOINs y aplicando análisis complejo.";
-        } else if (retoActualObj.fase === 3) {
-            mensajePersonalizado = "📈 ¡Increíble! Dominas las agregaciones y análisis complejo.";
-        } else if (retoActualObj.fase === 4) {
-            mensajePersonalizado = "🎖️ ¡Excepcional! Eres un experto en subconsultas estratégicas.";
-        } else if (retoActualObj.fase === 5) {
-            mensajePersonalizado = "🏆 ¡MAESTRO SQL! Has alcanzado el nivel más alto de consultas.";
+        if (!data.success) {
+            console.error('Error ejecutando consulta sugerida:', data.error);
+            return { completado: false, mensaje: "" };
         }
 
-        return {
-            completado: true,
-            mensaje: `🎉 ¡RETO ${retoActualObj.id} COMPLETADO! 
-                     ${mensajePersonalizado}
-                     +${retoActualObj.puntos} puntos | ${retoActualObj.titulo}`
-        };
+        const resultadosCorrectos = data.rows;
+        
+        // Comparar resultados
+        if (compararResultados(resultadosUsuario, resultadosCorrectos)) {
+            // ¡Reto completado!
+            const puntos = reto.puntos || 10;
+            
+            // Llamar a la función completarReto para desbloquear el siguiente
+            completarReto(reto.id, puntos);
+            
+            // Guardar progreso en localStorage
+            let progreso = JSON.parse(localStorage.getItem('retoProgress') || '{}');
+            progreso[reto.id] = {
+                completado: true,
+                puntos: puntos,
+                fecha: new Date().toISOString()
+            };
+            localStorage.setItem('retoProgress', JSON.stringify(progreso));
+            
+            // Actualizar puntuación total
+            let puntuacionTotal = parseInt(localStorage.getItem('puntuacionAtapuerca') || '0');
+            puntuacionTotal += puntos;
+            localStorage.setItem('puntuacionAtapuerca', puntuacionTotal.toString());
+            
+            return {
+                completado: true,
+                mensaje: `🎉 ¡RETO #${reto.id} COMPLETADO! 🎉\n\n` +
+                        `"${reto.titulo}"\n\n` +
+                        `+${puntos} puntos ganados!\n` +
+                        `💫 Puntuación total: ${puntuacionTotal} puntos`
+            };
+        } else {
+            return { completado: false, mensaje: "" };
+        }
+        
+    } catch (error) {
+        console.error('Error en verificación por comparación:', error);
+        return { completado: false, mensaje: "" };
     }
+}
 
-    return { completado: false, mensaje: "" };
+function compararResultados(resultados1, resultados2) {
+    // Verificar que tengan la misma cantidad de filas
+    if (resultados1.length !== resultados2.length) {
+        return false;
+    }
+    
+    // Si no hay resultados, son iguales
+    if (resultados1.length === 0) {
+        return true;
+    }
+    
+    // Verificar que tengan las mismas columnas
+    const columnas1 = Object.keys(resultados1[0] || {});
+    const columnas2 = Object.keys(resultados2[0] || {});
+    
+    if (columnas1.length !== columnas2.length) {
+        return false;
+    }
+    
+    // Normalizar nombres de columnas (case insensitive)
+    const columnasNorm1 = columnas1.map(c => c.toLowerCase()).sort();
+    const columnasNorm2 = columnas2.map(c => c.toLowerCase()).sort();
+    
+    for (let i = 0; i < columnasNorm1.length; i++) {
+        if (columnasNorm1[i] !== columnasNorm2[i]) {
+            return false;
+        }
+    }
+    
+    // Comparar cada fila
+    for (let i = 0; i < resultados1.length; i++) {
+        const fila1 = resultados1[i];
+        const fila2 = resultados2[i];
+        
+        // Comparar cada valor en la fila
+        for (const columna of columnas1) {
+            const valor1 = normalizeValue(fila1[columna]);
+            const valor2 = normalizeValue(fila2[columna]);
+            
+            if (valor1 !== valor2) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+function normalizeValue(value) {
+    // Normalizar valores para comparación
+    if (value === null || value === undefined) {
+        return null;
+    }
+    
+    // Convertir a string y limpiar espacios
+    const str = String(value).trim();
+    
+    // Si es un número, parsearlo
+    if (!isNaN(str) && str !== '') {
+        return parseFloat(str);
+    }
+    
+    return str;
 }
 
 // ========================================

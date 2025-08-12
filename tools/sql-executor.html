@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ejecutor de Scripts SQL - Atapuerca</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #2d2d2d;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #45a049;
+        }
+        .button.danger {
+            background: #f44336;
+        }
+        .button.danger:hover {
+            background: #da190b;
+        }
+        .result {
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+        .error {
+            border-color: #f44336;
+            background: rgba(244, 67, 54, 0.1);
+        }
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ Ejecutor de Scripts SQL</h1>
+        
+        <div class="warning">
+            <strong>⚠️ Atención:</strong> Esta herramienta ejecuta scripts SQL directamente en la base de datos de producción. 
+            Úsala solo si entiendes lo que estás haciendo.
+        </div>
+
+        <button class="button" onclick="ejecutarScriptPistas()">
+            🔧 Arreglar Pistas Incompletas
+        </button>
+
+        <button class="button" onclick="verificarPistas()">
+            🔍 Verificar Estado de las Pistas
+        </button>
+
+        <button class="button danger" onclick="resetearProgreso()">
+            🗑️ Resetear Todo el Progreso de Usuarios
+        </button>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://atapuerca-net.es/api/retos.php';
+
+        async function ejecutarSQL(sql, descripcion) {
+            try {
+                mostrarResultado('Ejecutando: ' + descripcion + '...', 'info');
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        action: 'execute_sql',
+                        sql: sql
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    mostrarResultado('✅ ' + descripcion + ' completado exitosamente\n\n' + JSON.stringify(result.data, null, 2), 'success');
+                } else {
+                    mostrarResultado('❌ Error en ' + descripcion + ':\n' + result.error, 'error');
+                }
+            } catch (error) {
+                mostrarResultado('❌ Error de conexión: ' + error.message, 'error');
+            }
+        }
+
+        async function ejecutarScriptPistas() {
+            const sqlQueries = [
+                "UPDATE retos SET pista = 'Usa ORDER BY para ordenar. El resultado debería empezar con \"Centro Nexus\" y terminar con \"Torre Omega\"' WHERE reto_numero = 2;",
+                
+                "UPDATE retos SET descripcion = 'De la tabla Bases, muestra todas las columnas pero solo para los registros donde TipoBase sea exactamente \"Humana\". Deben aparecer 5 bases humanas.', consulta_sugerida = 'SELECT * FROM Bases WHERE TipoBase = ''Humana'';' WHERE reto_numero = 3;",
+                
+                "UPDATE retos SET descripcion = 'De la tabla Bases, muestra todas las columnas para los registros donde EsComandoCentral sea igual a 1 (verdadero). Solo debería aparecer 1 base.', consulta_sugerida = 'SELECT * FROM Bases WHERE EsComandoCentral = 1;' WHERE reto_numero = 7;",
+                
+                "UPDATE retos SET descripcion = 'Usa JOIN entre tablas Bases (b) y Survivors (s) conectadas por BaseID, con WHERE b.EsComandoCentral = 1. Selecciona b.Nombre, s.Nombre y s.Rol. Muestra el personal del comando central.', consulta_sugerida = 'SELECT b.Nombre AS Base, s.Nombre AS Superviviente, s.Rol FROM Bases b JOIN Survivors s ON b.BaseID = s.BaseID WHERE b.EsComandoCentral = 1;' WHERE reto_numero = 24;",
+                
+                "UPDATE retos SET descripcion = 'Usa LEFT JOIN entre Bases (b) y Survivors (s), con CASE WHEN b.Latitud > 0 THEN ''Norte'' ELSE ''Sur'' END para clasificar hemisferios. Agrupa con GROUP BY y cuenta bases y supervivientes por hemisferio.', consulta_sugerida = 'SELECT CASE WHEN b.Latitud > 0 THEN ''Norte'' ELSE ''Sur'' END AS Hemisferio, COUNT(DISTINCT b.BaseID) AS Bases, COUNT(s.SurvivorID) AS Supervivientes FROM Bases b LEFT JOIN Survivors s ON b.BaseID = s.BaseID GROUP BY CASE WHEN b.Latitud > 0 THEN ''Norte'' ELSE ''Sur'' END;' WHERE reto_numero = 25;"
+            ];
+
+            for (let i = 0; i < sqlQueries.length; i++) {
+                await ejecutarSQL(sqlQueries[i], `Actualizando reto ${i + 1}`);
+                await new Promise(resolve => setTimeout(resolve, 500)); // Pausa entre queries
+            }
+            
+            mostrarResultado('🎉 Proceso de actualización de pistas completado!', 'success');
+        }
+
+        async function verificarPistas() {
+            const sql = "SELECT reto_numero, titulo, CASE WHEN pista IS NULL OR pista = '' THEN 'SIN PISTA' WHEN LENGTH(pista) < 20 THEN 'PISTA CORTA' ELSE 'OK' END as estado_pista, LEFT(pista, 100) as preview_pista FROM retos WHERE activo = 1 ORDER BY reto_numero;";
+            
+            await ejecutarSQL(sql, 'Verificación de pistas');
+        }
+
+        async function resetearProgreso() {
+            if (!confirm('¿Estás SEGURO de que quieres eliminar TODO el progreso de usuarios?')) return;
+            if (!confirm('Esta acción NO se puede deshacer. ¿Continuar?')) return;
+            
+            const sql = "DELETE FROM progreso_usuario;";
+            await ejecutarSQL(sql, 'Reseteo de progreso de usuarios');
+        }
+
+        function mostrarResultado(mensaje, tipo) {
+            const resultado = document.getElementById('resultado');
+            resultado.innerHTML = mensaje;
+            resultado.className = 'result ' + tipo;
+        }
+    </script>
+</body>
+</html>

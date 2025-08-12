@@ -136,7 +136,7 @@
         
         if (data.success && data.rows) {
           const table = createSqlTable(data.rows);
-          output.innerHTML = `
+          let resultHTML = `
             <div style="color: var(--primary-green); margin-bottom: 1em;">
               ✅ Consulta ejecutada exitosamente<br>
               📊 Registros encontrados: ${data.rows.length}<br>
@@ -144,6 +144,34 @@
             </div>
             ${table}
           `;
+          
+          // Verificar si se completó un reto
+          if (typeof verificarReto === 'function') {
+            try {
+              const retoResult = await verificarReto(query, data.rows);
+              if (retoResult.completado) {
+                resultHTML = `
+                  <div style="
+                    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green)); 
+                    color: var(--bg-dark); 
+                    padding: 1em; 
+                    border-radius: 5px; 
+                    margin-bottom: 1em; 
+                    text-align: center; 
+                    font-weight: bold;
+                    animation: pulse 0.5s ease-in-out;
+                  ">
+                    ${retoResult.mensaje}<br>
+                    <span style="font-size: 0.9em;">Puntuación total: ${parseInt(localStorage.getItem('puntuacionAtapuerca') || '0')} puntos</span>
+                  </div>
+                ` + resultHTML;
+              }
+            } catch (error) {
+              console.error('Error verificando reto:', error);
+            }
+          }
+          
+          output.innerHTML = resultHTML;
         } else {
           output.innerHTML = `
             <div style="color: var(--error-red);">
