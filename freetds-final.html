@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtapuercaNet - Terminal SQL FREETDS FINAL</title>
+    <style>
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #0a0a0a, #1a0f0f, #0f1a0f);
+            color: #00ff41;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .terminal-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 20, 0, 0.9);
+            border: 3px solid #ff6b35;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            color: #ff6b35;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.8);
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b35, #ff8c35);
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 10px;
+            text-shadow: none;
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.7);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .sql-input {
+            width: 100%;
+            height: 150px;
+            background: rgba(0, 10, 0, 0.9);
+            border: 2px solid #00ff41;
+            border-radius: 5px;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 15px;
+            resize: vertical;
+        }
+        
+        .execute-btn {
+            background: linear-gradient(45deg, #00ff41, #00cc33);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s;
+        }
+        
+        .execute-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.8);
+        }
+        
+        .output {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff41;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            color: #00ff41;
+            overflow-x: auto;
+        }
+        
+        .status-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff6b35;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="status-indicator">🎯 FREETDS FINAL</div>
+    
+    <div class="terminal-container">
+        <div class="header">
+            <h1>🤖 ATAPUERCA NET 🤖</h1>
+            <div class="version-badge">FREETDS FINAL - AZURE SQL SERVER</div>
+            <div style="color: #00ff41; margin-top: 10px;">
+                🔗 Endpoint: /final-freetds.php | 🗄️ Driver: FreeTDS | ⚡ JS: freetds-20250812084320.js
+            </div>
+        </div>
+        
+        <div class="sql-section">
+            <h2 style="color: #ff6b35;">📡 Terminal SQL Azure FreeTDS</h2>
+            <textarea 
+                id="sqlInput" 
+                class="sql-input" 
+                placeholder="-- AtapuercaNet Terminal SQL FREETDS FINAL
+-- Conectado a Azure SQL Server con FreeTDS
+-- Base de datos: AtapuercaNet
+
+SELECT * FROM Robots;
+
+-- Consultas de ejemplo:
+-- SELECT RobotID, Modelo FROM Robots WHERE Generacion = '3';
+-- SELECT * FROM Robots WHERE NivelAmenaza > 5;
+-- SELECT COUNT(*) as TotalRobots FROM Robots;"
+            >SELECT * FROM Robots;</textarea>
+            
+            <br>
+            <button class="execute-btn" onclick="runQuery()">
+                🚀 EJECUTAR CONSULTA FREETDS FINAL
+            </button>
+        </div>
+        
+        <div class="output-section">
+            <h2 style="color: #ff6b35;">📋 Resultados</h2>
+            <div id="output" class="output">
+                🎯 Terminal SQL FREETDS FINAL listo<br>
+                🔗 Endpoint: final-freetds.php<br>
+                📄 JavaScript: freetds-20250812084320.js<br>
+                🗄️ Azure SQL Server con FreeTDS<br>
+                ⚡ Driver: pdo_dblib activado<br><br>
+                👨‍💻 Ejecuta una consulta para ver los datos reales...
+            </div>
+        </div>
+    </div>
+
+    <script src="freetds-20250812084320.js"></script>
+    <script>
+        console.log('🎯 HTML FREETDS FINAL cargado');
+        console.log('🎯 Timestamp:', new Date().toISOString());
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 DOM FREETDS FINAL listo');
+            
+            // Test automático
+            setTimeout(() => {
+                console.log('🎯 Test automático FREETDS iniciado...');
+                if (typeof runQuery === 'function') {
+                    runQuery();
+                } else {
+                    console.error('❌ Función runQuery NO encontrada');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -47,7 +47,7 @@
     
     <div style="margin-top: 2em; padding: 1em; background: var(--bg-light); border-radius: 5px; border-left: 4px solid var(--accent-orange);">
       <h4 style="margin: 0 0 1em 0; color: var(--accent-orange);">⚠️ Protocolo de seguridad:</h4>
-      <p style="margin: 0; font-size: 0.9em;">Usuario con permisos de solo lectura. Acceso a tablas del sistema bloqueado por seguridad.</p>
+      <p style="margin: 0; font-size: 0.9em;">Solo se permiten consultas SELECT. Otras operaciones están restringidas por seguridad.</p>
     </div>
     
     <!-- Botón de Reset discreto para desarrolladores -->
@@ -207,12 +207,15 @@
       return html;
     }
 
-    // Inicialización al cargar
+    // Test automático al cargar
     document.addEventListener('DOMContentLoaded', function() {
       console.log('🎯 SQL.HTML DOM listo');
       
-      // Solo cargar configuración inicial, sin ejecutar consulta automática
-      console.log('🎯 Sistema listo para consultas manuales');
+      // Test de conexión inicial
+      setTimeout(() => {
+        console.log('🎯 Test de conexión inicial...');
+        runQuery();
+      }, 1000);
     });
 
     // Función de reset original

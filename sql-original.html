@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminal SQL - Atapuerca Net</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+  <header>
+    <div style="display: flex; align-items: center; justify-content: center; gap: 1em; flex-wrap: wrap;">
+      <img src="docs/logo-atapuerca.png" alt="Logo Atapuerca" style="height: 100px; filter: drop-shadow(0 0 10px var(--primary-green));">
+      <h1 class="glow">🛰️ TERMINAL SQL</h1>
+    </div>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="retos.html">Retos</a>
+      <a href="sql.html">Consulta SQL</a>
+      <a href="descargas.html">Descargas</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </header>
+  <main>
+    <h2>� Conexión con la base de datos</h2>
+    <p><strong>Estado:</strong> <span style="color: var(--accent-cyan);">CONECTADO</span> | <strong>Servidor:</strong> atapuerca.database.windows.net</p>
+    
+    <form onsubmit="runQuery(); return false;">
+      <label for="sqlInput"><strong>Introduce tu consulta SQL:</strong></label>
+      <textarea id="sqlInput" rows="8" placeholder="-- Ejemplo: SELECT TOP 5 * FROM Robots;">SELECT TOP 5 * FROM Robots;</textarea>
+      <button type="submit">🚀 EJECUTAR CONSULTA</button>
+    </form>
+    
+    <h3>📊 Resultados:</h3>
+    <div id="output" style="
+      background: var(--bg-dark); 
+      border: 2px solid var(--primary-green); 
+      border-radius: 5px; 
+      padding: 1.5em; 
+      font-family: 'Courier New', monospace; 
+      font-size: 13px; 
+      line-height: 1.4; 
+      box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1); 
+      max-height: 400px; 
+      overflow-y: auto;
+      color: var(--text-primary);
+    ">Esperando comando...</div>
+    
+    <div style="margin-top: 2em; padding: 1em; background: var(--bg-light); border-radius: 5px; border-left: 4px solid var(--accent-orange);">
+      <h4 style="margin: 0 0 1em 0; color: var(--accent-orange);">⚠️ Protocolo de seguridad:</h4>
+      <p style="margin: 0; font-size: 0.9em;">Solo se permiten consultas SELECT. Otras operaciones están restringidas por seguridad.</p>
+    </div>
+    
+    <!-- Botón de Reset discreto para desarrolladores -->
+    <div style="margin-top: 1em; text-align: right;">
+      <button 
+        onclick="resetearProgresoRapido()" 
+        style="
+          background: var(--bg-medium); 
+          color: var(--text-secondary); 
+          border: 1px solid var(--bg-light); 
+          padding: 0.5em 1em; 
+          border-radius: 3px; 
+          font-size: 0.8em; 
+          cursor: pointer;
+          opacity: 0.7;
+        "
+        title="Reset rápido del progreso para testing"
+      >
+        🔧 Dev Reset
+      </button>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2025 Atapuerca Net</p>
+  </footer>
+  <script src="js/retos.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Función de reset rápido para desarrolladores
+    function resetearProgresoRapido() {
+      if (confirm('🔧 Reset rápido de desarrollo\n\n¿Limpiar todo el progreso?')) {
+        try {
+          // Usar la función del sistema si existe
+          if (typeof resetearSistemaCompleto === 'function') {
+            resetearSistemaCompleto();
+          } else {
+            // Fallback manual
+            localStorage.clear();
+          }
+          
+          alert('✅ Reset completado');
+          window.location.reload();
+        } catch (error) {
+          console.error('Error en reset:', error);
+          alert('❌ Error en reset');
+        }
+      }
+    }
+  </script>
+</body>
+</html>

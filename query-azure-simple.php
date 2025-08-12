@@ -13,27 +13,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-// Incluir la configuración de base de datos
-$config_path = __DIR__ . '/config/database.php';
-if (file_exists($config_path)) {
-    require_once $config_path;
-} else {
-    // Fallback: buscar en directorio actual
-    if (file_exists('config/database.php')) {
-        require_once 'config/database.php';
-    } else {
-        http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'Archivo de configuración de base de datos no encontrado']);
-        exit;
+// Configuración directa de Azure SQL Server
+function getAzureConnection() {
+    $server = 'atapuerca.database.windows.net';
+    $database = 'AtapuercaNet';
+    $username = 'matusalen';
+    $password = 'Access.2010';
+    
+    // Intentar conexión con driver FreeTDS
+    $dsn = "odbc:Driver={FreeTDS};Server=$server;Port=1433;Database=$database;TDS_Version=8.0;";
+    
+    try {
+        $pdo = new PDO($dsn, $username, $password, [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_TIMEOUT => 30,
+        ]);
+        return $pdo;
+    } catch (Exception $e) {
+        throw new Exception("Error de conexión: " . $e->getMessage());
     }
 }
 
 function ejecutarConsultaAzure($query) {
     try {
-        // Debug: log de la consulta
         error_log("Ejecutando consulta: " . $query);
         
-        $db = ConexionAzure::obtenerConexion();
+        $db = getAzureConnection();
         
         // Validar que solo sean consultas SELECT por seguridad
         $queryTrimmed = trim(strtoupper($query));
@@ -49,7 +55,6 @@ function ejecutarConsultaAzure($query) {
             $rows[] = $row;
         }
         
-        // Debug: log del resultado
         error_log("Consulta exitosa, " . count($rows) . " filas obtenidas");
         
         return [
@@ -59,7 +64,6 @@ function ejecutarConsultaAzure($query) {
         ];
         
     } catch (Exception $e) {
-        // Debug: log del error
         error_log("Error en consulta: " . $e->getMessage());
         
         return [
@@ -72,7 +76,6 @@ function ejecutarConsultaAzure($query) {
 // Obtener datos de la petición
 $input = json_decode(file_get_contents('php://input'), true);
 
-// Debug: log de los datos recibidos
 error_log("Datos recibidos: " . print_r($input, true));
 
 if (!isset($input['query'])) {
@@ -82,14 +85,11 @@ if (!isset($input['query'])) {
 }
 
 $query = $input['query'];
-
-// Debug: log de la query procesada
 error_log("Query a ejecutar: " . $query);
 
 // Ejecutar consulta
 $result = ejecutarConsultaAzure($query);
 
-// Debug: log del resultado final
 error_log("Resultado final: " . print_r($result, true));
 
 if ($result['success']) {

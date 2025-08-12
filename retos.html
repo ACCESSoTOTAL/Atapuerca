@@ -15,7 +15,7 @@
     <nav>
       <a href="index.html">Inicio</a>
       <a href="retos.html">Retos</a>
-      <a href="sql.html">Consulta SQL</a>
+      <a href="sql.html">Terminal SQL</a>
       <a href="descargas.html">Descargas</a>
       <a href="contacto.html">Contacto</a>
     </nav>
@@ -243,7 +243,7 @@
         const reto = obtenerReto(idReto);
         if (reto && reto.ejemploQuery) {
           localStorage.setItem('queryToLoad', reto.ejemploQuery);
-          window.location.href = 'sql.html';
+          window.location.href = 'freetds-final.html';
         } else {
           alert('No hay ejemplo disponible para este reto.');
         }
