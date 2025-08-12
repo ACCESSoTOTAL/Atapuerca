@@ -299,6 +299,15 @@
             <button onclick="migrarDesdeJS()">📥 Migrar desde JS</button>
             <button onclick="exportarJSON()">📤 Exportar JSON</button>
             
+            <!-- Separador visual -->
+            <div style="width: 100%; border-top: 1px solid #00ff41; margin: 15px 0; opacity: 0.3;"></div>
+            
+            <!-- Botones de Diagnóstico y Testing -->
+            <button onclick="window.open('../diagnostico_retos.html', '_blank')" style="background: #0066cc;">🔍 Diagnóstico Sistema</button>
+            <button onclick="window.open('../test_flujo_completo.html', '_blank')" style="background: #cc6600;">🧪 Test Flujo Completo</button>
+            <button onclick="window.open('../test_buttons.html', '_blank')" style="background: #6600cc;">🎮 Test Botones</button>
+            <button onclick="window.open('../retos.html', '_blank')" style="background: #006600;">⚔️ Ver Retos (Usuario)</button>
+            
             <select id="filtroFase" onchange="filtrarRetos()">
                 <option value="">Todas las Fases</option>
                 <option value="1">Fase 1</option>
