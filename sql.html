@@ -81,6 +81,142 @@
   <script>
     console.log('🎯 SQL.HTML con FreeTDS cargado');
     
+    // Función para verificar reto usando localStorage (sistema actualizado)
+    async function verificarRetoLocalStorage(consultaEjecutada, resultados) {
+      if (!consultaEjecutada || !resultados) {
+        return { completado: false, mensaje: "" };
+      }
+
+      // Obtener el reto actual desde localStorage
+      const retoActualStorage = JSON.parse(localStorage.getItem('retoActual') || 'null');
+      if (!retoActualStorage || !retoActualStorage.consulta_sugerida) {
+        console.log('No hay reto activo o no tiene consulta sugerida');
+        return { completado: false, mensaje: "" };
+      }
+
+      console.log('🎯 Verificando reto:', retoActualStorage.id, retoActualStorage.titulo);
+
+      try {
+        // Ejecutar la consulta sugerida del reto para obtener el resultado correcto
+        const response = await fetch('/final-freetds.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            query: retoActualStorage.consulta_sugerida
+          })
+        });
+
+        const data = await response.json();
+        
+        if (!data.success) {
+          console.error('Error ejecutando consulta sugerida:', data.error);
+          return { completado: false, mensaje: "" };
+        }
+
+        const resultadosCorrectos = data.rows;
+        
+        // Comparar resultados
+        if (compararResultadosSQL(resultados, resultadosCorrectos)) {
+          // ¡Reto completado!
+          const puntos = retoActualStorage.puntos || 10;
+          
+          // Guardar progreso en localStorage
+          let progreso = JSON.parse(localStorage.getItem('retoProgress') || '{}');
+          progreso[retoActualStorage.id] = {
+            completado: true,
+            puntos_ganados: puntos,
+            fecha_completion: new Date().toISOString()
+          };
+          localStorage.setItem('retoProgress', JSON.stringify(progreso));
+          
+          // Actualizar puntuación total
+          let puntuacionTotal = parseInt(localStorage.getItem('puntuacionAtapuerca') || '0');
+          puntuacionTotal += puntos;
+          localStorage.setItem('puntuacionAtapuerca', puntuacionTotal.toString());
+          
+          console.log('✅ Reto completado:', retoActualStorage.id, 'Puntos:', puntos, 'Total:', puntuacionTotal);
+          
+          // Limpiar reto actual
+          localStorage.removeItem('retoActual');
+          localStorage.removeItem('consultaPendiente');
+          
+          return {
+            completado: true,
+            mensaje: `🎉 ¡RETO #${retoActualStorage.id} COMPLETADO! 🎉\n\n` +
+                    `"${retoActualStorage.titulo}"\n\n` +
+                    `+${puntos} puntos ganados!\n` +
+                    `💫 Puntuación total: ${puntuacionTotal} puntos`
+          };
+        } else {
+          console.log('❌ Resultados no coinciden');
+          return { completado: false, mensaje: "" };
+        }
+        
+      } catch (error) {
+        console.error('Error en verificación por comparación:', error);
+        return { completado: false, mensaje: "" };
+      }
+    }
+
+    // Función para comparar resultados SQL
+    function compararResultadosSQL(resultados1, resultados2) {
+      // Verificar que tengan la misma cantidad de filas
+      if (resultados1.length !== resultados2.length) {
+        console.log('Diferente número de filas:', resultados1.length, 'vs', resultados2.length);
+        return false;
+      }
+      
+      // Si no hay resultados, son iguales
+      if (resultados1.length === 0) {
+        return true;
+      }
+      
+      // Verificar que tengan las mismas columnas
+      const columnas1 = Object.keys(resultados1[0] || {});
+      const columnas2 = Object.keys(resultados2[0] || {});
+      
+      if (columnas1.length !== columnas2.length) {
+        console.log('Diferente número de columnas:', columnas1.length, 'vs', columnas2.length);
+        return false;
+      }
+      
+      // Normalizar nombres de columnas (case insensitive)
+      const columnasNorm1 = columnas1.map(c => c.toLowerCase()).sort();
+      const columnasNorm2 = columnas2.map(c => c.toLowerCase()).sort();
+      
+      for (let i = 0; i < columnasNorm1.length; i++) {
+        if (columnasNorm1[i] !== columnasNorm2[i]) {
+          console.log('Columnas diferentes:', columnasNorm1[i], 'vs', columnasNorm2[i]);
+          return false;
+        }
+      }
+      
+      // Comparar cada fila (ordenar ambos resultados para comparación consistente)
+      const sorted1 = [...resultados1].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+      const sorted2 = [...resultados2].sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+      
+      for (let i = 0; i < sorted1.length; i++) {
+        const fila1 = sorted1[i];
+        const fila2 = sorted2[i];
+        
+        for (const col of columnas1) {
+          const val1 = String(fila1[col] || '').trim();
+          const val2 = String(fila2[col] || '').trim();
+          
+          if (val1 !== val2) {
+            console.log(`Diferencia en fila ${i}, columna ${col}:`, val1, 'vs', val2);
+            return false;
+          }
+        }
+      }
+      
+      console.log('✅ Resultados coinciden perfectamente');
+      return true;
+    }
+
     // Función runQuery adaptada para la estética original
     async function runQuery() {
       const query = document.getElementById('sqlInput').value;
@@ -146,29 +282,35 @@
           `;
           
           // Verificar si se completó un reto
-          if (typeof verificarReto === 'function') {
-            try {
-              const retoResult = await verificarReto(query, data.rows);
-              if (retoResult.completado) {
-                resultHTML = `
-                  <div style="
-                    background: linear-gradient(135deg, var(--primary-green), var(--secondary-green)); 
-                    color: var(--bg-dark); 
-                    padding: 1em; 
-                    border-radius: 5px; 
-                    margin-bottom: 1em; 
-                    text-align: center; 
-                    font-weight: bold;
-                    animation: pulse 0.5s ease-in-out;
-                  ">
-                    ${retoResult.mensaje}<br>
-                    <span style="font-size: 0.9em;">Puntuación total: ${parseInt(localStorage.getItem('puntuacionAtapuerca') || '0')} puntos</span>
-                  </div>
-                ` + resultHTML;
-              }
-            } catch (error) {
-              console.error('Error verificando reto:', error);
+          try {
+            const retoResult = await verificarRetoLocalStorage(query, data.rows);
+            if (retoResult.completado) {
+              resultHTML = `
+                <div style="
+                  background: linear-gradient(135deg, var(--primary-green), var(--secondary-green)); 
+                  color: var(--bg-dark); 
+                  padding: 1em; 
+                  border-radius: 5px; 
+                  margin-bottom: 1em; 
+                  text-align: center; 
+                  font-weight: bold;
+                  animation: pulse 0.5s ease-in-out;
+                  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+                ">
+                  ${retoResult.mensaje}<br>
+                  <span style="font-size: 0.9em;">Puntuación total: ${parseInt(localStorage.getItem('puntuacionAtapuerca') || '0')} puntos</span>
+                </div>
+              ` + resultHTML;
+              
+              // Opcional: redireccionar a retos.html después de 3 segundos
+              setTimeout(() => {
+                if (confirm('¡Reto completado! ¿Quieres volver a la página de retos para ver tu progreso?')) {
+                  window.location.href = 'retos.html';
+                }
+              }, 2000);
             }
+          } catch (error) {
+            console.error('Error verificando reto:', error);
           }
           
           output.innerHTML = resultHTML;
