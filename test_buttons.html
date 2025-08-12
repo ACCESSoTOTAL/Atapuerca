@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Botones Retos</title>
+</head>
+<body>
+    <h1>Test de funciones localStorage</h1>
+    
+    <button onclick="testDesbloquearTodos()">Test Desbloquear Todos</button>
+    <button onclick="testResetearProgreso()">Test Resetear Progreso</button>
+    <button onclick="verEstadoLocalStorage()">Ver Estado localStorage</button>
+    
+    <div id="resultado"></div>
+    
+    <script>
+        function testDesbloquearTodos() {
+            try {
+                // Simular que tenemos algunos retos
+                const retos = [
+                    {numero: 1, puntos: 10},
+                    {numero: 2, puntos: 15},
+                    {numero: 3, puntos: 20}
+                ];
+                
+                // Función copiada de retos.html
+                function desbloquearTodosLosRetos() {
+                    if (confirm('¿Estás seguro de que quieres desbloquear todos los retos? Esta acción desbloqueará todos los retos para este navegador.')) {
+                        try {
+                            // Obtener progreso actual
+                            const progresoActual = JSON.parse(localStorage.getItem('retoProgress') || '{}');
+                            
+                            // Marcar todos los retos como completados
+                            retos.forEach(reto => {
+                                progresoActual[reto.numero] = {
+                                    completado: true,
+                                    puntos_ganados: reto.puntos,
+                                    fecha_completion: new Date().toISOString()
+                                };
+                            });
+                            
+                            // Calcular puntuación total
+                            let puntuacionTotal = 0;
+                            Object.values(progresoActual).forEach(progreso => {
+                                if (progreso.completado) {
+                                    puntuacionTotal += progreso.puntos_ganados || 0;
+                                }
+                            });
+                            
+                            // Guardar en localStorage
+                            localStorage.setItem('retoProgress', JSON.stringify(progresoActual));
+                            localStorage.setItem('puntuacionAtapuerca', puntuacionTotal.toString());
+                            
+                            alert('✅ Todos los retos han sido desbloqueados en este navegador.');
+                            document.getElementById('resultado').innerHTML = '<p style="color: green;">✅ Función ejecutada correctamente</p>';
+                            
+                        } catch (error) {
+                            console.error('Error al desbloquear todos los retos:', error);
+                            alert('❌ Error al desbloquear los retos: ' + error.message);
+                            document.getElementById('resultado').innerHTML = '<p style="color: red;">❌ Error: ' + error.message + '</p>';
+                        }
+                    } else {
+                        document.getElementById('resultado').innerHTML = '<p style="color: blue;">ℹ️ Operación cancelada por el usuario</p>';
+                    }
+                }
+                
+                desbloquearTodosLosRetos();
+                
+            } catch (error) {
+                document.getElementById('resultado').innerHTML = '<p style="color: red;">❌ Error en test: ' + error.message + '</p>';
+            }
+        }
+        
+        function testResetearProgreso() {
+            try {
+                if (confirm('¿Estás seguro de que quieres resetear el progreso? Se perderán todos los retos completados en este navegador.')) {
+                    localStorage.removeItem('retoProgress');
+                    localStorage.removeItem('puntuacionAtapuerca');
+                    alert('✅ Progreso reseteado correctamente.');
+                    document.getElementById('resultado').innerHTML = '<p style="color: green;">✅ Progreso reseteado</p>';
+                } else {
+                    document.getElementById('resultado').innerHTML = '<p style="color: blue;">ℹ️ Operación cancelada por el usuario</p>';
+                }
+            } catch (error) {
+                document.getElementById('resultado').innerHTML = '<p style="color: red;">❌ Error en reset: ' + error.message + '</p>';
+            }
+        }
+        
+        function verEstadoLocalStorage() {
+            const progreso = localStorage.getItem('retoProgress');
+            const puntuacion = localStorage.getItem('puntuacionAtapuerca');
+            
+            let html = '<h3>Estado actual del localStorage:</h3>';
+            html += '<p><strong>retoProgress:</strong> ' + (progreso || 'No existe') + '</p>';
+            html += '<p><strong>puntuacionAtapuerca:</strong> ' + (puntuacion || 'No existe') + '</p>';
+            
+            if (progreso) {
+                try {
+                    const objetoProgreso = JSON.parse(progreso);
+                    html += '<h4>Retos completados:</h4>';
+                    Object.keys(objetoProgreso).forEach(reto => {
+                        const info = objetoProgreso[reto];
+                        html += '<p>Reto ' + reto + ': ' + (info.completado ? '✅' : '❌') + ' (' + (info.puntos_ganados || 0) + ' puntos)</p>';
+                    });
+                } catch (e) {
+                    html += '<p style="color: red;">Error al parsear progreso: ' + e.message + '</p>';
+                }
+            }
+            
+            document.getElementById('resultado').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

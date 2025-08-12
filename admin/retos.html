@@ -334,6 +334,7 @@
                     <th>Nivel</th>
                     <th>Título</th>
                     <th>Puntos</th>
+                    <th>Video</th>
                     <th>Consulta</th>
                     <th>Acciones</th>
                 </tr>
@@ -447,12 +448,19 @@
             
             retos.forEach(reto => {
                 const fila = document.createElement('tr');
+                
+                // Formatear URL del video para mostrar
+                const videoDisplay = reto.video_url ? 
+                    `<a href="${reto.video_url}" target="_blank" style="color: #00ff41; text-decoration: none;">🎥 Ver</a>` : 
+                    '<span style="color: #666;">Sin video</span>';
+                
                 fila.innerHTML = `
                     <td>${reto.id}</td>
                     <td><span class="fase-badge">F${reto.fase}</span></td>
                     <td>${reto.nivel}</td>
                     <td>${reto.titulo}</td>
                     <td><span class="puntos">${reto.puntos}</span></td>
+                    <td>${videoDisplay}</td>
                     <td><div class="consulta-preview">${reto.consulta_sugerida}</div></td>
                     <td class="actions">
                         <button class="btn-small btn-edit" onclick="editarReto(${reto.id})">✏️</button>

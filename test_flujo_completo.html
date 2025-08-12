@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Flujo Completo Retos</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .step {
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .step h2 {
+            color: #00ffff;
+            margin-top: 0;
+        }
+        .success {
+            border-color: #00ff00;
+            background: #001a00;
+        }
+        .error {
+            border-color: #ff0000;
+            background: #1a0000;
+        }
+        .warning {
+            border-color: #ffaa00;
+            background: #1a1500;
+        }
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #00cccc;
+        }
+        .disabled {
+            background: #666 !important;
+            cursor: not-allowed !important;
+        }
+        pre {
+            background: #000;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            border: 1px solid #333;
+        }
+        .info {
+            background: #001a33;
+            border-left: 4px solid #0066cc;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Flujo Completo de Retos</h1>
+        <p>Esta página simula el flujo completo desde seleccionar un reto hasta completarlo.</p>
+        
+        <div class="step" id="step1">
+            <h2>Paso 1: Preparar Test Environment</h2>
+            <button onclick="prepararTest()">🔧 Preparar Test</button>
+            <button onclick="limpiarLocalStorage()">🗑️ Limpiar localStorage</button>
+            <div id="step1-result"></div>
+        </div>
+
+        <div class="step" id="step2">
+            <h2>Paso 2: Simular Selección de Reto</h2>
+            <button onclick="simularSeleccionReto()" class="disabled" id="btn-step2">🎯 Seleccionar Reto #1</button>
+            <div id="step2-result"></div>
+        </div>
+
+        <div class="step" id="step3">
+            <h2>Paso 3: Verificar localStorage del Reto</h2>
+            <button onclick="verificarRetoActual()" class="disabled" id="btn-step3">🔍 Verificar Reto en localStorage</button>
+            <div id="step3-result"></div>
+        </div>
+
+        <div class="step" id="step4">
+            <h2>Paso 4: Simular Consulta SQL</h2>
+            <button onclick="simularConsultaSQL()" class="disabled" id="btn-step4">📝 Ejecutar Consulta Correcta</button>
+            <button onclick="simularConsultaIncorrecta()" class="disabled" id="btn-step4b">❌ Ejecutar Consulta Incorrecta</button>
+            <div id="step4-result"></div>
+        </div>
+
+        <div class="step" id="step5">
+            <h2>Paso 5: Verificar Progreso Final</h2>
+            <button onclick="verificarProgresoFinal()" class="disabled" id="btn-step5">✅ Verificar Progreso</button>
+            <div id="step5-result"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        
+        function prepararTest() {
+            const result = document.getElementById('step1-result');
+            
+            // Limpiar localStorage para empezar limpio
+            localStorage.removeItem('retoProgress');
+            localStorage.removeItem('puntuacionAtapuerca');
+            localStorage.removeItem('retoActual');
+            localStorage.removeItem('consultaPendiente');
+            
+            result.innerHTML = `
+                <div class="info">
+                    ✅ localStorage limpiado<br>
+                    📋 Test environment preparado<br>
+                    🎮 Listo para simular flujo completo
+                </div>
+            `;
+            
+            document.getElementById('step1').className = 'step success';
+            habilitarPaso(2);
+        }
+        
+        function limpiarLocalStorage() {
+            localStorage.clear();
+            document.getElementById('step1-result').innerHTML = '<div class="info">🗑️ Todo el localStorage ha sido limpiado</div>';
+        }
+        
+        function simularSeleccionReto() {
+            const result = document.getElementById('step2-result');
+            
+            // Simular datos del Reto #1 (similar a como lo hace retos.html)
+            const reto = {
+                id: 1,
+                titulo: "Primeros pasos con SELECT",
+                descripcion: "Obtén los primeros 5 robots de la tabla",
+                consulta_sugerida: "SELECT TOP 5 * FROM Robots;",
+                puntos: 10,
+                fase: 1
+            };
+            
+            // Guardar en localStorage como lo hace retos.html
+            localStorage.setItem('retoActual', JSON.stringify(reto));
+            localStorage.setItem('consultaPendiente', reto.consulta_sugerida);
+            
+            result.innerHTML = `
+                <div class="info">
+                    ✅ Reto simulado seleccionado<br>
+                    🎯 Reto #${reto.id}: "${reto.titulo}"<br>
+                    💰 Puntos: ${reto.puntos}<br>
+                    📝 Consulta esperada: <code>${reto.consulta_sugerida}</code>
+                </div>
+            `;
+            
+            document.getElementById('step2').className = 'step success';
+            habilitarPaso(3);
+        }
+        
+        function verificarRetoActual() {
+            const result = document.getElementById('step3-result');
+            
+            const retoActual = localStorage.getItem('retoActual');
+            const consultaPendiente = localStorage.getItem('consultaPendiente');
+            const progreso = localStorage.getItem('retoProgress');
+            const puntuacion = localStorage.getItem('puntuacionAtapuerca');
+            
+            let html = '<div class="info">';
+            html += '<strong>📋 Estado actual del localStorage:</strong><br>';
+            html += `• retoActual: ${retoActual ? '✅ Existe' : '❌ No existe'}<br>`;
+            html += `• consultaPendiente: ${consultaPendiente ? '✅ Existe' : '❌ No existe'}<br>`;
+            html += `• retoProgress: ${progreso ? '✅ Existe' : '❌ No existe'}<br>`;
+            html += `• puntuacionAtapuerca: ${puntuacion || '0'}<br>`;
+            
+            if (retoActual) {
+                try {
+                    const reto = JSON.parse(retoActual);
+                    html += `<br><strong>🎯 Detalles del reto activo:</strong><br>`;
+                    html += `• ID: ${reto.id}<br>`;
+                    html += `• Título: ${reto.titulo}<br>`;
+                    html += `• Puntos: ${reto.puntos}<br>`;
+                } catch (e) {
+                    html += `<br>❌ Error parseando reto: ${e.message}`;
+                }
+            }
+            html += '</div>';
+            
+            result.innerHTML = html;
+            
+            if (retoActual && consultaPendiente) {
+                document.getElementById('step3').className = 'step success';
+                habilitarPaso(4);
+            } else {
+                document.getElementById('step3').className = 'step error';
+            }
+        }
+        
+        async function simularConsultaSQL() {
+            const result = document.getElementById('step4-result');
+            result.innerHTML = '<div class="info">🔄 Simulando ejecución de consulta SQL...</div>';
+            
+            try {
+                // Simular la verificación como lo haría sql.html
+                const retoActual = JSON.parse(localStorage.getItem('retoActual'));
+                const consultaUsuario = "SELECT TOP 5 * FROM Robots;";
+                
+                // Simular resultados (estos serían los datos reales de la consulta)
+                const resultadosSimulados = [
+                    { id: 1, nombre: "R2D2", tipo: "Astromecánico" },
+                    { id: 2, nombre: "C3PO", tipo: "Protocolo" },
+                    { id: 3, nombre: "BB8", tipo: "Astromecánico" },
+                    { id: 4, nombre: "K2SO", tipo: "Seguridad" },
+                    { id: 5, nombre: "IG88", tipo: "Cazarrecompensas" }
+                ];
+                
+                // Simular verificación exitosa
+                const verificacion = await simularVerificacionReto(retoActual, consultaUsuario, resultadosSimulados);
+                
+                if (verificacion.completado) {
+                    result.innerHTML = `
+                        <div class="info" style="border-color: #00ff00;">
+                            ${verificacion.mensaje}<br><br>
+                            <strong>📊 Cambios en localStorage:</strong><br>
+                            • Reto #${retoActual.id} marcado como completado<br>
+                            • +${retoActual.puntos} puntos añadidos<br>
+                            • retoActual y consultaPendiente limpiados
+                        </div>
+                    `;
+                    document.getElementById('step4').className = 'step success';
+                    habilitarPaso(5);
+                } else {
+                    result.innerHTML = '<div class="info" style="border-color: #ff0000;">❌ La consulta no fue correcta</div>';
+                }
+                
+            } catch (error) {
+                result.innerHTML = `<div class="info" style="border-color: #ff0000;">❌ Error: ${error.message}</div>`;
+            }
+        }
+        
+        async function simularConsultaIncorrecta() {
+            const result = document.getElementById('step4-result');
+            result.innerHTML = '<div class="info">🔄 Simulando consulta incorrecta...</div>';
+            
+            setTimeout(() => {
+                result.innerHTML = `
+                    <div class="info" style="border-color: #ffaa00;">
+                        ⚠️ Consulta incorrecta simulada<br>
+                        Los resultados no coinciden con la consulta esperada<br>
+                        El reto NO se marca como completado
+                    </div>
+                `;
+            }, 1000);
+        }
+        
+        async function simularVerificacionReto(reto, consulta, resultados) {
+            // Simular que la verificación es exitosa
+            // En el mundo real, esto compararía con la ejecución de consulta_sugerida
+            
+            const puntos = reto.puntos || 10;
+            
+            // Actualizar localStorage como lo hace el sistema real
+            let progreso = JSON.parse(localStorage.getItem('retoProgress') || '{}');
+            progreso[reto.id] = {
+                completado: true,
+                puntos_ganados: puntos,
+                fecha_completion: new Date().toISOString()
+            };
+            localStorage.setItem('retoProgress', JSON.stringify(progreso));
+            
+            // Actualizar puntuación total
+            let puntuacionTotal = parseInt(localStorage.getItem('puntuacionAtapuerca') || '0');
+            puntuacionTotal += puntos;
+            localStorage.setItem('puntuacionAtapuerca', puntuacionTotal.toString());
+            
+            // Limpiar reto actual
+            localStorage.removeItem('retoActual');
+            localStorage.removeItem('consultaPendiente');
+            
+            return {
+                completado: true,
+                mensaje: `🎉 ¡RETO #${reto.id} COMPLETADO! 🎉\n\n` +
+                        `"${reto.titulo}"\n\n` +
+                        `+${puntos} puntos ganados!\n` +
+                        `💫 Puntuación total: ${puntuacionTotal} puntos`
+            };
+        }
+        
+        function verificarProgresoFinal() {
+            const result = document.getElementById('step5-result');
+            
+            const progreso = JSON.parse(localStorage.getItem('retoProgress') || '{}');
+            const puntuacion = localStorage.getItem('puntuacionAtapuerca') || '0';
+            const retoActual = localStorage.getItem('retoActual');
+            
+            let html = '<div class="info">';
+            html += '<strong>🏆 Estado final del progreso:</strong><br>';
+            html += `• Puntuación total: ${puntuacion} puntos<br>`;
+            html += `• Retos completados: ${Object.keys(progreso).length}<br>`;
+            html += `• Reto activo: ${retoActual ? 'Sí' : 'No'}<br><br>`;
+            
+            if (Object.keys(progreso).length > 0) {
+                html += '<strong>📋 Detalle de retos completados:</strong><br>';
+                Object.keys(progreso).forEach(retoId => {
+                    const info = progreso[retoId];
+                    html += `• Reto ${retoId}: ${info.completado ? '✅' : '❌'} (${info.puntos_ganados || 0} pts)<br>`;
+                });
+            }
+            
+            html += '<br><strong>🎮 Sistema listo para:</strong><br>';
+            html += '• Volver a retos.html para ver progreso actualizado<br>';
+            html += '• Seleccionar siguiente reto disponible<br>';
+            html += '• Continuar con el flujo normal';
+            html += '</div>';
+            
+            result.innerHTML = html;
+            document.getElementById('step5').className = 'step success';
+        }
+        
+        function habilitarPaso(paso) {
+            currentStep = paso;
+            const btn = document.getElementById(`btn-step${paso}`);
+            if (btn) {
+                btn.classList.remove('disabled');
+            }
+            
+            // También habilitar botones adicionales si existen
+            const btnB = document.getElementById(`btn-step${paso}b`);
+            if (btnB) {
+                btnB.classList.remove('disabled');
+            }
+        }
+        
+        // Mostrar estado inicial
+        window.onload = function() {
+            console.log('🧪 Test de flujo completo cargado');
+        };
+    </script>
+</body>
+</html>

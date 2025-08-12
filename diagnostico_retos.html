@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico - Sistema de Retos</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            color: #00ffff;
+            margin-top: 0;
+        }
+        .info {
+            background: #001a1a;
+            padding: 10px;
+            border-left: 4px solid #00ff00;
+            margin: 10px 0;
+        }
+        .warning {
+            background: #1a1a00;
+            padding: 10px;
+            border-left: 4px solid #ffff00;
+            margin: 10px 0;
+        }
+        .error {
+            background: #1a0000;
+            padding: 10px;
+            border-left: 4px solid #ff0000;
+            margin: 10px 0;
+        }
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #00cccc;
+        }
+        pre {
+            background: #111;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        .json {
+            font-size: 12px;
+            color: #ffaa00;
+        }
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .table th, .table td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: left;
+        }
+        .table th {
+            background: #333;
+            color: #00ffff;
+        }
+        .completed {
+            color: #00ff00;
+        }
+        .blocked {
+            color: #ff6666;
+        }
+        .available {
+            color: #ffff00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Diagnóstico del Sistema de Retos</h1>
+        
+        <div class="section">
+            <h2>🎮 Control Panel</h2>
+            <button onclick="diagnosticarTodo()">🔍 Diagnóstico Completo</button>
+            <button onclick="verificarLocalStorage()">💾 Verificar localStorage</button>
+            <button onclick="cargarRetosAPI()">🌐 Probar API de Retos</button>
+            <button onclick="simularProgreso()">🎯 Simular Progreso</button>
+            <button onclick="limpiarTodo()">🗑️ Limpiar Todo</button>
+        </div>
+
+        <div id="resultados"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://atapuerca-net.es/api/retos.php';
+        let retosCache = [];
+        let resultadosDiv = document.getElementById('resultados');
+
+        // ==============================================
+        // FUNCIÓN PRINCIPAL DE DIAGNÓSTICO
+        // ==============================================
+        async function diagnosticarTodo() {
+            resultadosDiv.innerHTML = '<div class="info">🔄 Ejecutando diagnóstico completo...</div>';
+            
+            let html = '';
+            
+            // 1. Verificar localStorage
+            html += await diagnosticarLocalStorage();
+            
+            // 2. Verificar API
+            html += await diagnosticarAPI();
+            
+            // 3. Verificar lógica de bloqueos
+            html += await diagnosticarBloqueos();
+            
+            // 4. Verificar puntuación
+            html += await diagnosticarPuntuacion();
+            
+            resultadosDiv.innerHTML = html;
+        }
+
+        // ==============================================
+        // DIAGNÓSTICO DE LOCALSTORAGE
+        // ==============================================
+        async function diagnosticarLocalStorage() {
+            let html = '<div class="section"><h2>💾 Estado del localStorage</h2>';
+            
+            try {
+                // Verificar claves principales
+                const retoProgress = localStorage.getItem('retoProgress');
+                const puntuacion = localStorage.getItem('puntuacionAtapuerca');
+                const usuarioId = localStorage.getItem('atapuerca_usuario_id');
+                const modoDesarrollador = localStorage.getItem('modoDesarrollador');
+                
+                html += '<table class="table">';
+                html += '<tr><th>Clave</th><th>Estado</th><th>Valor</th></tr>';
+                html += `<tr><td>retoProgress</td><td>${retoProgress ? '✅ Existe' : '❌ No existe'}</td><td>${retoProgress ? 'Ver abajo' : 'null'}</td></tr>`;
+                html += `<tr><td>puntuacionAtapuerca</td><td>${puntuacion ? '✅ Existe' : '❌ No existe'}</td><td>${puntuacion || 'null'}</td></tr>`;
+                html += `<tr><td>atapuerca_usuario_id</td><td>${usuarioId ? '✅ Existe' : '❌ No existe'}</td><td>${usuarioId || 'null'}</td></tr>`;
+                html += `<tr><td>modoDesarrollador</td><td>${modoDesarrollador ? '✅ Existe' : '❌ No existe'}</td><td>${modoDesarrollador || 'false'}</td></tr>`;
+                html += '</table>';
+                
+                // Analizar progreso de retos
+                if (retoProgress) {
+                    try {
+                        const progreso = JSON.parse(retoProgress);
+                        const retosCompletados = Object.keys(progreso).length;
+                        
+                        html += `<div class="info">📊 <strong>Análisis del Progreso:</strong><br>`;
+                        html += `• Retos completados: ${retosCompletados}<br>`;
+                        html += `• Formato JSON válido: ✅</div>`;
+                        
+                        if (retosCompletados > 0) {
+                            html += '<h3>🎯 Detalle de Retos Completados:</h3>';
+                            html += '<table class="table">';
+                            html += '<tr><th>Reto ID</th><th>Completado</th><th>Puntos</th><th>Fecha</th></tr>';
+                            
+                            Object.keys(progreso).sort((a, b) => parseInt(a) - parseInt(b)).forEach(retoId => {
+                                const info = progreso[retoId];
+                                html += `<tr>`;
+                                html += `<td>Reto ${retoId}</td>`;
+                                html += `<td class="${info.completado ? 'completed' : 'error'}">${info.completado ? '✅ Sí' : '❌ No'}</td>`;
+                                html += `<td>${info.puntos_ganados || info.puntos || 'N/A'}</td>`;
+                                html += `<td>${info.fecha_completion || info.fecha || 'N/A'}</td>`;
+                                html += `</tr>`;
+                            });
+                            html += '</table>';
+                        }
+                        
+                        html += '<h3>📋 JSON Completo:</h3>';
+                        html += `<pre class="json">${JSON.stringify(progreso, null, 2)}</pre>`;
+                        
+                    } catch (e) {
+                        html += `<div class="error">❌ <strong>Error parseando progreso:</strong> ${e.message}</div>`;
+                    }
+                }
+                
+            } catch (error) {
+                html += `<div class="error">❌ <strong>Error general:</strong> ${error.message}</div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        // ==============================================
+        // DIAGNÓSTICO DE API
+        // ==============================================
+        async function diagnosticarAPI() {
+            let html = '<div class="section"><h2>🌐 Verificación de API</h2>';
+            
+            try {
+                html += '<div class="info">🔄 Conectando a API...</div>';
+                
+                const response = await fetch(API_URL + '?action=list&activo=1&_t=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+                
+                html += `<div class="info">📡 <strong>Estado HTTP:</strong> ${response.status} ${response.statusText}</div>`;
+                
+                if (!response.ok) {
+                    html += `<div class="error">❌ <strong>Error HTTP:</strong> ${response.status}</div>`;
+                    html += '</div>';
+                    return html;
+                }
+                
+                const data = await response.json();
+                retosCache = data.data || [];
+                
+                html += `<div class="info">✅ <strong>API Response exitosa</strong><br>`;
+                html += `• Success: ${data.success}<br>`;
+                html += `• Total retos: ${data.total}<br>`;
+                html += `• Retos cargados: ${retosCache.length}</div>`;
+                
+                if (retosCache.length > 0) {
+                    html += '<h3>📋 Lista de Retos Cargados:</h3>';
+                    html += '<table class="table">';
+                    html += '<tr><th>ID</th><th>Título</th><th>Fase</th><th>Puntos</th><th>Activo</th></tr>';
+                    
+                    retosCache.forEach(reto => {
+                        html += `<tr>`;
+                        html += `<td>${reto.id}</td>`;
+                        html += `<td>${reto.titulo}</td>`;
+                        html += `<td>Fase ${reto.fase}</td>`;
+                        html += `<td>${reto.puntos}</td>`;
+                        html += `<td class="${reto.activo === 1 ? 'completed' : 'error'}">${reto.activo === 1 ? '✅' : '❌'}</td>`;
+                        html += `</tr>`;
+                    });
+                    html += '</table>';
+                }
+                
+            } catch (error) {
+                html += `<div class="error">❌ <strong>Error de API:</strong> ${error.message}</div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        // ==============================================
+        // DIAGNÓSTICO DE LÓGICA DE BLOQUEOS
+        // ==============================================
+        async function diagnosticarBloqueos() {
+            let html = '<div class="section"><h2>🔒 Verificación de Lógica de Bloqueos</h2>';
+            
+            try {
+                // Cargar progreso actual
+                const retoProgress = localStorage.getItem('retoProgress');
+                let progreso = {};
+                
+                if (retoProgress) {
+                    progreso = JSON.parse(retoProgress);
+                }
+                
+                if (retosCache.length === 0) {
+                    html += '<div class="warning">⚠️ No hay retos cargados. Ejecuta diagnóstico de API primero.</div>';
+                    html += '</div>';
+                    return html;
+                }
+                
+                html += '<h3>🎯 Análisis de Estado por Reto:</h3>';
+                html += '<table class="table">';
+                html += '<tr><th>Reto</th><th>Estado</th><th>Motivo</th><th>Completado</th><th>Puntos</th></tr>';
+                
+                retosCache.forEach(reto => {
+                    const completado = progreso[reto.id] ? progreso[reto.id].completado : false;
+                    let bloqueado = false;
+                    let motivo = 'Disponible';
+                    
+                    // Lógica de bloqueo: verificar retos anteriores
+                    if (reto.id > 1) {
+                        for (let i = 1; i < reto.id; i++) {
+                            if (!progreso[i] || !progreso[i].completado) {
+                                bloqueado = true;
+                                motivo = `Reto ${i} no completado`;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    let estado = completado ? 'completed' : (bloqueado ? 'blocked' : 'available');
+                    let estadoTexto = completado ? '✅ Completado' : (bloqueado ? '🔒 Bloqueado' : '🎯 Disponible');
+                    
+                    html += `<tr>`;
+                    html += `<td>Reto ${reto.id}: ${reto.titulo}</td>`;
+                    html += `<td class="${estado}">${estadoTexto}</td>`;
+                    html += `<td>${motivo}</td>`;
+                    html += `<td class="${completado ? 'completed' : 'error'}">${completado ? 'Sí' : 'No'}</td>`;
+                    html += `<td>${reto.puntos}</td>`;
+                    html += `</tr>`;
+                });
+                
+                html += '</table>';
+                
+            } catch (error) {
+                html += `<div class="error">❌ <strong>Error:</strong> ${error.message}</div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        // ==============================================
+        // DIAGNÓSTICO DE PUNTUACIÓN
+        // ==============================================
+        async function diagnosticarPuntuacion() {
+            let html = '<div class="section"><h2>🏆 Verificación de Puntuación</h2>';
+            
+            try {
+                const retoProgress = localStorage.getItem('retoProgress');
+                const puntuacionGuardada = localStorage.getItem('puntuacionAtapuerca');
+                
+                let progreso = {};
+                if (retoProgress) {
+                    progreso = JSON.parse(retoProgress);
+                }
+                
+                // Calcular puntuación desde progreso
+                let puntuacionCalculada = 0;
+                let retosCompletados = 0;
+                
+                Object.keys(progreso).forEach(retoId => {
+                    if (progreso[retoId].completado) {
+                        retosCompletados++;
+                        puntuacionCalculada += progreso[retoId].puntos_ganados || progreso[retoId].puntos || 10;
+                    }
+                });
+                
+                html += '<table class="table">';
+                html += '<tr><th>Métrica</th><th>Valor</th><th>Estado</th></tr>';
+                html += `<tr><td>Retos Completados</td><td>${retosCompletados}</td><td>ℹ️</td></tr>`;
+                html += `<tr><td>Puntuación Calculada</td><td>${puntuacionCalculada}</td><td>📊</td></tr>`;
+                html += `<tr><td>Puntuación Guardada</td><td>${puntuacionGuardada || 'N/A'}</td><td>${puntuacionGuardada ? '✅' : '❌'}</td></tr>`;
+                
+                const coincide = parseInt(puntuacionGuardada || 0) === puntuacionCalculada;
+                html += `<tr><td>Consistencia</td><td>${coincide ? 'Correcta' : 'Inconsistente'}</td><td class="${coincide ? 'completed' : 'error'}">${coincide ? '✅' : '❌'}</td></tr>`;
+                html += '</table>';
+                
+                if (!coincide && puntuacionGuardada) {
+                    html += `<div class="warning">⚠️ <strong>Inconsistencia detectada:</strong><br>`;
+                    html += `• Puntuación guardada: ${puntuacionGuardada}<br>`;
+                    html += `• Puntuación calculada: ${puntuacionCalculada}<br>`;
+                    html += `• Diferencia: ${Math.abs(parseInt(puntuacionGuardada) - puntuacionCalculada)}</div>`;
+                }
+                
+                // Simulación de gamificación
+                const experiencia = retosCompletados * 100;
+                const nivel = Math.floor(experiencia / 500) + 1;
+                
+                html += '<h3>🎮 Datos de Gamificación:</h3>';
+                html += '<table class="table">';
+                html += '<tr><th>Elemento</th><th>Valor</th></tr>';
+                html += `<tr><td>Experiencia</td><td>${experiencia} XP</td></tr>`;
+                html += `<tr><td>Nivel</td><td>${nivel}</td></tr>`;
+                html += `<tr><td>Fase Actual</td><td>${Math.min(Math.floor(nivel / 2), 4) + 1}</td></tr>`;
+                html += '</table>';
+                
+            } catch (error) {
+                html += `<div class="error">❌ <strong>Error:</strong> ${error.message}</div>`;
+            }
+            
+            html += '</div>';
+            return html;
+        }
+
+        // ==============================================
+        // FUNCIONES AUXILIARES
+        // ==============================================
+        function verificarLocalStorage() {
+            diagnosticarLocalStorage().then(html => {
+                resultadosDiv.innerHTML = html;
+            });
+        }
+
+        function cargarRetosAPI() {
+            diagnosticarAPI().then(html => {
+                resultadosDiv.innerHTML = html;
+            });
+        }
+
+        function simularProgreso() {
+            const progreso = {
+                1: { completado: true, puntos_ganados: 10, fecha_completion: new Date().toISOString() },
+                2: { completado: true, puntos_ganados: 15, fecha_completion: new Date().toISOString() },
+                3: { completado: false, puntos_ganados: 0, fecha_completion: null }
+            };
+            
+            localStorage.setItem('retoProgress', JSON.stringify(progreso));
+            localStorage.setItem('puntuacionAtapuerca', '25');
+            
+            resultadosDiv.innerHTML = '<div class="info">✅ Progreso simulado creado (Retos 1 y 2 completados)</div>';
+        }
+
+        function limpiarTodo() {
+            if (!confirm('¿Limpiar todo el localStorage?')) return;
+            
+            localStorage.removeItem('retoProgress');
+            localStorage.removeItem('puntuacionAtapuerca');
+            localStorage.removeItem('atapuerca_usuario_id');
+            localStorage.removeItem('modoDesarrollador');
+            
+            resultadosDiv.innerHTML = '<div class="info">🗑️ localStorage limpiado completamente</div>';
+        }
+
+        // Ejecutar diagnóstico automático al cargar
+        window.onload = function() {
+            setTimeout(diagnosticarTodo, 500);
+        };
+    </script>
+</body>
+</html>
