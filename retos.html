@@ -400,20 +400,27 @@
     }
 
     function desbloquearTodosLosRetos() {
-      if (!confirm('¿Desbloquear todos los retos? Esto guardará el progreso en la base de datos.')) return;
+      if (!confirm('¿Desbloquear todos los retos? Esto marcará todos como completados en localStorage.')) return;
       
-      let promesas = [];
+      // Crear progreso completo en localStorage
+      let progreso = {};
+      let puntuacionTotal = 0;
+      
       retosCache.forEach(function(reto) {
-        promesas.push(guardarProgreso(reto.id, true, reto.puntos));
+        progreso[reto.id] = {
+          completado: true,
+          puntos: reto.puntos || 10,
+          fecha: new Date().toISOString()
+        };
+        puntuacionTotal += (reto.puntos || 10);
       });
       
-      Promise.all(promesas).then(function() {
-        alert('¡Todos los retos desbloqueados y guardados en MySQL!');
-        location.reload();
-      }).catch(function(error) {
-        console.error('Error al desbloquear retos:', error);
-        alert('Error al guardar en MySQL: ' + error.message);
-      });
+      // Guardar en localStorage
+      localStorage.setItem('retoProgress', JSON.stringify(progreso));
+      localStorage.setItem('puntuacionAtapuerca', puntuacionTotal.toString());
+      
+      alert(`¡Todos los retos desbloqueados!\n${retosCache.length} retos completados\n${puntuacionTotal} puntos totales`);
+      location.reload();
     }
 
     function modoDesarrollador() {
@@ -424,71 +431,16 @@
     }
 
     function resetearProgreso() {
-      if (!confirm('¿Resetear todo el progreso en MySQL?')) return;
-      if (!confirm('¿Estás SEGURO? Esto eliminará el progreso de la base de datos.')) return;
+      if (!confirm('¿Resetear todo el progreso? Esto eliminará todos los retos completados.')) return;
+      if (!confirm('¿Estás SEGURO? Esto volverá todos los retos al estado inicial.')) return;
       
-      // Solo limpiar localStorage, el progreso de MySQL se puede resetear desde el admin
-      localStorage.clear();
-      alert('LocalStorage limpiado. Usa el panel de administración para resetear MySQL.');
+      // Limpiar localStorage
+      localStorage.removeItem('retoProgress');
+      localStorage.removeItem('puntuacionAtapuerca');
+      localStorage.removeItem('atapuerca_usuario_id');
+      
+      alert('Progreso reseteado completamente. Todos los retos vuelven al estado inicial.');
       location.reload();
-    }
-
-    // ========================================
-    // FUNCIÓN PARA GUARDAR PROGRESO EN MYSQL
-    // ========================================
-    async function guardarProgreso(retoId, completado, puntos) {
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            action: 'save_progress',
-            usuario_id: USUARIO_ID,
-            reto_numero: retoId,
-            completado: completado,
-            puntos_ganados: puntos
-          })
-        });
-        
-        const result = await response.json();
-        if (!result.success) {
-          throw new Error(result.error || 'Error al guardar progreso');
-        }
-        
-        // Actualizar cache local
-        progresoUsuario[retoId] = {
-          completado: completado,
-          puntos_ganados: puntos,
-          fecha_completion: new Date().toISOString()
-        };
-        
-        return result;
-      } catch (error) {
-        console.error('Error al guardar progreso:', error);
-        throw error;
-      }
-    }
-
-    // ========================================
-    // FUNCIÓN PARA MARCAR RETO COMO COMPLETADO
-    // ========================================
-    async function marcarRetoCompletado(retoId, puntos) {
-      try {
-        await guardarProgreso(retoId, true, puntos);
-        console.log('✅ Reto ' + retoId + ' marcado como completado en MySQL');
-        
-        // Recargar la página para mostrar el cambio
-        setTimeout(function() {
-          location.reload();
-        }, 1000);
-        
-      } catch (error) {
-        console.error('Error al marcar reto completado:', error);
-        alert('Error al guardar progreso: ' + error.message);
-      }
     }
 
     function mostrarError(mensaje) {
