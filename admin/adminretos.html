@@ -441,8 +441,8 @@
                 const fila = document.createElement('tr');
                 
                 // Formatear URL del video para mostrar
-                const videoDisplay = reto.video_url ? 
-                    `<a href="${reto.video_url}" target="_blank" style="color: #00ff41; text-decoration: none;">🎥 Ver</a>` : 
+                const videoDisplay = reto.videoUrl ? 
+                    `<a href="${reto.videoUrl}" target="_blank" style="color: #00ff41; text-decoration: none;">🎥 Ver</a>` : 
                     '<span style="color: #666;">Sin video</span>';
                 
                 fila.innerHTML = `
@@ -537,7 +537,7 @@
             document.getElementById('retoConsulta').value = reto.consulta_sugerida;
             document.getElementById('retoPista').value = reto.pista || '';
             document.getElementById('retoPuntos').value = reto.puntos;
-            document.getElementById('retoVideo').value = reto.video_url || '';
+            document.getElementById('retoVideo').value = reto.videoUrl || '';
             
             document.getElementById('modalReto').style.display = 'block';
         }
